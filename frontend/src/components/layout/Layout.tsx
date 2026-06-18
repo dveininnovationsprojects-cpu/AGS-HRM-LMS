@@ -5,6 +5,7 @@ import { RootState } from '../../store';
 import { setSidebarMobileOpen } from '../../store/slices/uiSlice';
 import Sidebar from './Sidebar';
 import Header from './Header';
+import ChatbotWidget from '../ui/ChatbotWidget';
 
 export default function Layout() {
   const dispatch = useDispatch();
@@ -46,6 +47,9 @@ export default function Layout() {
           </AnimatePresence>
         </main>
       </div>
+
+      {/* Floating Chatbot Widget */}
+      <ChatbotWidget />
     </div>
   );
 }

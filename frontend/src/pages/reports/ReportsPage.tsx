@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Download, FileSpreadsheet, Users, DollarSign, Clock, TrendingUp } from 'lucide-react';
+import { Download, FileSpreadsheet, Users, TrendingUp } from 'lucide-react';
 import PageHeader from '../../components/ui/PageHeader';
 import toast from 'react-hot-toast';
 import { useState } from 'react';
@@ -15,24 +15,6 @@ const reports = [
     filename: 'employees.xlsx',
   },
   {
-    id: 'payroll',
-    title: 'Payroll Report',
-    description: 'Monthly payroll summary with gross, deductions, and net salary',
-    icon: DollarSign,
-    color: 'bg-emerald-500',
-    endpoint: '/api/v1/reports/payroll/excel',
-    filename: 'payroll.xlsx',
-  },
-  {
-    id: 'attendance',
-    title: 'Attendance Report',
-    description: 'Daily and monthly attendance records with work hours analysis',
-    icon: Clock,
-    color: 'bg-purple-500',
-    endpoint: null,
-    filename: null,
-  },
-  {
     id: 'performance',
     title: 'Performance Report',
     description: 'Employee performance ratings, KPI scores, and goal achievement',
@@ -45,8 +27,6 @@ const reports = [
 
 export default function ReportsPage() {
   const [downloading, setDownloading] = useState<string | null>(null);
-  const [payrollMonth, setPayrollMonth] = useState(new Date().getMonth() + 1);
-  const [payrollYear, setPayrollYear] = useState(new Date().getFullYear());
 
   const downloadReport = async (report: typeof reports[0]) => {
     if (!report.endpoint) {
@@ -55,9 +35,7 @@ export default function ReportsPage() {
     }
     setDownloading(report.id);
     try {
-      const url = report.id === 'payroll'
-        ? `${report.endpoint}?month=${payrollMonth}&year=${payrollYear}`
-        : report.endpoint;
+      const url = report.endpoint;
 
       const token = localStorage.getItem('accessToken');
       const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
@@ -103,16 +81,7 @@ export default function ReportsPage() {
                   <h3 className="font-semibold text-slate-200 text-sm">{report.title}</h3>
                   <p className="text-xs text-slate-400 mt-1 line-clamp-2">{report.description}</p>
 
-                  {report.id === 'payroll' && (
-                    <div className="flex gap-2 mt-3">
-                      <select value={payrollMonth} onChange={e => setPayrollMonth(Number(e.target.value))} className="input-field py-1 text-xs w-auto">
-                        {Array.from({length:12},(_,i) => <option key={i+1} value={i+1}>{new Date(0,i).toLocaleString('en',{month:'short'})}</option>)}
-                      </select>
-                      <select value={payrollYear} onChange={e => setPayrollYear(Number(e.target.value))} className="input-field py-1 text-xs w-auto">
-                        {[2023,2024,2025,2026].map(y => <option key={y}>{y}</option>)}
-                      </select>
-                    </div>
-                  )}
+
 
                   <button
                     onClick={() => downloadReport(report)}

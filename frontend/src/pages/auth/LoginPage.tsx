@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
-import { Eye, EyeOff, Layers } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { login } from '../../store/slices/authSlice';
 import { AppDispatch, RootState } from '../../store';
@@ -195,11 +195,12 @@ export default function LoginPage() {
         <div className="glass-card p-8 border border-white/10 shadow-glass relative">
           {/* Header logo / branding */}
           <div className="flex flex-col items-center justify-center mb-8 text-center">
-            <div className="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-4">
-              <Layers className="w-7 h-7 text-primary" />
-            </div>
-            <h1 className="text-2xl font-bold text-slate-100">AGS Health</h1>
-            <p className="text-primary text-xs font-semibold tracking-wider uppercase mt-1">Workforce Intelligence Platform</p>
+            <img 
+              src="https://cdn-bpead.nitrocdn.com/BBpeMUqwtpRtLgerjeQhQjKhWBtMWEQP/assets/images/optimized/rev-e5326ea/www.agshealth.com/wp-content/uploads/2022/09/AGS-Health-Logo-White.svg" 
+              alt="AGS Health Logo" 
+              className="h-10 w-auto mb-4"
+            />
+            <p className="text-primary text-xs font-semibold tracking-widest uppercase mt-1">Workforce Intelligence Platform</p>
           </div>
 
           <div className="mb-6 text-center">
