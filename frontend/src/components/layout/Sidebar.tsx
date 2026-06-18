@@ -4,26 +4,21 @@ import { motion } from 'framer-motion';
 import { RootState } from '../../store';
 import { toggleSidebar } from '../../store/slices/uiSlice';
 import {
-  LayoutDashboard, Users, UserCheck, Clock, DollarSign, Briefcase,
-  BookOpen, GraduationCap, TrendingUp, BarChart3, Bot, FileText,
-  Building2, ChevronLeft, ChevronRight, Menu, Layers, TrendingDown
+  LayoutDashboard, Users, Briefcase, BookOpen, GraduationCap,
+  TrendingUp, BarChart3, FileText, ChevronLeft, ChevronRight,
+  Menu, TrendingDown
 } from 'lucide-react';
 import clsx from 'clsx';
 
 const navItems = [
   { label: 'Dashboard', icon: LayoutDashboard, path: '/dashboard' },
   { label: 'Employees', icon: Users, path: '/employees' },
-  { label: 'Departments', icon: Building2, path: '/departments' },
-  { label: 'Attendance', icon: Clock, path: '/attendance' },
-  { label: 'Leave Management', icon: UserCheck, path: '/leaves' },
-  { label: 'Payroll', icon: DollarSign, path: '/payroll' },
   { label: 'Recruitment', icon: Briefcase, path: '/recruitment' },
   { label: 'LMS Courses', icon: BookOpen, path: '/lms/courses' },
   { label: 'Training', icon: GraduationCap, path: '/training' },
   { label: 'Performance', icon: TrendingUp, path: '/performance' },
   { label: 'Analytics', icon: BarChart3, path: '/analytics' },
   { label: 'Profit & Loss Analyzer', icon: TrendingDown, path: '/profit-loss' },
-  { label: 'AI Advisor', icon: Bot, path: '/ai-advisor' },
   { label: 'Reports', icon: FileText, path: '/reports' },
 ];
 
@@ -45,20 +40,27 @@ export default function Sidebar() {
       )}
     >
       {/* Logo */}
-      <div className="flex items-center gap-3 px-4 py-5 border-b border-white/5">
-        <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 border border-primary/20">
-          <Layers className="w-5 h-5 text-primary" />
-        </div>
-        {!sidebarCollapsed && (
-          <motion.div
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            <div className="text-slate-100 font-bold text-sm leading-tight">AGS Health</div>
-            <div className="text-primary text-xs font-medium tracking-wide">Workforce Intel</div>
-          </motion.div>
+      <div className="flex items-center gap-3 px-4 py-5 border-b border-white/5 h-16">
+        {sidebarCollapsed ? (
+          <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 border border-primary/20 mx-auto overflow-hidden">
+            <div 
+              className="w-5 h-5"
+              style={{
+                backgroundImage: `url('https://cdn-bpead.nitrocdn.com/BBpeMUqwtpRtLgerjeQhQjKhWBtMWEQP/assets/images/optimized/rev-e5326ea/www.agshealth.com/wp-content/uploads/2022/09/AGS-Health-Logo-White.svg')`,
+                backgroundPosition: 'right center',
+                backgroundSize: '700% 100%',
+                backgroundRepeat: 'no-repeat'
+              }}
+            />
+          </div>
+        ) : (
+          <div className="flex flex-col gap-1 pl-1">
+            <img 
+              src="https://cdn-bpead.nitrocdn.com/BBpeMUqwtpRtLgerjeQhQjKhWBtMWEQP/assets/images/optimized/rev-e5326ea/www.agshealth.com/wp-content/uploads/2022/09/AGS-Health-Logo-White.svg" 
+              alt="AGS Health" 
+              className="h-6 w-auto object-contain" 
+            />
+          </div>
         )}
       </div>
 

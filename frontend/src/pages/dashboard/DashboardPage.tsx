@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
-  Users, UserCheck, Clock, DollarSign, TrendingUp,
+  Users, UserCheck, DollarSign, TrendingUp,
   Briefcase, BookOpen, AlertCircle, ArrowUpRight, ArrowDownRight
 } from 'lucide-react';
 import { AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
@@ -20,13 +20,7 @@ const monthlyData = [
   { month: 'Jan', joiners: 9, leavers: 4 },
 ];
 
-const attendanceData = [
-  { day: 'Mon', present: 85, absent: 15 },
-  { day: 'Tue', present: 88, absent: 12 },
-  { day: 'Wed', present: 82, absent: 18 },
-  { day: 'Thu', present: 90, absent: 10 },
-  { day: 'Fri', present: 79, absent: 21 },
-];
+
 
 const deptData = [
   { name: 'Operations', value: 35 },
@@ -186,60 +180,6 @@ export default function DashboardPage() {
                 </div>
                 <span className="font-medium text-slate-200">{d.value}%</span>
               </div>
-            ))}
-          </div>
-        </motion.div>
-      </div>
-
-      {/* Bottom Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        {/* Attendance Week */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-          className="bg-[#0e112a] rounded-2xl p-5 shadow-card border border-white/5"
-        >
-          <h3 className="font-semibold text-slate-200 mb-1 text-sm">Weekly Attendance</h3>
-          <p className="text-xs text-slate-400 mb-4">Present vs Absent this week</p>
-          <ResponsiveContainer width="100%" height={200}>
-            <BarChart data={attendanceData} barSize={20} barGap={4}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
-              <XAxis dataKey="day" tick={{ fontSize: 11, fill: '#94a3b8' }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fontSize: 11, fill: '#94a3b8' }} axisLine={false} tickLine={false} />
-              <Tooltip contentStyle={{ backgroundColor: '#0e112a', borderRadius: 10, border: '1px solid rgba(255, 255, 255, 0.05)', fontSize: 12 }} />
-              <Bar dataKey="present" fill="#10b981" radius={[6, 6, 0, 0]} name="Present" />
-              <Bar dataKey="absent" fill="#ef4444" radius={[6, 6, 0, 0]} name="Absent" />
-              <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 12 }} />
-            </BarChart>
-          </ResponsiveContainer>
-        </motion.div>
-
-        {/* Quick Links */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7 }}
-          className="bg-[#0e112a] rounded-2xl p-5 shadow-card border border-white/5"
-        >
-          <h3 className="font-semibold text-slate-200 mb-4 text-sm">Quick Actions</h3>
-          <div className="grid grid-cols-2 gap-3">
-            {[
-              { label: 'Add Employee', icon: '👤', path: '/employees/new', color: 'bg-primary/5 hover:bg-primary/10 text-primary border border-primary/10' },
-              { label: 'Post Job', icon: '💼', path: '/recruitment', color: 'bg-purple-500/5 hover:bg-purple-500/10 text-purple-400 border border-purple-500/10' },
-              { label: 'Mark Attendance', icon: '✅', path: '/attendance', color: 'bg-teal-500/5 hover:bg-teal-500/10 text-teal-400 border border-teal-500/10' },
-              { label: 'Process Payroll', icon: '💰', path: '/payroll', color: 'bg-amber-500/5 hover:bg-amber-500/10 text-amber-400 border border-amber-500/10' },
-              { label: 'Create Course', icon: '📚', path: '/lms/courses', color: 'bg-sky-500/5 hover:bg-sky-500/10 text-sky-400 border border-sky-500/10' },
-              { label: 'AI Insights', icon: '🤖', path: '/ai-advisor', color: 'bg-rose-500/5 hover:bg-rose-500/10 text-rose-400 border border-rose-500/10' },
-            ].map((action) => (
-              <a
-                key={action.label}
-                href={action.path}
-                className={`flex items-center gap-2.5 px-3 py-3 rounded-xl transition-colors text-sm font-semibold border ${action.color}`}
-              >
-                <span className="text-base">{action.icon}</span>
-                {action.label}
-              </a>
             ))}
           </div>
         </motion.div>
