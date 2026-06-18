@@ -2,16 +2,68 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/ags-icon.svg" />
+    <link rel="icon" type="image/svg+xml" href="https://cdn-bpead.nitrocdn.com/BBpeMUqwtpRtLgerjeQhQjKhWBtMWEQP/assets/images/optimized/rev-e5326ea/www.agshealth.com/wp-content/uploads/2022/09/ags-siticon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="AGS Health Workforce Intelligence Platform - Enterprise HRM & LMS" />
     <title>AGS Health | Workforce Intelligence Platform</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    
+    <style>
+      /* Hide Google Translate top toolbar banner frame */
+      iframe.goog-te-banner-frame {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        width: 0 !important;
+      }
+      .goog-te-banner-frame {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        width: 0 !important;
+      }
+      /* Hide Google translation hover tooltip */
+      #goog-gt-tt, .goog-te-balloon-frame, .goog-tooltip, .goog-tooltip:hover {
+        display: none !important;
+        visibility: hidden !important;
+      }
+      /* Hide text highlights of translated elements */
+      .goog-text-highlight {
+        background-color: transparent !important;
+        box-shadow: none !important;
+        border: none !important;
+      }
+      /* Prevent the layout from being pushed down by the missing banner */
+      body {
+        top: 0px !important;
+        position: static !important;
+      }
+      /* Hide default translate widgets completely */
+      #google_translate_element {
+        display: none !important;
+      }
+      .skiptranslate:not(.google-translate-exclude) {
+        display: none !important;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
+    
+    <!-- Google Translate Widget Container (Hidden) -->
+    <div id="google_translate_element" style="display:none; position:fixed; visibility:hidden; width:0; height:0; z-index:-999;"></div>
+    <script type="text/javascript">
+      function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+          pageLanguage: 'en',
+          autoDisplay: false
+        }, 'google_translate_element');
+      }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
