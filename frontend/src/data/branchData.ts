@@ -1,9 +1,10 @@
-// AGS Health India Branch Mock Data — All 7 branches
+// AGS Health Global Branch Mock Data — 12 branches across 4 countries
 
 export interface BranchData {
   id: string;
   city: string;
   state: string;
+  country: string;
   coordinates: [number, number];
   address: string;
   established: string;
@@ -27,10 +28,11 @@ export interface BranchData {
 }
 
 export const BRANCH_DATA: BranchData[] = [
+  // --- INDIA BRANCHES ---
   {
-    id: 'chennai', city: 'Chennai', state: 'Tamil Nadu',
+    id: 'chennai', city: 'Chennai (OMR)', state: 'Tamil Nadu', country: 'India',
     coordinates: [80.2707, 13.0827],
-    address: '14th Floor, Prince Towers, Anna Salai, Chennai – 600002',
+    address: 'Prince Infocity II, Kandanchavadi, OMR, Chennai – 600096',
     established: '2014', headCount: 312, activeEmployees: 289,
     revenue: 4820000, cost: 1940000, profit: 2880000,
     attritionRate: 8.2, hiringEfficiency: 84, trainingROI: 210,
@@ -68,9 +70,9 @@ export const BRANCH_DATA: BranchData[] = [
     ],
   },
   {
-    id: 'vellore', city: 'Vellore', state: 'Tamil Nadu',
+    id: 'vellore', city: 'Vellore', state: 'Tamil Nadu', country: 'India',
     coordinates: [79.1325, 12.9165],
-    address: '3rd Floor, Ranipet Highway Business Park, Vellore – 632001',
+    address: 'Site 1, Susee Towers, Vellore – 632009',
     established: '2017', headCount: 148, activeEmployees: 132,
     revenue: 2140000, cost: 980000, profit: 1160000,
     attritionRate: 11.4, hiringEfficiency: 74, trainingROI: 178,
@@ -108,9 +110,9 @@ export const BRANCH_DATA: BranchData[] = [
     ],
   },
   {
-    id: 'hyderabad', city: 'Hyderabad', state: 'Telangana',
+    id: 'hyderabad', city: 'Hyderabad', state: 'Telangana', country: 'India',
     coordinates: [78.4867, 17.3850],
-    address: '22nd Floor, Skyview 10, Hitech City, Hyderabad – 500081',
+    address: '9th Floor, Western Pearl, Hitech City, Hyderabad – 500081',
     established: '2015', headCount: 274, activeEmployees: 258,
     revenue: 4210000, cost: 1680000, profit: 2530000,
     attritionRate: 9.1, hiringEfficiency: 81, trainingROI: 196,
@@ -148,9 +150,9 @@ export const BRANCH_DATA: BranchData[] = [
     ],
   },
   {
-    id: 'tirupati', city: 'Tirupati', state: 'Andhra Pradesh',
+    id: 'tirupati', city: 'Tirupati', state: 'Andhra Pradesh', country: 'India',
     coordinates: [79.4192, 13.6288],
-    address: '5th Floor, Leela Towers, Renigunta Road, Tirupati – 517507',
+    address: 'Sree Rama Tech Park, Renigunta Road, Tirupati – 517507',
     established: '2019', headCount: 96, activeEmployees: 84,
     revenue: 1380000, cost: 680000, profit: 700000,
     attritionRate: 13.6, hiringEfficiency: 68, trainingROI: 152,
@@ -188,9 +190,9 @@ export const BRANCH_DATA: BranchData[] = [
     ],
   },
   {
-    id: 'bengaluru', city: 'Bengaluru', state: 'Karnataka',
+    id: 'bengaluru', city: 'Bengaluru', state: 'Karnataka', country: 'India',
     coordinates: [77.5946, 12.9716],
-    address: '18th Floor, Prestige Tech Park, Outer Ring Road, Bengaluru – 560103',
+    address: '8th Floor, B Wing, M2-Madhuvan North Avenue, Bengaluru – 560103',
     established: '2013', headCount: 428, activeEmployees: 406,
     revenue: 6840000, cost: 2620000, profit: 4220000,
     attritionRate: 7.4, hiringEfficiency: 88, trainingROI: 234,
@@ -228,9 +230,9 @@ export const BRANCH_DATA: BranchData[] = [
     ],
   },
   {
-    id: 'jaipur', city: 'Jaipur', state: 'Rajasthan',
+    id: 'jaipur', city: 'Jaipur', state: 'Rajasthan', country: 'India',
     coordinates: [75.7873, 26.9124],
-    address: '9th Floor, Aishwarya Tower, Malviya Nagar, Jaipur – 302017',
+    address: 'Office 301, Malviya Nagar, Jaipur – 302017',
     established: '2020', headCount: 112, activeEmployees: 98,
     revenue: 1620000, cost: 780000, profit: 840000,
     attritionRate: 12.1, hiringEfficiency: 71, trainingROI: 162,
@@ -268,9 +270,9 @@ export const BRANCH_DATA: BranchData[] = [
     ],
   },
   {
-    id: 'ahmedabad', city: 'Ahmedabad', state: 'Gujarat',
+    id: 'ahmedabad', city: 'Ahmedabad', state: 'Gujarat', country: 'India',
     coordinates: [72.5714, 23.0225],
-    address: '11th Floor, GIFT City Tower, Gandhinagar, Ahmedabad – 382355',
+    address: 'Commerce House, Judges Bungalow Road, Ahmedabad – 380054',
     established: '2021', headCount: 88, activeEmployees: 76,
     revenue: 1240000, cost: 620000, profit: 620000,
     attritionRate: 14.8, hiringEfficiency: 65, trainingROI: 144,
@@ -307,54 +309,364 @@ export const BRANCH_DATA: BranchData[] = [
       { name: 'Jaimin R', risk: 'Medium', sla: 71, lms: 57, dept: 'AR' },
     ],
   },
+
+  // --- UNITED STATES BRANCHES ---
+  {
+    id: 'washington', city: 'Washington D.C. (HQ)', state: 'District of Columbia', country: 'United States',
+    coordinates: [-77.0369, 38.9072],
+    address: 'Suite 1101, 1015 18th St. NW, Washington, D.C. 20036',
+    established: '2010', headCount: 156, activeEmployees: 148,
+    revenue: 9420000, cost: 4880000, profit: 4540000,
+    attritionRate: 5.4, hiringEfficiency: 90, trainingROI: 245,
+    openPositions: 8, benchStrength: 10, slaCompliance: 96, avgLmsScore: 84,
+    topDepts: [
+      { name: 'Team Leader', count: 32 },
+      { name: 'Quality Analyst', count: 28 },
+      { name: 'Medical Coder', count: 42 },
+      { name: 'HR', count: 18 },
+      { name: 'AR Caller', count: 22 },
+      { name: 'Med. Billing Exec.', count: 14 },
+    ],
+    monthlyTrend: [
+      { month: 'Aug', joiners: 8, leavers: 1, revenue: 1450000 },
+      { month: 'Sep', joiners: 10, leavers: 2, revenue: 1520000 },
+      { month: 'Oct', joiners: 12, leavers: 1, revenue: 1580000 },
+      { month: 'Nov', joiners: 9, leavers: 2, revenue: 1560000 },
+      { month: 'Dec', joiners: 11, leavers: 1, revenue: 1640000 },
+      { month: 'Jan', joiners: 15, leavers: 3, revenue: 1670000 },
+    ],
+    recruiterLeaderboard: [
+      { name: 'Sarah Connor', hired: 34, active: 31, retentionPct: 91 },
+      { name: 'John Doe', hired: 28, active: 25, retentionPct: 89 },
+      { name: 'Michael C', hired: 22, active: 19, retentionPct: 86 },
+    ],
+    topPerformers: [
+      { name: 'Robert Vance', role: 'VP Global Ops', revenue: 112000, profit: 76000 },
+      { name: 'Angela Martin', role: 'Finance Lead', revenue: 94000, profit: 62000 },
+      { name: 'Oscar Martinez', role: 'Compliance Chief', revenue: 86000, profit: 54000 },
+    ],
+    attritionRisk: [
+      { name: 'Ryan Howard', risk: 'High', sla: 65, lms: 55, dept: 'Operations' },
+      { name: 'Kelly Kapoor', risk: 'Medium', sla: 74, lms: 68, dept: 'Customer Support' },
+    ],
+  },
+  {
+    id: 'scranton', city: 'Scranton (Olyphant)', state: 'Pennsylvania', country: 'United States',
+    coordinates: [-75.5905, 41.4565],
+    address: '1444 E Lackawanna Ave, Olyphant, PA 18447',
+    established: '2012', headCount: 118, activeEmployees: 109,
+    revenue: 6140000, cost: 3580000, profit: 2560000,
+    attritionRate: 6.8, hiringEfficiency: 86, trainingROI: 220,
+    openPositions: 5, benchStrength: 8, slaCompliance: 93, avgLmsScore: 80,
+    topDepts: [
+      { name: 'Medical Coder', count: 35 },
+      { name: 'AR Caller', count: 30 },
+      { name: 'Med. Billing Exec.', count: 25 },
+      { name: 'Quality Analyst', count: 12 },
+      { name: 'Team Leader', count: 10 },
+      { name: 'HR', count: 6 },
+    ],
+    monthlyTrend: [
+      { month: 'Aug', joiners: 5, leavers: 1, revenue: 950000 },
+      { month: 'Sep', joiners: 7, leavers: 2, revenue: 990000 },
+      { month: 'Oct', joiners: 8, leavers: 1, revenue: 1020000 },
+      { month: 'Nov', joiners: 6, leavers: 2, revenue: 1010000 },
+      { month: 'Dec', joiners: 8, leavers: 1, revenue: 1070000 },
+      { month: 'Jan', joiners: 10, leavers: 2, revenue: 1100000 },
+    ],
+    recruiterLeaderboard: [
+      { name: 'Toby Flenderson', hired: 20, active: 18, retentionPct: 90 },
+      { name: 'Holly Flax', hired: 16, active: 15, retentionPct: 94 },
+    ],
+    topPerformers: [
+      { name: 'Jim Halpert', role: 'Senior Sales Director', revenue: 98000, profit: 68000 },
+      { name: 'Dwight Schrute', role: 'Sales Manager', revenue: 104000, profit: 72000 },
+      { name: 'Pam Beesly', role: 'Office Administrator', revenue: 45000, profit: 25000 },
+    ],
+    attritionRisk: [
+      { name: 'Creed Bratton', risk: 'Critical', sla: 42, lms: 22, dept: 'Quality Analyst' },
+      { name: 'Stanley Hudson', risk: 'Low', sla: 80, lms: 70, dept: 'AR' },
+    ],
+  },
+
+  // --- PHILIPPINES BRANCHES ---
+  {
+    id: 'manila', city: 'Manila (Taguig)', state: 'Metro Manila', country: 'Philippines',
+    coordinates: [121.0437, 14.5303],
+    address: '21st Floor, Cyber Sigma, Lawton Avenue, McKinley West, Fort Bonifacio, Taguig City, Philippines',
+    established: '2016', headCount: 224, activeEmployees: 208,
+    revenue: 4180000, cost: 2080000, profit: 2100000,
+    attritionRate: 9.6, hiringEfficiency: 82, trainingROI: 205,
+    openPositions: 12, benchStrength: 15, slaCompliance: 90, avgLmsScore: 79,
+    topDepts: [
+      { name: 'Medical Coder', count: 72 },
+      { name: 'AR Caller', count: 62 },
+      { name: 'Med. Billing Exec.', count: 48 },
+      { name: 'Quality Analyst', count: 24 },
+      { name: 'Team Leader', count: 12 },
+      { name: 'HR', count: 6 },
+    ],
+    monthlyTrend: [
+      { month: 'Aug', joiners: 10, leavers: 2, revenue: 640000 },
+      { month: 'Sep', joiners: 12, leavers: 3, revenue: 680000 },
+      { month: 'Oct', joiners: 15, leavers: 4, revenue: 710000 },
+      { month: 'Nov', joiners: 11, leavers: 2, revenue: 700000 },
+      { month: 'Dec', joiners: 14, leavers: 3, revenue: 720000 },
+      { month: 'Jan', joiners: 18, leavers: 5, revenue: 730000 },
+    ],
+    recruiterLeaderboard: [
+      { name: 'Maria Santos', hired: 35, active: 31, retentionPct: 88 },
+      { name: 'Juan Dela Cruz', hired: 28, active: 23, retentionPct: 82 },
+    ],
+    topPerformers: [
+      { name: 'Jose Rizal', role: 'Operations Director', revenue: 62000, profit: 41000 },
+      { name: 'Catriona Gray', role: 'HR Lead', revenue: 48000, profit: 32000 },
+      { name: 'Manny Pac', role: 'Team Lead', revenue: 38000, profit: 24000 },
+    ],
+    attritionRisk: [
+      { name: 'Liza Soberano', risk: 'High', sla: 60, lms: 50, dept: 'AR Caller' },
+      { name: 'Daniel Padilla', risk: 'Medium', sla: 71, lms: 61, dept: 'Medical Coding' },
+    ],
+  },
+
+  // --- MEXICO BRANCHES ---
+  {
+    id: 'zapopan_tizoc', city: 'Zapopan (Tizoc)', state: 'Jalisco', country: 'Mexico',
+    coordinates: [-103.3986, 20.6517],
+    address: 'Tizoc 97, Col. Ciudad Del Sol, C.P. 45050, Zapopan, Jalisco, México',
+    established: '2018', headCount: 98, activeEmployees: 90,
+    revenue: 1850000, cost: 1120000, profit: 730000,
+    attritionRate: 11.2, hiringEfficiency: 75, trainingROI: 180,
+    openPositions: 8, benchStrength: 12, slaCompliance: 86, avgLmsScore: 72,
+    topDepts: [
+      { name: 'Medical Coder', count: 32 },
+      { name: 'AR Caller', count: 26 },
+      { name: 'Med. Billing Exec.', count: 18 },
+      { name: 'Quality Analyst', count: 10 },
+      { name: 'Team Leader', count: 8 },
+      { name: 'HR', count: 4 },
+    ],
+    monthlyTrend: [
+      { month: 'Aug', joiners: 4, leavers: 1, revenue: 270000 },
+      { month: 'Sep', joiners: 6, leavers: 2, revenue: 290000 },
+      { month: 'Oct', joiners: 8, leavers: 2, revenue: 310000 },
+      { month: 'Nov', joiners: 5, leavers: 1, revenue: 300000 },
+      { month: 'Dec', joiners: 7, leavers: 2, revenue: 340000 },
+      { month: 'Jan', joiners: 10, leavers: 3, revenue: 340000 },
+    ],
+    recruiterLeaderboard: [
+      { name: 'Sofia Vergara', hired: 22, active: 18, retentionPct: 81 },
+      { name: 'Carlos Slim', hired: 16, active: 13, retentionPct: 81 },
+    ],
+    topPerformers: [
+      { name: 'Guillermo Toro', role: 'Creative Ops Chief', revenue: 32000, profit: 18000 },
+      { name: 'Salma Hayek', role: 'HR Director', revenue: 28000, profit: 16000 },
+    ],
+    attritionRisk: [
+      { name: 'Diego Luna', risk: 'High', sla: 61, lms: 45, dept: 'Billing' },
+      { name: 'Gael Garcia', risk: 'Medium', sla: 73, lms: 58, dept: 'AR Caller' },
+    ],
+  },
+  {
+    id: 'zapopan_meya', city: 'Zapopan (Torre Meya)', state: 'Jalisco', country: 'Mexico',
+    coordinates: [-103.4026, 20.6487],
+    address: 'Av. Adolfo López Mateos Sur #2220, Col. Ciudad del Sol, C.P. 45050, Zapopan, Jalisco, México',
+    established: '2019', headCount: 82, activeEmployees: 74,
+    revenue: 1420000, cost: 920000, profit: 500000,
+    attritionRate: 12.8, hiringEfficiency: 70, trainingROI: 165,
+    openPositions: 6, benchStrength: 10, slaCompliance: 83, avgLmsScore: 69,
+    topDepts: [
+      { name: 'Medical Coder', count: 28 },
+      { name: 'AR Caller', count: 22 },
+      { name: 'Med. Billing Exec.', count: 14 },
+      { name: 'Quality Analyst', count: 8 },
+      { name: 'Team Leader', count: 6 },
+      { name: 'HR', count: 4 },
+    ],
+    monthlyTrend: [
+      { month: 'Aug', joiners: 3, leavers: 1, revenue: 210000 },
+      { month: 'Sep', joiners: 5, leavers: 2, revenue: 220000 },
+      { month: 'Oct', joiners: 6, leavers: 1, revenue: 240000 },
+      { month: 'Nov', joiners: 4, leavers: 1, revenue: 235000 },
+      { month: 'Dec', joiners: 6, leavers: 2, revenue: 255000 },
+      { month: 'Jan', joiners: 8, leavers: 3, revenue: 260000 },
+    ],
+    recruiterLeaderboard: [
+      { name: 'Alejandro G', hired: 15, active: 12, retentionPct: 80 },
+      { name: 'Luis Miguel', hired: 12, active: 9, retentionPct: 75 },
+    ],
+    topPerformers: [
+      { name: 'Thalia Sodi', role: 'Support Lead', revenue: 22000, profit: 12000 },
+      { name: 'Paulina Rubio', role: 'Billing Exec', revenue: 19000, profit: 9500 },
+    ],
+    attritionRisk: [
+      { name: 'Vicente F', risk: 'Critical', sla: 48, lms: 32, dept: 'Medical Coding' },
+    ],
+  },
 ];
 
-const ROLE_NAMES = ['Medical Coder', 'AR Caller', 'Med. Billing Exec.', 'Quality Analyst', 'Team Leader', 'HR'];
+export const COUNTRIES = ['United States', 'India', 'Philippines', 'Mexico'];
 
-export const ALL_INDIA_DATA: BranchData = {
-  id: 'all',
-  city: 'All India',
-  state: 'Pan India',
-  coordinates: [80.0, 22.0],
-  address: 'AGS Health — All 7 India Branches',
-  established: '2013',
-  headCount: BRANCH_DATA.reduce((s, b) => s + b.headCount, 0),
-  activeEmployees: BRANCH_DATA.reduce((s, b) => s + b.activeEmployees, 0),
-  revenue: BRANCH_DATA.reduce((s, b) => s + b.revenue, 0),
-  cost: BRANCH_DATA.reduce((s, b) => s + b.cost, 0),
-  profit: BRANCH_DATA.reduce((s, b) => s + b.profit, 0),
-  attritionRate: parseFloat((BRANCH_DATA.reduce((s, b) => s + b.attritionRate, 0) / BRANCH_DATA.length).toFixed(1)),
-  hiringEfficiency: Math.round(BRANCH_DATA.reduce((s, b) => s + b.hiringEfficiency, 0) / BRANCH_DATA.length),
-  trainingROI: Math.round(BRANCH_DATA.reduce((s, b) => s + b.trainingROI, 0) / BRANCH_DATA.length),
-  openPositions: BRANCH_DATA.reduce((s, b) => s + b.openPositions, 0),
-  benchStrength: BRANCH_DATA.reduce((s, b) => s + b.benchStrength, 0),
-  slaCompliance: Math.round(BRANCH_DATA.reduce((s, b) => s + b.slaCompliance, 0) / BRANCH_DATA.length),
-  avgLmsScore: Math.round(BRANCH_DATA.reduce((s, b) => s + b.avgLmsScore, 0) / BRANCH_DATA.length),
-  topDepts: ROLE_NAMES.map(name => ({
-    name,
-    count: BRANCH_DATA.reduce((s, b) => s + (b.topDepts.find(d => d.name === name)?.count || 0), 0),
-  })),
-  monthlyTrend: ['Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan'].map((month, idx) => ({
-    month,
-    joiners: BRANCH_DATA.reduce((s, b) => s + b.monthlyTrend[idx].joiners, 0),
-    leavers: BRANCH_DATA.reduce((s, b) => s + b.monthlyTrend[idx].leavers, 0),
-    revenue: BRANCH_DATA.reduce((s, b) => s + b.monthlyTrend[idx].revenue, 0),
-  })),
-  recruiterLeaderboard: [
-    { name: 'Nisha P (BLR)', hired: 64, active: 58, retentionPct: 91 },
-    { name: 'Priya N (CHN)', hired: 48, active: 42, retentionPct: 88 },
-    { name: 'Arjun M (BLR)', hired: 52, active: 45, retentionPct: 87 },
-  ],
-  topPerformers: [
-    { name: 'Rajesh S', role: 'VP Ops, BLR', revenue: 78400, profit: 52600 },
-    { name: 'Nandita V', role: 'Sr. Director, BLR', revenue: 64200, profit: 41800 },
-    { name: 'Anand Kumar', role: 'Sr. Manager, CHN', revenue: 52400, profit: 34200 },
-  ],
-  attritionRisk: [
-    { name: 'Vishal M', risk: 'Critical', sla: 54, lms: 38, dept: 'Medical Coding' },
-    { name: 'Suresh B', risk: 'Critical', sla: 55, lms: 40, dept: 'Medical Coding' },
-    { name: 'Kiran S', risk: 'Critical', sla: 58, lms: 42, dept: 'AR' },
-    { name: 'Lakshmi V', risk: 'High', sla: 61, lms: 47, dept: 'AR' },
-    { name: 'Aditya V', risk: 'High', sla: 63, lms: 49, dept: 'Medical Coding' },
-  ],
+export const STATES_BY_COUNTRY: Record<string, string[]> = {
+  'United States': ['District of Columbia', 'Pennsylvania'],
+  'India': ['Tamil Nadu', 'Telangana', 'Andhra Pradesh', 'Karnataka', 'Rajasthan', 'Gujarat'],
+  'Philippines': ['Metro Manila'],
+  'Mexico': ['Jalisco'],
 };
+
+export function getAggregatedData(
+  filter: { country?: string; state?: string; branchId?: string }
+): BranchData {
+  const { country, state, branchId } = filter;
+
+  // 1. Specific single branch selection
+  if (branchId && branchId !== 'all') {
+    const singleBranch = BRANCH_DATA.find((b) => b.id === branchId);
+    if (singleBranch) return singleBranch;
+  }
+
+  // 2. Filter list of branches based on scope
+  let filtered = BRANCH_DATA;
+  if (country && country !== 'all') {
+    filtered = filtered.filter((b) => b.country === country);
+  }
+  if (state && state !== 'all') {
+    filtered = filtered.filter((b) => b.state === state);
+  }
+
+  // Fallback if no matching data found
+  if (filtered.length === 0) {
+    return {
+      id: 'empty',
+      city: 'No Data',
+      state: 'None',
+      country: 'None',
+      coordinates: [0, 0],
+      address: 'No locations available in this filter',
+      established: 'N/A',
+      headCount: 0,
+      activeEmployees: 0,
+      revenue: 0,
+      cost: 0,
+      profit: 0,
+      attritionRate: 0,
+      hiringEfficiency: 0,
+      trainingROI: 0,
+      openPositions: 0,
+      benchStrength: 0,
+      slaCompliance: 0,
+      avgLmsScore: 0,
+      topDepts: [],
+      monthlyTrend: [],
+      recruiterLeaderboard: [],
+      topPerformers: [],
+      attritionRisk: [],
+    };
+  }
+
+  // 3. Consolidated calculations
+  const totalHeadCount = filtered.reduce((s, b) => s + b.headCount, 0);
+  const totalActive = filtered.reduce((s, b) => s + b.activeEmployees, 0);
+  const totalRevenue = filtered.reduce((s, b) => s + b.revenue, 0);
+  const totalCost = filtered.reduce((s, b) => s + b.cost, 0);
+  const totalProfit = filtered.reduce((s, b) => s + b.profit, 0);
+
+  const avgAttrition = parseFloat((filtered.reduce((s, b) => s + b.attritionRate, 0) / filtered.length).toFixed(1));
+  const avgHiring = Math.round(filtered.reduce((s, b) => s + b.hiringEfficiency, 0) / filtered.length);
+  const avgTraining = Math.round(filtered.reduce((s, b) => s + b.trainingROI, 0) / filtered.length);
+  const totalOpen = filtered.reduce((s, b) => s + b.openPositions, 0);
+  const totalBench = filtered.reduce((s, b) => s + b.benchStrength, 0);
+  const avgSla = Math.round(filtered.reduce((s, b) => s + b.slaCompliance, 0) / filtered.length);
+  const avgLms = Math.round(filtered.reduce((s, b) => s + b.avgLmsScore, 0) / filtered.length);
+
+  // Consolidated Role Distribution (Departments)
+  const ROLE_NAMES = ['Medical Coder', 'AR Caller', 'Med. Billing Exec.', 'Quality Analyst', 'Team Leader', 'HR'];
+  const topDepts = ROLE_NAMES.map((name) => ({
+    name,
+    count: filtered.reduce((s, b) => s + (b.topDepts.find((d) => d.name === name)?.count || 0), 0),
+  }));
+
+  // Consolidated Monthly Trends (consolidated by month order)
+  const months = ['Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan'];
+  const monthlyTrend = months.map((month, idx) => ({
+    month,
+    joiners: filtered.reduce((s, b) => s + (b.monthlyTrend[idx]?.joiners || 0), 0),
+    leavers: filtered.reduce((s, b) => s + (b.monthlyTrend[idx]?.leavers || 0), 0),
+    revenue: filtered.reduce((s, b) => s + (b.monthlyTrend[idx]?.revenue || 0), 0),
+  }));
+
+  // recruiter leaderboard
+  const allRecruiters = filtered.flatMap((b) => b.recruiterLeaderboard);
+  const recruiterMap: Record<string, { name: string; hired: number; active: number; retentionPct: number }> = {};
+  allRecruiters.forEach((r) => {
+    const baseName = r.name.split(' (')[0];
+    if (!recruiterMap[baseName]) {
+      recruiterMap[baseName] = { name: baseName, hired: 0, active: 0, retentionPct: 0 };
+    }
+    recruiterMap[baseName].hired += r.hired;
+    recruiterMap[baseName].active += r.active;
+  });
+  const recruiterLeaderboard = Object.values(recruiterMap)
+    .map((r) => ({
+      ...r,
+      retentionPct: r.hired > 0 ? Math.round((r.active / r.hired) * 100) : 0,
+    }))
+    .sort((a, b) => b.hired - a.hired)
+    .slice(0, 3);
+
+  // top performers
+  const topPerformers = filtered.flatMap((b) => b.topPerformers)
+    .sort((a, b) => b.profit - a.profit)
+    .slice(0, 3);
+
+  // consolidated attrition risks
+  const attritionRisk = filtered.flatMap((b) => b.attritionRisk)
+    .sort((a, b) => {
+      const riskScore = { Critical: 4, High: 3, Medium: 2, Low: 1 };
+      return riskScore[b.risk] - riskScore[a.risk];
+    })
+    .slice(0, 5);
+
+  // Label resolving
+  let labelCity = 'All Countries';
+  let labelState = 'Global';
+  if (country && country !== 'all') {
+    labelCity = `All ${country}`;
+    labelState = country;
+    if (state && state !== 'all') {
+      labelCity = `All ${state}`;
+      labelState = state;
+    }
+  }
+
+  return {
+    id: branchId || 'all',
+    city: labelCity,
+    state: labelState,
+    country: country || 'Global',
+    coordinates: filtered[0]?.coordinates || [0, 0],
+    address: `Consolidated workforce metrics across ${filtered.length} location(s)`,
+    established: '2010',
+    headCount: totalHeadCount,
+    activeEmployees: totalActive,
+    revenue: totalRevenue,
+    cost: totalCost,
+    profit: totalProfit,
+    attritionRate: avgAttrition,
+    hiringEfficiency: avgHiring,
+    trainingROI: avgTraining,
+    openPositions: totalOpen,
+    benchStrength: totalBench,
+    slaCompliance: avgSla,
+    avgLmsScore: avgLms,
+    topDepts,
+    monthlyTrend,
+    recruiterLeaderboard,
+    topPerformers,
+    attritionRisk,
+  };
+}
+
+// Compatibility Exports
+export const ALL_INDIA_DATA: BranchData = getAggregatedData({ country: 'India' });
+export const GLOBAL_DATA: BranchData = getAggregatedData({ country: 'all' });
