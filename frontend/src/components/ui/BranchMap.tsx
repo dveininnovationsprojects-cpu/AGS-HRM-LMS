@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { ComposableMap, Geographies, Geography, Marker, ZoomableGroup } from 'react-simple-maps';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, ZoomIn, ZoomOut, Maximize2 } from 'lucide-react';
@@ -10,6 +10,8 @@ const GEO_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json'
 interface Props {
   selectedBranch: BranchData;
   onBranchSelect: (branch: BranchData) => void;
+  selectedCountry: string;
+  selectedState: string;
 }
 
 const profitColor = (profit: number) => {
@@ -18,30 +20,79 @@ const profitColor = (profit: number) => {
   return '#f59e0b';
 };
 
-// India center
-const DEFAULT_CENTER: [number, number] = [82.5, 21.0];
-const DEFAULT_ZOOM = 4;
-
-// Custom label positions to prevent overlapping for cities in close proximity
-const LABEL_OFFSETS: Record<string, { x: number; y: number; textAnchor: 'start' | 'middle' | 'end' }> = {
-  chennai:   { x: 3.5,  y: 0.8,  textAnchor: 'start' },  // to the right
-  vellore:   { x: -3.5, y: 2.2,  textAnchor: 'end' },    // bottom-left
-  tirupati:  { x: 0,    y: -3.8, textAnchor: 'middle' }, // top
-  bengaluru: { x: -3.5, y: 0.8,  textAnchor: 'end' },    // to the left
-  hyderabad: { x: 3.5,  y: 0.8,  textAnchor: 'start' },  // to the right
-  jaipur:    { x: 0,    y: 4.8,  textAnchor: 'middle' }, // bottom
-  ahmedabad: { x: 0,    y: 4.8,  textAnchor: 'middle' }, // bottom
+const MAP_CONFIGS: Record<string, { center: [number, number]; scale: number; baseZoom: number }> = {
+  all: { center: [0, 20], scale: 120, baseZoom: 1.2 },
+  'India': { center: [80, 21], scale: 150, baseZoom: 3.8 },
+  'United States': { center: [-98, 38], scale: 150, baseZoom: 2.5 },
+  'Philippines': { center: [121, 13], scale: 150, baseZoom: 5.5 },
+  'Mexico': { center: [-102, 23], scale: 150, baseZoom: 3.5 },
 };
 
-export default function IndiaBranchMap({ selectedBranch, onBranchSelect }: Props) {
-  const [zoom, setZoom] = useState(DEFAULT_ZOOM);
-  const [center, setCenter] = useState<[number, number]>(DEFAULT_CENTER);
+// Custom label offsets to prevent overlapping for cities in close proximity
+const LABEL_OFFSETS: Record<string, { x: number; y: number; textAnchor: 'start' | 'middle' | 'end' }> = {
+  chennai:      { x: 3.5,  y: 0.8,  textAnchor: 'start' },  // to the right
+  vellore:      { x: -3.5, y: 2.2,  textAnchor: 'end' },    // bottom-left
+  tirupati:     { x: 0,    y: -3.8, textAnchor: 'middle' }, // top
+  bengaluru:    { x: -3.5, y: 0.8,  textAnchor: 'end' },    // to the left
+  hyderabad:    { x: 3.5,  y: 0.8,  textAnchor: 'start' },  // to the right
+  jaipur:       { x: 0,    y: 4.8,  textAnchor: 'middle' }, // bottom
+  ahmedabad:    { x: 0,    y: 4.8,  textAnchor: 'middle' }, // bottom
+  washington:   { x: 3.5,  y: 0.8,  textAnchor: 'start' },
+  scranton:     { x: -3.5, y: -2.2, textAnchor: 'end' },
+  manila:       { x: 3.5,  y: 0.8,  textAnchor: 'start' },
+  zapopan_tizoc: { x: -3.5, y: -2.2, textAnchor: 'end' },
+  zapopan_meya:  { x: 3.5,  y: 2.2,  textAnchor: 'start' },
+};
+
+export default function BranchMap({ selectedBranch, onBranchSelect, selectedCountry, selectedState }: Props) {
+  const [zoom, setZoom] = useState(MAP_CONFIGS.all.baseZoom);
+  const [center, setCenter] = useState<[number, number]>(MAP_CONFIGS.all.center);
   const [hoveredBranch, setHoveredBranch] = useState<BranchData | null>(null);
   const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
 
-  const handleZoomIn  = useCallback(() => setZoom(z => Math.min(z + 1, 12)), []);
+  // Update center and zoom based on filter selections
+  useEffect(() => {
+    if (selectedBranch && selectedBranch.id !== 'all' && selectedBranch.id !== 'empty' && !selectedBranch.city.startsWith('All ')) {
+      // Specific branch selection
+      setCenter(selectedBranch.coordinates);
+      setZoom(selectedBranch.country === 'Philippines' ? 8.5 : 7.0);
+    } else if (selectedState && selectedState !== 'all') {
+      const stateBranches = BRANCH_DATA.filter(b => b.state === selectedState);
+      if (stateBranches.length > 0) {
+        const avgX = stateBranches.reduce((sum, b) => sum + b.coordinates[0], 0) / stateBranches.length;
+        const avgY = stateBranches.reduce((sum, b) => sum + b.coordinates[1], 0) / stateBranches.length;
+        setCenter([avgX, avgY]);
+        setZoom(5.0);
+      }
+    } else if (selectedCountry && selectedCountry !== 'all') {
+      const config = MAP_CONFIGS[selectedCountry] || MAP_CONFIGS.all;
+      setCenter(config.center);
+      setZoom(config.baseZoom);
+    } else {
+      setCenter(MAP_CONFIGS.all.center);
+      setZoom(MAP_CONFIGS.all.baseZoom);
+    }
+  }, [selectedBranch, selectedCountry, selectedState]);
+
+  const handleZoomIn  = useCallback(() => setZoom(z => Math.min(z + 1, 15)), []);
   const handleZoomOut = useCallback(() => setZoom(z => Math.max(z - 1, 1)), []);
-  const handleReset   = useCallback(() => { setZoom(DEFAULT_ZOOM); setCenter(DEFAULT_CENTER); }, []);
+  const handleReset   = useCallback(() => {
+    if (selectedCountry && selectedCountry !== 'all') {
+      const config = MAP_CONFIGS[selectedCountry] || MAP_CONFIGS.all;
+      setCenter(config.center);
+      setZoom(config.baseZoom);
+    } else {
+      setCenter(MAP_CONFIGS.all.center);
+      setZoom(MAP_CONFIGS.all.baseZoom);
+    }
+  }, [selectedCountry]);
+
+  // Determine which branches should be visible / active
+  const visibleBranches = BRANCH_DATA.filter(b => {
+    if (selectedCountry && selectedCountry !== 'all' && b.country !== selectedCountry) return false;
+    if (selectedState && selectedState !== 'all' && b.state !== selectedState) return false;
+    return true;
+  });
 
   return (
     <div className="relative w-full h-full bg-[#04080f] overflow-hidden">
@@ -49,7 +100,7 @@ export default function IndiaBranchMap({ selectedBranch, onBranchSelect }: Props
       {/* ── Composable World Map ── */}
       <ComposableMap
         projection="geoMercator"
-        projectionConfig={{ center: DEFAULT_CENTER, scale: 150 }}
+        projectionConfig={{ scale: 140 }}
         style={{ width: '100%', height: '100%' }}
       >
         <ZoomableGroup
@@ -59,25 +110,43 @@ export default function IndiaBranchMap({ selectedBranch, onBranchSelect }: Props
             setZoom(z);
             setCenter(coordinates as [number, number]);
           }}
-          minZoom={1}
-          maxZoom={12}
+          minZoom={0.8}
+          maxZoom={18}
         >
           {/* World countries */}
           <Geographies geography={GEO_URL}>
             {({ geographies }: { geographies: any[] }) =>
               geographies.map((geo: any) => {
-                // India (id 356) gets a subtle highlight
-                const isIndia = geo.id === '356';
+                const officeCountryIds: Record<string, string> = {
+                  '356': 'India',
+                  '840': 'United States',
+                  '608': 'Philippines',
+                  '484': 'Mexico',
+                };
+                const countryName = officeCountryIds[geo.id];
+                const hasOffice = !!countryName;
+
+                let fill = '#080f1e';
+                let stroke = '#0d1f38';
+                let strokeWidth = 0.3;
+
+                if (hasOffice) {
+                  const isSelected = selectedCountry === 'all' || selectedCountry === countryName;
+                  fill = isSelected ? '#0d2040' : '#0a1428';
+                  stroke = isSelected ? '#1e4a8a' : '#142f56';
+                  strokeWidth = isSelected ? 0.8 : 0.4;
+                }
+
                 return (
                   <Geography
                     key={geo.rsmKey}
                     geography={geo}
-                    fill={isIndia ? '#0d2040' : '#080f1e'}
-                    stroke={isIndia ? '#1e4a8a' : '#0d1f38'}
-                    strokeWidth={isIndia ? 0.8 : 0.3}
+                    fill={fill}
+                    stroke={stroke}
+                    strokeWidth={strokeWidth}
                     style={{
                       default: { outline: 'none' },
-                      hover:   { fill: isIndia ? '#102a52' : '#0a1428', outline: 'none' },
+                      hover:   { fill: hasOffice ? '#102a52' : '#0a1428', outline: 'none' },
                       pressed: { outline: 'none' },
                     }}
                   />
@@ -87,7 +156,7 @@ export default function IndiaBranchMap({ selectedBranch, onBranchSelect }: Props
           </Geographies>
 
           {/* Branch Markers */}
-          {BRANCH_DATA.map((branch) => {
+          {visibleBranches.map((branch) => {
             const isSelected = selectedBranch.id === branch.id;
             const isHovered  = hoveredBranch?.id === branch.id;
             const color = profitColor(branch.profit);
@@ -96,7 +165,7 @@ export default function IndiaBranchMap({ selectedBranch, onBranchSelect }: Props
             const r = Math.max(1.8, Math.min(3.2, branch.headCount / 120));
 
             // Dynamic scaling based on zoom factor to keep markers/labels screen-size constant
-            const zoomFactor = zoom / 4;
+            const zoomFactor = Math.max(0.5, zoom / 3);
             const markerRadius = r / zoomFactor;
             const strokeWidth = (isSelected ? 0.5 : 0.3) / zoomFactor;
             const fontSize = 2.4 / zoomFactor;
@@ -189,7 +258,7 @@ export default function IndiaBranchMap({ selectedBranch, onBranchSelect }: Props
 
         {/* Zoom level indicator */}
         <div className="w-8 h-6 bg-[#060c1e]/80 border border-white/8 rounded-md flex items-center justify-center">
-          <span className="text-[9px] text-slate-500 font-mono">{zoom}x</span>
+          <span className="text-[9px] text-slate-500 font-mono">{zoom.toFixed(1)}x</span>
         </div>
       </div>
 
@@ -197,7 +266,9 @@ export default function IndiaBranchMap({ selectedBranch, onBranchSelect }: Props
       <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
         <div className="bg-[#060c1e]/85 backdrop-blur-md border border-white/8 rounded-xl px-2.5 py-1.5 flex items-center gap-1.5">
           <MapPin className="w-3 h-3 text-emerald-400" />
-          <span className="text-[10px] text-slate-200 font-semibold">{BRANCH_DATA.length} AGS Branches · India</span>
+          <span className="text-[10px] text-slate-200 font-semibold">
+            {visibleBranches.length} AGS Branches · {selectedCountry === 'all' ? 'Global' : selectedCountry}
+          </span>
         </div>
         <div className="bg-[#060c1e]/70 border border-white/5 rounded-lg px-2 py-1">
           <span className="text-[8.5px] text-slate-500">Drag to pan · Scroll to zoom</span>
@@ -208,9 +279,9 @@ export default function IndiaBranchMap({ selectedBranch, onBranchSelect }: Props
       <div className="absolute bottom-3 left-3 flex flex-col gap-1.5 bg-[#060c1e]/85 backdrop-blur-md border border-white/8 rounded-xl px-2.5 py-2 z-10">
         <p className="text-[8px] text-slate-500 font-bold uppercase tracking-wider">Profit Scale</p>
         {[
-          { color: '#10b981', label: '> ₹3M  High' },
-          { color: '#06b6d4', label: '₹1–3M  Mid' },
-          { color: '#f59e0b', label: '< ₹1M  Growth' },
+          { color: '#10b981', label: '> $3.0M High' },
+          { color: '#06b6d4', label: '$1.0–3.0M Mid' },
+          { color: '#f59e0b', label: '< $1.0M Growth' },
         ].map(l => (
           <div key={l.label} className="flex items-center gap-2">
             <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: l.color, boxShadow: `0 0 5px ${l.color}` }} />
@@ -242,9 +313,9 @@ export default function IndiaBranchMap({ selectedBranch, onBranchSelect }: Props
               <div className="space-y-1.5">
                 {[
                   { label: 'Headcount', value: hoveredBranch.headCount.toLocaleString(), cls: 'text-slate-100' },
-                  { label: 'Revenue', value: `$${(hoveredBranch.revenue / 1e6).toFixed(1)}M`, cls: 'text-emerald-400' },
-                  { label: 'Net Profit', value: `$${(hoveredBranch.profit / 1e6).toFixed(1)}M`, cls: 'text-indigo-400' },
-                  { label: 'SLA', value: `${hoveredBranch.slaCompliance}%`, cls: hoveredBranch.slaCompliance >= 90 ? 'text-emerald-400' : 'text-amber-400' },
+                  { label: 'Revenue', value: `$${(hoveredBranch.revenue / 1e6).toFixed(2)}M`, cls: 'text-emerald-400' },
+                  { label: 'Net Profit', value: `$${(hoveredBranch.profit / 1e6).toFixed(2)}M`, cls: 'text-indigo-400' },
+                  { label: 'SLA Compliance', value: `${hoveredBranch.slaCompliance}%`, cls: hoveredBranch.slaCompliance >= 90 ? 'text-emerald-400' : 'text-amber-400' },
                 ].map(row => (
                   <div key={row.label} className="flex justify-between text-[10px]">
                     <span className="text-slate-400">{row.label}</span>

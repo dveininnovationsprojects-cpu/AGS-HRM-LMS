@@ -11,8 +11,8 @@ import {
 } from 'recharts';
 import api from '../../services/api';
 import CountUp from '../../components/ui/CountUp';
-import IndiaBranchMap from '../../components/ui/IndiaBranchMap';
-import { BRANCH_DATA, ALL_INDIA_DATA, type BranchData } from '../../data/branchData';
+import BranchMap from '../../components/ui/BranchMap';
+import { BRANCH_DATA, GLOBAL_DATA, COUNTRIES, STATES_BY_COUNTRY, getAggregatedData, type BranchData } from '../../data/branchData';
 
 const DEPT_COLORS = ['#10b981', '#06b6d4', '#8b5cf6', '#f59e0b', '#ef4444', '#64748b'];
 const RETENTION_COLORS = ['#8b5cf6', '#10b981', '#06b6d4'];
@@ -107,14 +107,26 @@ function FadeIn({ children, delay = 0, className = '' }: { children: React.React
 }
 
 export default function DashboardPage() {
-  const [selectedBranch, setSelectedBranch] = useState<BranchData>(ALL_INDIA_DATA);
+  const [selectedCountry, setSelectedCountry] = useState<string>('all');
+  const [selectedState, setSelectedState] = useState<string>('all');
+  const [selectedBranchId, setSelectedBranchId] = useState<string>('all');
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
 
   useEffect(() => {
     api.get('/dashboard/stats').catch(() => {});
   }, []);
 
-  const b = selectedBranch;
+  const b = getAggregatedData({
+    country: selectedCountry,
+    state: selectedState,
+    branchId: selectedBranchId
+  });
+
+  const handleMapBranchSelect = (branch: BranchData) => {
+    setSelectedCountry(branch.country);
+    setSelectedState(branch.state);
+    setSelectedBranchId(branch.id);
+  };
 
   const statCards = [
     { title: 'Total Employees',   value: b.headCount,         icon: Users,       color: 'bg-emerald-500', change: '+5.2%',  up: true,  prefix: '',  suffix: '' },
@@ -144,35 +156,102 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6">
 
-      {/* ── Header + Branch Pills ── */}
-      <div className="flex items-start justify-between flex-wrap gap-3">
-        <div>
-          <h1 className="text-xl font-bold text-slate-100">Workforce Intelligence Overview</h1>
+      {/* ── Header + Dynamic Cascading Filters ── */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#0a0f24]/60 border border-white/5 p-4 rounded-2xl backdrop-blur-md">
+        <div className="shrink-0">
+          <h1 className="text-xl font-bold text-slate-100 flex items-center gap-2">
+            <Globe className="w-5 h-5 text-emerald-400" />
+            Workforce Intelligence Overview
+          </h1>
         </div>
-        <div className="flex items-center gap-2 flex-wrap">
-          <button
-            onClick={() => setSelectedBranch(ALL_INDIA_DATA)}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
-              b.id === 'all'
-                ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
-                : 'bg-white/5 text-slate-400 border-white/10 hover:bg-white/10'
-            }`}
-          >
-            <Globe className="w-3 h-3" /> All India
-          </button>
-          {BRANCH_DATA.map(br => (
-            <button
-              key={br.id}
-              onClick={() => setSelectedBranch(br)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
-                b.id === br.id
-                  ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40'
-                  : 'bg-white/5 text-slate-400 border-white/10 hover:bg-white/10'
-              }`}
+
+        <div className="flex flex-row flex-nowrap items-end gap-3 shrink-0 overflow-x-auto pb-1">
+          {/* Country Filter */}
+          <div className="flex flex-col gap-1 shrink-0">
+            <span className="text-[9px] text-slate-500 uppercase tracking-wider font-semibold">Country</span>
+            <select
+              value={selectedCountry}
+              onChange={(e) => {
+                setSelectedCountry(e.target.value);
+                setSelectedState('all');
+                setSelectedBranchId('all');
+              }}
+              className="bg-[#0e112a] border border-white/10 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-emerald-500 transition-colors"
             >
-              <MapPin className="w-3 h-3" /> {br.city}
-            </button>
-          ))}
+              <option value="all">All Countries</option>
+              {COUNTRIES.map(c => (
+                <option key={c} value={c}>{c}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* State Filter */}
+          {selectedCountry !== 'all' && STATES_BY_COUNTRY[selectedCountry]?.length > 0 && (
+            <div className="flex flex-col gap-1 shrink-0">
+              <span className="text-[9px] text-slate-500 uppercase tracking-wider font-semibold">State</span>
+              <select
+                value={selectedState}
+                onChange={(e) => {
+                  setSelectedState(e.target.value);
+                  setSelectedBranchId('all');
+                }}
+                className="bg-[#0e112a] border border-white/10 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-emerald-500 transition-colors"
+              >
+                <option value="all">All States</option>
+                {STATES_BY_COUNTRY[selectedCountry].map(s => (
+                  <option key={s} value={s}>{s}</option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          {/* Branch Filter */}
+          <div className="flex flex-col gap-1 shrink-0">
+            <span className="text-[9px] text-slate-500 uppercase tracking-wider font-semibold">Branch</span>
+            <select
+              value={selectedBranchId}
+              onChange={(e) => {
+                const bid = e.target.value;
+                setSelectedBranchId(bid);
+                if (bid !== 'all') {
+                  const found = BRANCH_DATA.find(b => b.id === bid);
+                  if (found) {
+                    setSelectedCountry(found.country);
+                    setSelectedState(found.state);
+                  }
+                }
+              }}
+              className="bg-[#0e112a] border border-white/10 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-emerald-500 transition-colors"
+            >
+              <option value="all">All Branches</option>
+              {BRANCH_DATA
+                .filter(br => {
+                  if (selectedCountry !== 'all' && br.country !== selectedCountry) return false;
+                  if (selectedState !== 'all' && br.state !== selectedState) return false;
+                  return true;
+                })
+                .map(br => (
+                  <option key={br.id} value={br.id}>{br.city} ({br.state})</option>
+                ))
+              }
+            </select>
+          </div>
+
+          {/* Reset Filters */}
+          {(selectedCountry !== 'all' || selectedState !== 'all' || selectedBranchId !== 'all') && (
+            <div className="shrink-0">
+              <button
+                onClick={() => {
+                  setSelectedCountry('all');
+                  setSelectedState('all');
+                  setSelectedBranchId('all');
+                }}
+                className="px-3 py-1.5 bg-rose-500/10 border border-rose-500/20 text-rose-300 hover:bg-rose-500/20 rounded-lg text-xs font-semibold transition-all"
+              >
+                Reset
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -449,11 +528,18 @@ export default function DashboardPage() {
           <div className="xl:col-span-3 bg-[#0a0f24] rounded-2xl border border-white/5 overflow-hidden" style={{ height: 420 }}>
             <div className="px-4 py-3 border-b border-white/5 flex items-center gap-2">
               <Building2 className="w-4 h-4 text-emerald-400" />
-              <h3 className="text-sm font-semibold text-slate-200">AGS Health Branch Network — India</h3>
+              <h3 className="text-sm font-semibold text-slate-200">
+                AGS Health Branch Network — {selectedCountry === 'all' ? 'Global' : selectedCountry}
+              </h3>
               <span className="ml-auto text-[10px] text-slate-500">Click marker to filter</span>
             </div>
             <div style={{ height: 374 }}>
-              <IndiaBranchMap selectedBranch={b} onBranchSelect={setSelectedBranch} />
+              <BranchMap
+                selectedBranch={b}
+                onBranchSelect={handleMapBranchSelect}
+                selectedCountry={selectedCountry}
+                selectedState={selectedState}
+              />
             </div>
           </div>
 
@@ -530,17 +616,17 @@ export default function DashboardPage() {
                   <div className="flex justify-between text-[10px] mb-1">
                     <span className="text-slate-500">Revenue Contribution</span>
                     <span className="text-emerald-400 font-semibold">
-                      ${(b.revenue / 1e6).toFixed(1)}M / ${(ALL_INDIA_DATA.revenue / 1e6).toFixed(1)}M
+                      ${(b.revenue / 1e6).toFixed(2)}M / ${(GLOBAL_DATA.revenue / 1e6).toFixed(2)}M
                     </span>
                   </div>
                   <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
                     <div
                       className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full transition-all duration-500"
-                      style={{ width: `${Math.round((b.revenue / ALL_INDIA_DATA.revenue) * 100)}%` }}
+                      style={{ width: `${Math.max(1, Math.min(100, Math.round((b.revenue / GLOBAL_DATA.revenue) * 100)))}%` }}
                     />
                   </div>
                   <p className="text-[9px] text-slate-500 mt-0.5 text-right">
-                    {Math.round((b.revenue / ALL_INDIA_DATA.revenue) * 100)}% of all India
+                    {Math.round((b.revenue / GLOBAL_DATA.revenue) * 100)}% of Global Revenue
                   </p>
                 </div>
               </motion.div>
