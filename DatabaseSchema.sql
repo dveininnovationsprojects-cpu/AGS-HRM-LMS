@@ -182,6 +182,8 @@ CREATE TABLE IF NOT EXISTS employees (
   date_of_exit       DATE,
   exit_reason        TEXT,
   work_location      VARCHAR(200),
+  work_country       VARCHAR(100) DEFAULT 'India',
+  work_branch        VARCHAR(150) DEFAULT 'Chennai',
   avatar_url         VARCHAR(500),
   bank_name          VARCHAR(200),
   bank_account_number VARCHAR(50),

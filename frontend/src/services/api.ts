@@ -162,6 +162,29 @@ const generateMockEmployees = () => {
     const dobDay = String(1 + (i % 28)).padStart(2, '0');
     const date_of_birth = `${dobYear}-${dobMonth}-${dobDay}`;
 
+    let work_country = 'India';
+    let work_branch = 'Chennai';
+    let nationality = 'Indian';
+
+    if (i % 10 === 0) {
+      work_country = 'United States';
+      work_branch = (i % 20 === 0) ? 'Washington, D.C. (HQ)' : 'Scranton, PA';
+      nationality = 'American';
+    } else if (i % 10 === 1) {
+      work_country = 'Philippines';
+      work_branch = 'Manila';
+      nationality = 'Filipino';
+    } else if (i % 10 === 2) {
+      work_country = 'Mexico';
+      work_branch = 'Mexico City';
+      nationality = 'Mexican';
+    } else {
+      const branches = ['Chennai', 'Vellore', 'Tirupati', 'Hyderabad', 'Bengaluru', 'Ahmedabad', 'Jaipur'];
+      work_country = 'India';
+      work_branch = branches[(i - 1) % branches.length];
+      nationality = 'Indian';
+    }
+
     let revenue = 0;
     let cost = 4000 + (i % 10) * 1000;
     let proj = 'Bench / Support';
@@ -275,7 +298,9 @@ const generateMockEmployees = () => {
       gender,
       date_of_birth,
       blood_group: bloodGroups[i % bloodGroups.length],
-      nationality: 'Indian',
+      nationality,
+      work_country,
+      work_branch,
       pan_number: `ABCDE${String(1000 + i)}F`,
       bank_account_number: `12345678${String(1000 + i)}`,
       bank_ifsc: 'SBIN0000789',
@@ -472,7 +497,7 @@ const checkAndSeedMockDatabases = () => {
   } else {
     try {
       const parsed = JSON.parse(storedEmps);
-      if (!Array.isArray(parsed) || parsed.length < 100 || !parsed[0].hasOwnProperty('profit_status')) {
+      if (!Array.isArray(parsed) || parsed.length < 100 || !parsed[0].hasOwnProperty('profit_status') || !parsed[0].hasOwnProperty('work_country')) {
         needsSeeding = true;
       }
     } catch {
@@ -586,6 +611,8 @@ api.get = async (url: string, config?: any): Promise<any> => {
     const training_performance = params.training_performance || '';
     const revenue_status = params.revenue_status || '';
     const profit_status = params.profit_status || '';
+    const country = params.country || '';
+    const branch = params.branch || '';
 
     if (search) {
       employees = employees.filter((e: any) => 
@@ -606,6 +633,12 @@ api.get = async (url: string, config?: any): Promise<any> => {
     }
     if (profit_status) {
       employees = employees.filter((e: any) => e.profit_status === profit_status);
+    }
+    if (country) {
+      employees = employees.filter((e: any) => e.work_country === country);
+    }
+    if (branch) {
+      employees = employees.filter((e: any) => e.work_branch === branch);
     }
 
     const page = parseInt(params.page) || 1;
@@ -1167,6 +1200,8 @@ api.post = async (url: string, data?: any): Promise<any> => {
       date_of_birth: data.date_of_birth || '',
       blood_group: data.blood_group || '',
       nationality: data.nationality || '',
+      work_country: data.work_country || 'India',
+      work_branch: data.work_branch || 'Chennai',
       pan_number: data.pan_number || '',
       bank_account_number: data.bank_account_number || '',
       bank_ifsc: data.bank_ifsc || '',

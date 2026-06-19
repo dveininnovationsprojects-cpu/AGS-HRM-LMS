@@ -5,6 +5,7 @@ import { Plus, Search, Filter, Download } from 'lucide-react';
 import api from '../../services/api';
 import DataTable from '../../components/ui/DataTable';
 import PageHeader from '../../components/ui/PageHeader';
+import CustomSelect from '../../components/ui/CustomSelect';
 import toast from 'react-hot-toast';
 
 interface Employee {
@@ -46,6 +47,8 @@ export default function EmployeeListPage() {
   const [trainingPerformance, setTrainingPerformance] = useState('');
   const [revenueStatus, setRevenueStatus] = useState('');
   const [profitStatus, setProfitStatus] = useState('');
+  const [country, setCountry] = useState('');
+  const [branch, setBranch] = useState('');
 
   const fetchEmployees = async (page = 1) => {
     setLoading(true);
@@ -58,7 +61,9 @@ export default function EmployeeListPage() {
           status,
           training_performance: trainingPerformance,
           revenue_status: revenueStatus,
-          profit_status: profitStatus
+          profit_status: profitStatus,
+          country,
+          branch
         } 
       });
       setEmployees(res.data.data.employees || []);
@@ -70,7 +75,7 @@ export default function EmployeeListPage() {
     }
   };
 
-  useEffect(() => { fetchEmployees(); }, [search, status, trainingPerformance, revenueStatus, profitStatus]);
+  useEffect(() => { fetchEmployees(); }, [search, status, trainingPerformance, revenueStatus, profitStatus, country, branch]);
 
   const columns = [
     { header: 'Emp Code', accessor: 'emp_code' as keyof Employee },
@@ -94,6 +99,15 @@ export default function EmployeeListPage() {
     },
     { header: 'Department', accessor: (row: Employee) => row.department?.name || '-' },
     { header: 'Designation', accessor: (row: Employee) => row.designation?.title || '-' },
+    {
+      header: 'Location',
+      accessor: (row: any) => (
+        <div className="text-xs">
+          <div className="font-semibold text-slate-200">{row.work_branch || '-'}</div>
+          <div className="text-slate-400">{row.work_country || '-'}</div>
+        </div>
+      )
+    },
     {
       header: 'Status',
       accessor: (row: Employee) => (
@@ -166,6 +180,19 @@ export default function EmployeeListPage() {
     },
   ];
 
+  const allStoredEmployees = JSON.parse(localStorage.getItem('ags_employees') || '[]');
+  const usaCount = allStoredEmployees.filter((e: any) => e.work_country === 'United States').length;
+  const indiaCount = allStoredEmployees.filter((e: any) => e.work_country === 'India').length;
+  const philCount = allStoredEmployees.filter((e: any) => e.work_country === 'Philippines').length;
+  const mexCount = allStoredEmployees.filter((e: any) => e.work_country === 'Mexico').length;
+
+  const AGS_LOCATIONS: Record<string, string[]> = {
+    'United States': ['Washington, D.C. (HQ)', 'Scranton, PA'],
+    'India': ['Chennai', 'Vellore', 'Tirupati', 'Hyderabad', 'Bengaluru', 'Ahmedabad', 'Jaipur'],
+    'Philippines': ['Manila'],
+    'Mexico': ['Mexico City']
+  };
+
   return (
     <div className="space-y-5">
       <PageHeader
@@ -183,6 +210,89 @@ export default function EmployeeListPage() {
         }
       />
 
+      {/* Global Delivery Hubs */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {[
+          {
+            name: 'United States',
+            flag: '🇺🇸',
+            branches: 'Washington, D.C. (HQ) · Scranton',
+            count: usaCount,
+            isHq: true,
+            bgClass: 'from-blue-500/10 to-indigo-500/5 border-blue-500/10 text-blue-400 hover:border-blue-500/30',
+            activeGlow: 'shadow-[0_0_15px_rgba(59,130,246,0.15)] border-blue-500/50 bg-blue-500/5'
+          },
+          {
+            name: 'India',
+            flag: '🇮🇳',
+            branches: 'Chennai · Vellore · Hyderabad · Tirupati · Bengaluru · Ahmedabad · Jaipur',
+            count: indiaCount,
+            isHq: false,
+            bgClass: 'from-emerald-500/10 to-teal-500/5 border-emerald-500/10 text-emerald-400 hover:border-emerald-500/30',
+            activeGlow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)] border-emerald-500/50 bg-emerald-500/5'
+          },
+          {
+            name: 'Philippines',
+            flag: '🇵🇭',
+            branches: 'Manila Delivery Center',
+            count: philCount,
+            isHq: false,
+            bgClass: 'from-amber-500/10 to-orange-500/5 border-amber-500/10 text-amber-400 hover:border-amber-500/30',
+            activeGlow: 'shadow-[0_0_15px_rgba(245,158,11,0.15)] border-amber-500/50 bg-amber-500/5'
+          },
+          {
+            name: 'Mexico',
+            flag: '🇲🇽',
+            branches: 'Mexico City Operations',
+            count: mexCount,
+            isHq: false,
+            bgClass: 'from-purple-500/10 to-fuchsia-500/5 border-purple-500/10 text-purple-400 hover:border-purple-500/30',
+            activeGlow: 'shadow-[0_0_15px_rgba(168,85,247,0.15)] border-purple-500/50 bg-purple-500/5'
+          }
+        ].map((hub) => {
+          const isSelected = country === hub.name;
+          return (
+            <motion.div
+              key={hub.name}
+              whileHover={{ scale: 1.015, y: -2 }}
+              onClick={() => {
+                if (isSelected) {
+                  setCountry('');
+                  setBranch('');
+                } else {
+                  setCountry(hub.name);
+                  setBranch('');
+                }
+              }}
+              className={`cursor-pointer rounded-2xl border p-4.5 bg-gradient-to-br transition-all duration-300 ${hub.bgClass} ${
+                isSelected ? hub.activeGlow : 'border-white/5 bg-[#0e112a]/40'
+              }`}
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-center gap-3 min-w-0 flex-1">
+                  <span className="text-3xl leading-none shrink-0">{hub.flag}</span>
+                  <div className="min-w-0">
+                    <h3 className="font-bold text-slate-200 flex items-center gap-1.5 truncate">
+                      <span className="truncate">{hub.name}</span>
+                      {hub.isHq && (
+                        <span className="shrink-0 px-1.5 py-0.5 rounded bg-blue-500/20 text-[9px] text-blue-300 font-extrabold uppercase border border-blue-500/30 tracking-wider">
+                          HQ
+                        </span>
+                      )}
+                    </h3>
+                    <p className="text-[10px] text-slate-400 truncate mt-0.5" title={hub.branches}>{hub.branches}</p>
+                  </div>
+                </div>
+                <div className="text-right shrink-0">
+                  <div className="text-2xl font-black text-slate-100">{hub.count}</div>
+                  <div className="text-[9px] text-slate-400 uppercase tracking-widest font-semibold">Employees</div>
+                </div>
+              </div>
+            </motion.div>
+          );
+        })}
+      </div>
+
       {/* Filters */}
       <div className="bg-[#0e112a] rounded-2xl shadow-card border border-white/5 p-4 flex flex-wrap gap-3">
         <div className="relative flex-1 min-w-[200px]">
@@ -192,51 +302,91 @@ export default function EmployeeListPage() {
             placeholder="Search by name, email or code..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="input-field pl-9"
+            className="input-field pl-9 w-full"
           />
         </div>
-        <select
+        
+        <CustomSelect
           value={status}
-          onChange={(e) => setStatus(e.target.value)}
-          className="input-field w-auto min-w-[140px]"
-        >
-          <option value="">All Status</option>
-          <option>Active</option>
-          <option>Resigned</option>
-          <option>Terminated</option>
-          <option>On-Leave</option>
-        </select>
-        <select
+          onChange={setStatus}
+          options={[
+            { value: '', label: 'All Status' },
+            { value: 'Active', label: 'Active' },
+            { value: 'Resigned', label: 'Resigned' },
+            { value: 'Terminated', label: 'Terminated' },
+            { value: 'On-Leave', label: 'On-Leave' }
+          ]}
+          className="w-full sm:w-auto min-w-[140px]"
+          placeholder="Status"
+        />
+
+        <CustomSelect
+          value={country}
+          onChange={(val) => {
+            setCountry(val);
+            setBranch('');
+          }}
+          options={[
+            { value: '', label: 'All Countries' },
+            { value: 'United States', label: 'United States', icon: '🇺🇸' },
+            { value: 'India', label: 'India', icon: '🇮🇳' },
+            { value: 'Philippines', label: 'Philippines', icon: '🇵🇭' },
+            { value: 'Mexico', label: 'Mexico', icon: '🇲🇽' }
+          ]}
+          className="w-full sm:w-auto min-w-[160px] text-primary"
+          placeholder="Country"
+        />
+
+        <CustomSelect
+          value={branch}
+          onChange={setBranch}
+          options={[
+            { value: '', label: 'All Branches' },
+            ...(AGS_LOCATIONS[country] || []).map(b => ({ value: b, label: b }))
+          ]}
+          className="w-full sm:w-auto min-w-[160px] text-primary"
+          placeholder="Branch"
+        />
+
+        <CustomSelect
           value={trainingPerformance}
-          onChange={(e) => setTrainingPerformance(e.target.value)}
-          className="input-field w-auto min-w-[140px]"
-        >
-          <option value="">All Training Perf</option>
-          <option>Excellent</option>
-          <option>Medium</option>
-          <option>Poor</option>
-        </select>
-        <select
+          onChange={setTrainingPerformance}
+          options={[
+            { value: '', label: 'All Training Perf' },
+            { value: 'Excellent', label: 'Excellent' },
+            { value: 'Medium', label: 'Medium' },
+            { value: 'Poor', label: 'Poor' }
+          ]}
+          className="w-full sm:w-auto min-w-[150px]"
+          placeholder="Training Perf"
+        />
+
+        <CustomSelect
           value={revenueStatus}
-          onChange={(e) => setRevenueStatus(e.target.value)}
-          className="input-field w-auto min-w-[140px]"
-        >
-          <option value="">All Revenue</option>
-          <option>High</option>
-          <option>Normal</option>
-          <option>Low</option>
-        </select>
-        <select
+          onChange={setRevenueStatus}
+          options={[
+            { value: '', label: 'All Revenue' },
+            { value: 'High', label: 'High' },
+            { value: 'Normal', label: 'Normal' },
+            { value: 'Low', label: 'Low' }
+          ]}
+          className="w-full sm:w-auto min-w-[140px]"
+          placeholder="Revenue Status"
+        />
+
+        <CustomSelect
           value={profitStatus}
-          onChange={(e) => setProfitStatus(e.target.value)}
-          className="input-field w-auto min-w-[140px]"
-        >
-          <option value="">All Profit Status</option>
-          <option>High Profit</option>
-          <option>Normal Margin</option>
-          <option>Loss Center</option>
-          <option>Cost Center (Support)</option>
-        </select>
+          onChange={setProfitStatus}
+          options={[
+            { value: '', label: 'All Profit Status' },
+            { value: 'High Profit', label: 'High Profit' },
+            { value: 'Normal Margin', label: 'Normal Margin' },
+            { value: 'Loss Center', label: 'Loss Center' },
+            { value: 'Cost Center (Support)', label: 'Cost Center (Support)' }
+          ]}
+          className="w-full sm:w-auto min-w-[160px]"
+          placeholder="Profit Status"
+        />
       </div>
 
       <DataTable

@@ -70,6 +70,16 @@ export default function EmployeeDetailPage() {
             </div>
             <p className="text-sm text-slate-300 mt-1">{employee.designation?.title || 'Associate'} · {employee.department?.name || 'Operations'}</p>
             <p className="text-xs text-slate-400 mt-1">{employee.emp_code} · {employee.employment_type || 'Full-time'}</p>
+            <div className="flex items-center gap-2 mt-2 justify-center sm:justify-start">
+              <span className="px-2 py-0.5 rounded bg-primary/10 text-primary border border-primary/20 text-xs font-semibold flex items-center gap-1">
+                📍 {employee.work_branch || 'Chennai'}, {employee.work_country || 'India'}
+              </span>
+              {employee.work_country === 'United States' && (
+                <span className="px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20 text-xs font-semibold uppercase tracking-wider">
+                  🇺🇸 Global Headquarters
+                </span>
+              )}
+            </div>
           </div>
         </div>
       </motion.div>
@@ -86,6 +96,204 @@ export default function EmployeeDetailPage() {
           </div>
         </motion.div>
       )}
+
+      {/* Visual Lifecycle Stepper */}
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.05 }}
+        className="bg-[#0e112a] rounded-2xl shadow-card border border-white/5 p-6 relative overflow-hidden"
+      >
+        {/* Background breathing dots overlay */}
+        <div className="absolute inset-0 opacity-[0.03] pointer-events-none ags-dot-grid" />
+        
+        <h3 className="font-semibold text-slate-200 text-sm mb-6 pb-2 border-b border-white/5 flex items-center gap-2">
+          <TrendingUp className="w-4 h-4 text-primary" /> Employee Lifecycle Journey
+        </h3>
+
+        <div className="relative flex flex-col md:flex-row justify-between items-start md:items-stretch gap-6 md:gap-4">
+          
+          {/* Timeline Connector Line for desktop */}
+          <div className="hidden md:block absolute top-7 left-[8%] right-[8%] h-[2px] bg-gradient-to-r from-blue-500/40 via-emerald-500/40 to-slate-500/20 z-0" />
+
+          {/* Phase 1: Recruitment */}
+          <div className="flex-1 relative z-10 bg-[#0c0e25]/60 border border-white/5 rounded-2xl p-4 flex flex-col justify-between">
+            <div>
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-7 h-7 rounded-full bg-blue-500/20 border border-blue-500/40 flex items-center justify-center text-xs font-bold text-blue-400">
+                  1
+                </div>
+                <span className="text-xs font-extrabold uppercase tracking-wider text-blue-400">Attraction & Sourcing</span>
+              </div>
+              
+              <div className="space-y-2 mt-1">
+                <div className="text-[11px] text-slate-400 flex items-center justify-between">
+                  <span>Recruiter:</span>
+                  <span className="font-semibold text-slate-300">{employee.recruiter || 'Bhavya Rao'}</span>
+                </div>
+                <div className="text-[11px] text-slate-400 flex items-center justify-between">
+                  <span>Panel:</span>
+                  <span className="font-semibold text-slate-300">{employee.interviewer || 'VP Operations'}</span>
+                </div>
+                <div className="text-[11px] text-slate-400 flex items-center justify-between">
+                  <span>Joined Date:</span>
+                  <span className="font-semibold text-emerald-400">{employee.date_of_joining}</span>
+                </div>
+              </div>
+            </div>
+            <div className="mt-4 pt-2 border-t border-white/5 text-[9px] text-slate-500">
+              Talent Acquisition Completed
+            </div>
+          </div>
+
+          {/* Phase 2: Onboarding & LMS */}
+          <div className="flex-1 relative z-10 bg-[#0c0e25]/60 border border-white/5 rounded-2xl p-4 flex flex-col justify-between">
+            <div>
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-7 h-7 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-xs font-bold text-emerald-400">
+                  2
+                </div>
+                <span className="text-xs font-extrabold uppercase tracking-wider text-emerald-400">Integration & LMS</span>
+              </div>
+              
+              <div className="space-y-2 mt-1">
+                <div className="text-[11px] text-slate-400 flex items-center justify-between">
+                  <span>Trainer:</span>
+                  <span className="font-semibold text-slate-300">{employee.trainer || 'Meera Jasmine'}</span>
+                </div>
+                <div className="text-[11px] text-slate-400 flex items-center justify-between">
+                  <span>Perf Score:</span>
+                  <span className={`font-semibold badge ${
+                    employee.training_performance === 'Excellent' ? 'bg-emerald-500/10 text-emerald-400' :
+                    employee.training_performance === 'Poor' ? 'bg-rose-500/10 text-rose-400' :
+                    'bg-blue-500/10 text-blue-400'
+                  } border border-transparent px-1.5 py-0 text-[10px]`}>
+                    {employee.training_performance || 'Medium'}
+                  </span>
+                </div>
+                <div className="text-[11px] text-slate-400">
+                  <span className="block mb-1">Certifications:</span>
+                  <div className="flex flex-wrap gap-1">
+                    {(employee.courses_completed || []).map((c: string, idx: number) => (
+                      <span key={idx} className="px-1.5 py-0.5 rounded bg-white/5 text-[9px] text-slate-300 border border-white/5 max-w-[120px] truncate" title={c}>
+                        ✓ {c}
+                      </span>
+                    ))}
+                    {(!employee.courses_completed || employee.courses_completed.length === 0) && (
+                      <span className="text-[10px] text-slate-500">None completed</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="mt-4 pt-2 border-t border-white/5 text-[9px] text-slate-500">
+              Training & Onboarding Passed
+            </div>
+          </div>
+
+          {/* Phase 3: Core Performance */}
+          <div className="flex-1 relative z-10 bg-[#0c0e25]/60 border border-white/5 rounded-2xl p-4 flex flex-col justify-between">
+            <div>
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-7 h-7 rounded-full bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-xs font-bold text-purple-400">
+                  3
+                </div>
+                <span className="text-xs font-extrabold uppercase tracking-wider text-purple-400">Growth & Productivity</span>
+              </div>
+              
+              <div className="space-y-2 mt-1">
+                <div className="text-[11px] text-slate-400 flex items-center justify-between">
+                  <span>Project:</span>
+                  <span className="font-semibold text-slate-300 truncate max-w-[100px]" title={employee.project}>{employee.project || 'Bench'}</span>
+                </div>
+                <div className="text-[11px] text-slate-400 flex items-center justify-between">
+                  <span>Net Yield:</span>
+                  <span className={`font-semibold ${
+                    profitLoss > 0 ? 'text-emerald-400' :
+                    profitLoss < 0 ? 'text-rose-400' :
+                    'text-slate-400'
+                  }`}>
+                    {profitLoss > 0 ? '+' : ''}${profitLoss.toLocaleString()}
+                  </span>
+                </div>
+                <div className="text-[11px] text-slate-400 flex items-center justify-between">
+                  <span>SLA Gaps:</span>
+                  <span className={`font-semibold ${
+                    employee.mistakes && employee.mistakes.length > 0 ? 'text-amber-400' : 'text-slate-400'
+                  }`}>
+                    {employee.mistakes ? employee.mistakes.length : 0} logged
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div className="mt-4 pt-2 border-t border-white/5 text-[9px] text-slate-500">
+              Active Delivery Contribution
+            </div>
+          </div>
+
+          {/* Phase 4: Retention or Offboarding */}
+          {['Resigned', 'Terminated'].includes(employee.employment_status) ? (
+            <div className="flex-1 relative z-10 bg-rose-500/5 border border-rose-500/20 rounded-2xl p-4 flex flex-col justify-between">
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-7 h-7 rounded-full bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-xs font-bold text-rose-400">
+                    4
+                  </div>
+                  <span className="text-xs font-extrabold uppercase tracking-wider text-rose-400">Offboarding & separation</span>
+                </div>
+                
+                <div className="space-y-2 mt-1">
+                  <div className="text-[11px] text-slate-400 flex items-center justify-between">
+                    <span>Exit Date:</span>
+                    <span className="font-semibold text-rose-400">{employee.date_of_leaving}</span>
+                  </div>
+                  <div className="text-[11px] text-slate-400">
+                    <span className="block mb-1">Reason:</span>
+                    <span className="font-semibold text-slate-200 text-[10px] bg-rose-500/10 p-1.5 rounded border border-rose-500/10 block leading-tight">
+                      {employee.leaving_reason || 'Unknown'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-4 pt-2 border-t border-rose-500/10 text-[9px] text-rose-400 font-medium">
+                Separated / Inactive
+              </div>
+            </div>
+          ) : (
+            <div className="flex-1 relative z-10 bg-emerald-500/5 border border-emerald-500/20 rounded-2xl p-4 flex flex-col justify-between">
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-7 h-7 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-xs font-bold text-emerald-400">
+                    4
+                  </div>
+                  <span className="text-xs font-extrabold uppercase tracking-wider text-emerald-400">Retention & Growth</span>
+                </div>
+                
+                <div className="space-y-2 mt-1">
+                  <div className="text-[11px] text-slate-400 flex items-center justify-between">
+                    <span>Retained:</span>
+                    <span className="font-semibold text-emerald-400">Yes</span>
+                  </div>
+                  <div className="text-[11px] text-slate-400 flex items-center justify-between">
+                    <span>Status:</span>
+                    <span className="font-semibold text-slate-200">{employee.employment_status || 'Active'}</span>
+                  </div>
+                  <div className="text-[11px] text-slate-400">
+                    <span className="block mb-1">Career Goal:</span>
+                    <span className="text-[10px] text-emerald-300 font-medium block leading-tight">
+                      Promote to Fast-track Leadership path
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-4 pt-2 border-t border-emerald-500/10 text-[9px] text-emerald-400 font-medium animate-pulse">
+                Active Career Path
+              </div>
+            </div>
+          )}
+
+        </div>
+      </motion.div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         

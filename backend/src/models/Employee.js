@@ -44,6 +44,8 @@ const Employee = sequelize.define('Employee', {
   date_of_exit: { type: DataTypes.DATEONLY },
   exit_reason: { type: DataTypes.TEXT },
   work_location: { type: DataTypes.STRING(200) },
+  work_country: { type: DataTypes.STRING(100), defaultValue: 'India' },
+  work_branch: { type: DataTypes.STRING(150), defaultValue: 'Chennai' },
   avatar_url: { type: DataTypes.STRING(500) },
   bank_name: { type: DataTypes.STRING(200) },
   bank_account_number: { type: DataTypes.STRING(50) },

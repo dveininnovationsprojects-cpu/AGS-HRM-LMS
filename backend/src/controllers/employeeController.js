@@ -6,7 +6,7 @@ const logger = require('../utils/logger');
 const getAll = async (req, res) => {
   try {
     const { page, limit, offset } = getPagination(req.query);
-    const { search, dept_id, status, employment_type } = req.query;
+    const { search, dept_id, status, employment_type, work_country, work_branch } = req.query;
 
     const where = { org_id: req.user.org_id };
     if (search) {
@@ -20,6 +20,8 @@ const getAll = async (req, res) => {
     if (dept_id) where.dept_id = dept_id;
     if (status) where.employment_status = status;
     if (employment_type) where.employment_type = employment_type;
+    if (work_country) where.work_country = work_country;
+    if (work_branch) where.work_branch = work_branch;
 
     const { rows, count } = await Employee.findAndCountAll({
       where,

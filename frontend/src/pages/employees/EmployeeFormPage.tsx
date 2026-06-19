@@ -14,7 +14,14 @@ export default function EmployeeFormPage() {
   const [designations, setDesignations] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const { register, handleSubmit, reset, formState: { errors } } = useForm();
+  const { register, handleSubmit, reset, watch, formState: { errors } } = useForm();
+  const selectedCountry = watch('work_country');
+  const AGS_LOCATIONS: Record<string, string[]> = {
+    'United States': ['Washington, D.C. (HQ)', 'Scranton, PA'],
+    'India': ['Chennai', 'Vellore', 'Tirupati', 'Hyderabad', 'Bengaluru', 'Ahmedabad', 'Jaipur'],
+    'Philippines': ['Manila'],
+    'Mexico': ['Mexico City']
+  };
 
   useEffect(() => {
     api.get('/departments').then(r => setDepartments(r.data.data.departments || []));
@@ -109,7 +116,13 @@ export default function EmployeeFormPage() {
               {value:'Active',label:'Active'},{value:'Inactive',label:'Inactive'},
               {value:'On-Leave',label:'On-Leave'},
             ]} />
-            <Field label="Work Location" name="work_location" />
+            <Field label="Work Country" name="work_country" required options={[
+              {value:'United States',label:'United States'},
+              {value:'India',label:'India'},
+              {value:'Philippines',label:'Philippines'},
+              {value:'Mexico',label:'Mexico'}
+            ]} />
+            <Field label="Work Branch" name="work_branch" required options={(AGS_LOCATIONS[selectedCountry] || []).map(b => ({value:b,label:b}))} />
           </div>
         </motion.div>
 
