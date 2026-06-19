@@ -4,7 +4,7 @@ import { Bell, Menu, LogOut, ChevronDown, Globe } from 'lucide-react';
 import { AppDispatch, RootState } from '../../store';
 import { logout } from '../../store/slices/authSlice';
 import { setSidebarMobileOpen } from '../../store/slices/uiSlice';
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import toast from 'react-hot-toast';
 
 const worldLanguages = [
@@ -30,92 +30,47 @@ export default function Header() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const user = useSelector((s: RootState) => s.auth.user);
-  const [showUserMenu, setShowUserMenu] = useState(false);
   
-  // Translation States
-  const [currentLang, setCurrentLang] = useState(() => localStorage.getItem('currentLanguage') || 'en');
+  const [showUserMenu, setShowUserMenu] = useState(false);
   const [showMoreMenu, setShowMoreMenu] = useState(false);
+  
+  // Get initial language from localStorage
+  const [currentLang, setCurrentLang] = useState(() => localStorage.getItem('currentLanguage') || 'en');
 
-  const translateIntervalRef = useRef<any>(null);
+  const changeLanguage = (langCode: string) => {
+    if (langCode === currentLang) return; // Prevent reload if same language is clicked
 
-  // Synchronize Google Translate drop-down on initial mount
-  useEffect(() => {
-    const storedLang = localStorage.getItem('currentLanguage') || 'en';
-    changeLanguage(storedLang, true);
-    
-    return () => {
-      if (translateIntervalRef.current) {
-        clearInterval(translateIntervalRef.current);
-      }
-    };
-  }, []);
-
-  const changeLanguage = (langCode: string, silent = false) => {
-    setCurrentLang(langCode);
     localStorage.setItem('currentLanguage', langCode);
-    
-    // Clear any pending translation polling
-    if (translateIntervalRef.current) {
-      clearInterval(translateIntervalRef.current);
-      translateIntervalRef.current = null;
-    }
-    
-    // Set Google Translate cookie
-    document.cookie = `googtrans=/en/${langCode}; path=/`;
-    document.cookie = `googtrans=/en/${langCode}; path=/; domain=${window.location.hostname}`;
-    if (window.location.hostname.includes('.')) {
-      const parts = window.location.hostname.split('.');
-      if (parts.length > 2) {
-        const rootDomain = '.' + parts.slice(-2).join('.');
-        document.cookie = `googtrans=/en/${langCode}; path=/; domain=${rootDomain}`;
+
+    if (langCode === 'en') {
+      // Cleanly remove all Google Translate cookies for English
+      const domains = [
+        window.location.hostname,
+        '.' + window.location.hostname,
+        'localhost',
+        '.localhost'
+      ];
+      domains.forEach(domain => {
+        document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=${domain}`;
+        document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+      });
+    } else {
+      // Set precise cookie for other languages
+      const cookieVal = `/en/${langCode}`;
+      document.cookie = `googtrans=${cookieVal}; path=/`;
+      document.cookie = `googtrans=${cookieVal}; path=/; domain=${window.location.hostname}`;
+      
+      if (window.location.hostname.includes('.')) {
+        const parts = window.location.hostname.split('.');
+        if (parts.length >= 2) {
+          const rootDomain = '.' + parts.slice(-2).join('.');
+          document.cookie = `googtrans=${cookieVal}; path=/; domain=${rootDomain}`;
+        }
       }
     }
 
-    let attempts = 0;
-    const maxAttempts = 20; // Poll for 4 seconds (20 * 200ms)
-    
-    const tryTranslate = () => {
-      const selectEl = document.querySelector('.goog-te-combo') as HTMLSelectElement;
-      if (selectEl) {
-        if (selectEl.value !== langCode) {
-          selectEl.value = langCode;
-          selectEl.dispatchEvent(new Event('change'));
-        } else {
-          selectEl.dispatchEvent(new Event('change'));
-        }
-        
-        const isTranslated = document.documentElement.classList.contains('translated-ltr') || 
-                             document.documentElement.classList.contains('translated-rtl') ||
-                             document.body.classList.contains('translated-ltr') ||
-                             document.body.classList.contains('translated-rtl');
-                             
-        if (langCode === 'en' || isTranslated || attempts > 8) {
-          if (translateIntervalRef.current) {
-            clearInterval(translateIntervalRef.current);
-            translateIntervalRef.current = null;
-          }
-        }
-      }
-      attempts++;
-      if (attempts >= maxAttempts) {
-        if (translateIntervalRef.current) {
-          clearInterval(translateIntervalRef.current);
-          translateIntervalRef.current = null;
-        }
-      }
-    };
-
-    tryTranslate();
-    translateIntervalRef.current = setInterval(tryTranslate, 200);
-    
-    if (!silent) {
-      toast.success(`Language set to ${
-        langCode === 'ta' ? 'Tamil' : 
-        langCode === 'hi' ? 'Hindi' : 
-        langCode === 'en' ? 'English' : 
-        worldLanguages.find(l => l.code === langCode)?.name.split(' ')[0] || 'Selected Language'
-      }`);
-    }
+    // Reload the window to apply changes cleanly without DOM corruption
+    window.location.reload();
   };
 
   const handleLogout = async () => {
@@ -126,7 +81,6 @@ export default function Header() {
 
   return (
     <header className="h-16 bg-[#060814]/80 backdrop-blur-md border-b border-white/5 px-6 flex items-center gap-4 shadow-sm sticky top-0 z-10">
-      {/* Mobile menu toggle */}
       <button
         onClick={() => dispatch(setSidebarMobileOpen(true))}
         className="lg:hidden p-2 rounded-lg text-slate-400 hover:bg-white/5 transition-colors"
@@ -134,7 +88,6 @@ export default function Header() {
         <Menu className="w-5 h-5" />
       </button>
 
-      {/* Custom styled translation bar replacing the old search bar */}
       <div className="flex items-center gap-2 flex-wrap">
         <Globe className="w-4 h-4 text-emerald-500 mr-1 hidden sm:block animate-pulse" />
         
@@ -169,7 +122,6 @@ export default function Header() {
           हिन्दी
         </button>
 
-        {/* More popular languages */}
         <div className="relative">
           <button
             onClick={() => setShowMoreMenu(!showMoreMenu)}
@@ -191,8 +143,8 @@ export default function Header() {
                   <button
                     key={lang.code}
                     onClick={() => {
-                      changeLanguage(lang.code);
                       setShowMoreMenu(false);
+                      changeLanguage(lang.code);
                     }}
                     className={`text-left text-[11px] px-2 py-1.5 rounded-lg border transition-all truncate ${
                       currentLang === lang.code
@@ -210,13 +162,11 @@ export default function Header() {
       </div>
 
       <div className="flex items-center gap-3 ml-auto">
-        {/* Notifications */}
         <button className="relative p-2 rounded-xl text-slate-400 hover:bg-white/5 transition-colors">
           <Bell className="w-5 h-5" />
           <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-primary rounded-full"></span>
         </button>
 
-        {/* User menu */}
         <div className="relative">
           <button
             onClick={() => setShowUserMenu(!showUserMenu)}

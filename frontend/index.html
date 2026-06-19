@@ -14,26 +14,33 @@
       // Pre-initialize googtrans cookie before Google Translate script loads
       (function() {
         var lang = localStorage.getItem('currentLanguage') || 'en';
-        var cookieVal = '/en/' + lang;
-        document.cookie = 'googtrans=' + cookieVal + '; path=/';
-        document.cookie = 'googtrans=' + cookieVal + '; path=/; domain=' + window.location.hostname;
-        if (window.location.hostname.includes('.')) {
-          var parts = window.location.hostname.split('.');
-          if (parts.length > 2) {
-            var rootDomain = '.' + parts.slice(-2).join('.');
-            document.cookie = 'googtrans=' + cookieVal + '; path=/; domain=' + rootDomain;
+        if (lang === 'en') {
+          var domains = [window.location.hostname, '.' + window.location.hostname, 'localhost', '.localhost', ''];
+          for (var i = 0; i < domains.length; i++) {
+            document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=' + domains[i];
+            document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
+          }
+        } else {
+          var cookieVal = '/en/' + lang;
+          document.cookie = 'googtrans=' + cookieVal + '; path=/';
+          document.cookie = 'googtrans=' + cookieVal + '; path=/; domain=' + window.location.hostname;
+          if (window.location.hostname.includes('.')) {
+            var parts = window.location.hostname.split('.');
+            if (parts.length > 2) {
+              var rootDomain = '.' + parts.slice(-2).join('.');
+              document.cookie = 'googtrans=' + cookieVal + '; path=/; domain=' + rootDomain;
+            }
           }
         }
       })();
     </script>
     
     <style>
-      /* Base styles */
       body {
         top: 0px !important;
         position: static !important;
+        min-height: 100vh;
       }
-      /* Completely hide Google Translate UI elements and animations */
       #google_translate_element,
       .skiptranslate,
       iframe.goog-te-banner-frame,
@@ -52,28 +59,23 @@
         width: 0 !important;
         pointer-events: none !important;
       }
-      /* Hide the tooltip popup and highlights */
       .goog-text-highlight {
         background-color: transparent !important;
         box-shadow: none !important;
         border: none !important;
-      }
-      /* Prevent the layout from being pushed down */
-      body {
-        min-height: 100vh;
-        top: 0px !important;
       }
     </style>
   </head>
   <body>
     <div id="root"></div>
 
-    <!-- Google Translate Widget Container (Hidden) -->
-    <div id="google_translate_element" style="display:none; position:fixed; visibility:hidden; width:0; height:0; z-index:-999;"></div>
+    <div id="google_translate_element" style="display:none;"></div>
     <script type="text/javascript">
       function googleTranslateElementInit() {
         new google.translate.TranslateElement({
           pageLanguage: 'en',
+          // Random languages prevent panna nammaloda languages-a mattum restrict panrom
+          includedLanguages: 'es,fr,de,ar,ja,zh-CN,pt,te,kn,ml,bn,ru,it,ko,ur,gu,ta,hi',
           autoDisplay: false
         }, 'google_translate_element');
       }

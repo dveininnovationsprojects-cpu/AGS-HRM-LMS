@@ -27,6 +27,30 @@ export default function CustomSelect({
 }: CustomSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [coords, setCoords] = useState({ top: 0, left: 0, width: 0 });
+
+  const updateCoords = () => {
+    if (containerRef.current) {
+      const rect = containerRef.current.getBoundingClientRect();
+      setCoords({
+        top: rect.bottom,
+        left: rect.left,
+        width: rect.width
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      updateCoords();
+      window.addEventListener('resize', updateCoords);
+      window.addEventListener('scroll', updateCoords, true);
+    }
+    return () => {
+      window.removeEventListener('resize', updateCoords);
+      window.removeEventListener('scroll', updateCoords, true);
+    };
+  }, [isOpen]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -69,7 +93,13 @@ export default function CustomSelect({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="absolute z-50 w-full min-w-[200px] mt-2 py-1.5 bg-[#141838] border border-white/10 rounded-xl shadow-2xl backdrop-blur-xl overflow-hidden"
+            style={{
+              position: 'fixed',
+              top: `${coords.top + 8}px`,
+              left: `${coords.left}px`,
+              width: `${coords.width}px`,
+            }}
+            className="z-[9999] min-w-[200px] py-1.5 bg-[#141838]/95 border border-white/10 rounded-xl shadow-2xl backdrop-blur-xl overflow-hidden"
           >
             <div className="max-h-60 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
               {options.map((opt) => {

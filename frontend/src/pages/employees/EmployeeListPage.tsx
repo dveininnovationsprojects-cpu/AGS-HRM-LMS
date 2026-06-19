@@ -4,7 +4,6 @@ import { motion } from 'framer-motion';
 import { Plus, Search, Filter, Download } from 'lucide-react';
 import api from '../../services/api';
 import DataTable from '../../components/ui/DataTable';
-import PageHeader from '../../components/ui/PageHeader';
 import CustomSelect from '../../components/ui/CustomSelect';
 import toast from 'react-hot-toast';
 
@@ -193,22 +192,72 @@ export default function EmployeeListPage() {
     'Mexico': ['Mexico City']
   };
 
+  const handleExport = async () => {
+    const toastId = toast.loading('Preparing all matching records for export...');
+    try {
+      const res = await api.get('/employees', { 
+        params: { 
+          page: 1, 
+          limit: 10000, 
+          search, 
+          status,
+          training_performance: trainingPerformance,
+          revenue_status: revenueStatus,
+          profit_status: profitStatus,
+          country,
+          branch
+        } 
+      });
+      
+      const allFilteredEmployees = res.data.data.employees || [];
+
+      if (allFilteredEmployees.length === 0) {
+        toast.error('No data available to export', { id: toastId });
+        return;
+      }
+
+      const headers = [
+        'Emp Code', 'First Name', 'Last Name', 'Email', 'Department', 'Designation',
+        'Country', 'Branch', 'Status', 'Training Performance', 'Revenue ($)', 'Cost ($)', 'Profit ($)', 'Profit Status'
+      ];
+
+      const csvData = allFilteredEmployees.map((emp: any) => {
+        const profit = (emp.revenue || 0) - (emp.cost || 0);
+        return [
+          emp.emp_code || '',
+          emp.first_name || '',
+          emp.last_name || '',
+          emp.work_email || '',
+          emp.department?.name || '',
+          emp.designation?.title || '',
+          emp.work_country || '',
+          emp.work_branch || '',
+          emp.employment_status || '',
+          emp.training_performance || '',
+          emp.revenue || 0,
+          emp.cost || 0,
+          profit,
+          emp.profit_status || ''
+        ].map(val => `"${String(val).replace(/"/g, '""')}"`).join(',');
+      });
+
+      const csvContent = [headers.join(','), ...csvData].join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `employee_data_${new Date().toISOString().split('T')[0]}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      toast.success(`Exported ${allFilteredEmployees.length} employee records successfully`, { id: toastId });
+    } catch {
+      toast.error('Failed to export employee data', { id: toastId });
+    }
+  };
+
   return (
     <div className="space-y-5">
-      <PageHeader
-        title="Employee Management"
-        subtitle="Manage your workforce master data"
-        actions={
-          <>
-            <button onClick={() => window.open('/api/v1/reports/employees/excel', '_blank')} className="btn-secondary flex items-center gap-1.5">
-              <Download className="w-4 h-4" /> Export
-            </button>
-            <button onClick={() => navigate('/employees/new')} className="btn-primary flex items-center gap-1.5">
-              <Plus className="w-4 h-4" /> Add Employee
-            </button>
-          </>
-        }
-      />
 
       {/* Global Delivery Hubs */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -264,15 +313,15 @@ export default function EmployeeListPage() {
                   setBranch('');
                 }
               }}
-              className={`cursor-pointer rounded-2xl border p-4.5 bg-gradient-to-br transition-all duration-300 ${hub.bgClass} ${
+              className={`cursor-pointer rounded-2xl border p-6 bg-gradient-to-br transition-all duration-300 ${hub.bgClass} ${
                 isSelected ? hub.activeGlow : 'border-white/5 bg-[#0e112a]/40'
               }`}
             >
-              <div className="flex items-start justify-between gap-3">
-                <div className="flex items-center gap-3 min-w-0 flex-1">
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-4 min-w-0 flex-1">
                   <span className="text-3xl leading-none shrink-0">{hub.flag}</span>
-                  <div className="min-w-0">
-                    <h3 className="font-bold text-slate-200 flex items-center gap-1.5 truncate">
+                  <div className="min-w-0 flex-1">
+                    <h3 className="font-bold text-slate-100 flex items-center gap-2 truncate text-base">
                       <span className="truncate">{hub.name}</span>
                       {hub.isHq && (
                         <span className="shrink-0 px-1.5 py-0.5 rounded bg-blue-500/20 text-[9px] text-blue-300 font-extrabold uppercase border border-blue-500/30 tracking-wider">
@@ -280,12 +329,12 @@ export default function EmployeeListPage() {
                         </span>
                       )}
                     </h3>
-                    <p className="text-[10px] text-slate-400 truncate mt-0.5" title={hub.branches}>{hub.branches}</p>
+                    <p className="text-xs text-slate-400 truncate mt-1" title={hub.branches}>{hub.branches}</p>
                   </div>
                 </div>
-                <div className="text-right shrink-0">
-                  <div className="text-2xl font-black text-slate-100">{hub.count}</div>
-                  <div className="text-[9px] text-slate-400 uppercase tracking-widest font-semibold">Employees</div>
+                <div className="text-right shrink-0 pl-4 border-l border-white/10 flex flex-col justify-center">
+                  <div className="text-2xl font-black text-slate-100 leading-none">{hub.count}</div>
+                  <div className="text-[8px] text-slate-400 font-bold uppercase mt-1 tracking-wider">Employees</div>
                 </div>
               </div>
             </motion.div>
@@ -293,9 +342,9 @@ export default function EmployeeListPage() {
         })}
       </div>
 
-      {/* Filters */}
-      <div className="bg-[#0e112a] rounded-2xl shadow-card border border-white/5 p-4 flex flex-wrap gap-3">
-        <div className="relative flex-1 min-w-[200px]">
+      {/* Filters & Actions Row */}
+      <div className="bg-[#0e112a] rounded-2xl shadow-card border border-white/5 p-4 flex flex-row flex-nowrap items-center gap-3 overflow-x-auto scrollbar-thin">
+        <div className="relative flex-1 min-w-[180px] shrink-0 md:shrink">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
           <input
             type="text"
@@ -316,7 +365,7 @@ export default function EmployeeListPage() {
             { value: 'Terminated', label: 'Terminated' },
             { value: 'On-Leave', label: 'On-Leave' }
           ]}
-          className="w-full sm:w-auto min-w-[140px]"
+          className="shrink-0 w-auto min-w-[130px]"
           placeholder="Status"
         />
 
@@ -333,7 +382,7 @@ export default function EmployeeListPage() {
             { value: 'Philippines', label: 'Philippines', icon: '🇵🇭' },
             { value: 'Mexico', label: 'Mexico', icon: '🇲🇽' }
           ]}
-          className="w-full sm:w-auto min-w-[160px] text-primary"
+          className="shrink-0 w-auto min-w-[150px] text-primary"
           placeholder="Country"
         />
 
@@ -344,7 +393,7 @@ export default function EmployeeListPage() {
             { value: '', label: 'All Branches' },
             ...(AGS_LOCATIONS[country] || []).map(b => ({ value: b, label: b }))
           ]}
-          className="w-full sm:w-auto min-w-[160px] text-primary"
+          className="shrink-0 w-auto min-w-[150px] text-primary"
           placeholder="Branch"
         />
 
@@ -357,7 +406,7 @@ export default function EmployeeListPage() {
             { value: 'Medium', label: 'Medium' },
             { value: 'Poor', label: 'Poor' }
           ]}
-          className="w-full sm:w-auto min-w-[150px]"
+          className="shrink-0 w-auto min-w-[150px]"
           placeholder="Training Perf"
         />
 
@@ -370,7 +419,7 @@ export default function EmployeeListPage() {
             { value: 'Normal', label: 'Normal' },
             { value: 'Low', label: 'Low' }
           ]}
-          className="w-full sm:w-auto min-w-[140px]"
+          className="shrink-0 w-auto min-w-[140px]"
           placeholder="Revenue Status"
         />
 
@@ -384,9 +433,16 @@ export default function EmployeeListPage() {
             { value: 'Loss Center', label: 'Loss Center' },
             { value: 'Cost Center (Support)', label: 'Cost Center (Support)' }
           ]}
-          className="w-full sm:w-auto min-w-[160px]"
+          className="shrink-0 w-auto min-w-[160px]"
           placeholder="Profit Status"
         />
+
+        <button 
+          onClick={handleExport} 
+          className="btn-secondary flex items-center gap-2 px-4 py-2.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20 hover:border-emerald-500/40 transition-all rounded-xl shadow-sm text-sm font-semibold shrink-0 ml-auto"
+        >
+          <Download className="w-4 h-4" /> Export Data
+        </button>
       </div>
 
       <DataTable
