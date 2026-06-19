@@ -217,13 +217,7 @@ export default function ChatbotWidget() {
                   </div>
                 </div>
               </div>
-<<<<<<< HEAD
-
-              <div className="flex items-center gap-1.5">
-=======
-              
               <div className="flex items-center gap-1.5" onPointerDown={(e) => e.stopPropagation()}>
->>>>>>> 3572745212bffc8dc559a13f9b3a231452b238a2
                 {/* Suggestions Trigger Button (?) */}
                 <button
                   onClick={() => setShowPrompts(!showPrompts)}
@@ -360,12 +354,7 @@ export default function ChatbotWidget() {
           </motion.div>
         )}
       </AnimatePresence>
-
-<<<<<<< HEAD
-      {/* Floating Action Button (Only Launcher) */}
-=======
       {/* Floating Action Button (Only Launcher / Drag Handle) */}
->>>>>>> 3572745212bffc8dc559a13f9b3a231452b238a2
       <motion.button
         onPointerDown={(e) => dragControls.start(e)}
         onClick={() => setIsOpen(!isOpen)}

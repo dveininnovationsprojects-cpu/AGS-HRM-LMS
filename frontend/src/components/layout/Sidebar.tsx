@@ -43,18 +43,18 @@ export default function Sidebar() {
       <div className="flex items-center gap-3 px-4 py-5 border-b border-white/5 h-16">
         {sidebarCollapsed ? (
           <div className="w-9 h-9 flex items-center justify-center flex-shrink-0 mx-auto">
-            <img 
-              src="https://cdn-bpead.nitrocdn.com/BBpeMUqwtpRtLgerjeQhQjKhWBtMWEQP/assets/images/optimized/rev-e5326ea/www.agshealth.com/wp-content/uploads/2022/09/ags-siticon.png" 
-              alt="AGS Health" 
-              className="w-7 h-7 object-contain" 
+            <img
+              src="https://cdn-bpead.nitrocdn.com/BBpeMUqwtpRtLgerjeQhQjKhWBtMWEQP/assets/images/optimized/rev-e5326ea/www.agshealth.com/wp-content/uploads/2022/09/ags-siticon.png"
+              alt="AGS Health"
+              className="w-7 h-7 object-contain"
             />
           </div>
         ) : (
           <div className="flex flex-col gap-1 pl-1">
-            <img 
-              src="https://cdn-bpead.nitrocdn.com/BBpeMUqwtpRtLgerjeQhQjKhWBtMWEQP/assets/images/optimized/rev-e5326ea/www.agshealth.com/wp-content/uploads/2022/09/AGS-Health-Logo-White.svg" 
-              alt="AGS Health" 
-              className="h-6 w-auto object-contain" 
+            <img
+              src="https://cdn-bpead.nitrocdn.com/BBpeMUqwtpRtLgerjeQhQjKhWBtMWEQP/assets/images/optimized/rev-e5326ea/www.agshealth.com/wp-content/uploads/2022/09/AGS-Health-Logo-White.svg"
+              alt="AGS Health"
+              className="h-6 w-auto object-contain"
             />
           </div>
         )}
