@@ -188,7 +188,7 @@ export default function ChatbotWidget() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.22, ease: 'easeOut' }}
-            className="w-[370px] max-w-[calc(100vw-2rem)] h-[490px] max-h-[calc(100vh-8rem)] bg-[#090b1e]/98 backdrop-blur-md rounded-2xl border border-emerald-500/25 shadow-[0_0_25px_rgba(16,185,129,0.15)] flex flex-col overflow-hidden relative"
+            className="absolute bottom-20 right-0 w-[370px] max-w-[calc(100vw-2rem)] h-[490px] max-h-[calc(100vh-8rem)] bg-[#090b1e]/98 backdrop-blur-md rounded-2xl border border-emerald-500/25 shadow-[0_0_25px_rgba(16,185,129,0.15)] flex flex-col overflow-hidden"
           >
             {/* Top glowing neon light accent */}
             <div className="h-[2px] bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-500 w-full flex-shrink-0" />
@@ -217,7 +217,6 @@ export default function ChatbotWidget() {
                   </div>
                 </div>
               </div>
-              
               <div className="flex items-center gap-1.5" onPointerDown={(e) => e.stopPropagation()}>
                 {/* Suggestions Trigger Button (?) */}
                 <button
@@ -355,7 +354,6 @@ export default function ChatbotWidget() {
           </motion.div>
         )}
       </AnimatePresence>
-
       {/* Floating Action Button (Only Launcher / Drag Handle) */}
       <motion.button
         onPointerDown={(e) => dragControls.start(e)}

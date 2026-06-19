@@ -1,0 +1,360 @@
+// AGS Health India Branch Mock Data — All 7 branches
+
+export interface BranchData {
+  id: string;
+  city: string;
+  state: string;
+  coordinates: [number, number];
+  address: string;
+  established: string;
+  headCount: number;
+  activeEmployees: number;
+  revenue: number;
+  cost: number;
+  profit: number;
+  attritionRate: number;
+  hiringEfficiency: number;
+  trainingROI: number;
+  openPositions: number;
+  benchStrength: number;
+  slaCompliance: number;
+  avgLmsScore: number;
+  topDepts: { name: string; count: number }[];
+  monthlyTrend: { month: string; joiners: number; leavers: number; revenue: number }[];
+  recruiterLeaderboard: { name: string; hired: number; active: number; retentionPct: number }[];
+  topPerformers: { name: string; role: string; revenue: number; profit: number }[];
+  attritionRisk: { name: string; risk: 'Critical' | 'High' | 'Medium' | 'Low'; sla: number; lms: number; dept: string }[];
+}
+
+export const BRANCH_DATA: BranchData[] = [
+  {
+    id: 'chennai', city: 'Chennai', state: 'Tamil Nadu',
+    coordinates: [80.2707, 13.0827],
+    address: '14th Floor, Prince Towers, Anna Salai, Chennai – 600002',
+    established: '2014', headCount: 312, activeEmployees: 289,
+    revenue: 4820000, cost: 1940000, profit: 2880000,
+    attritionRate: 8.2, hiringEfficiency: 84, trainingROI: 210,
+    openPositions: 18, benchStrength: 23, slaCompliance: 91, avgLmsScore: 78,
+    topDepts: [
+      { name: 'Medical Coder', count: 98 },
+      { name: 'AR Caller', count: 82 },
+      { name: 'Med. Billing Exec.', count: 64 },
+      { name: 'Quality Analyst', count: 38 },
+      { name: 'Team Leader', count: 22 },
+      { name: 'HR', count: 8 },
+    ],
+    monthlyTrend: [
+      { month: 'Aug', joiners: 14, leavers: 3, revenue: 720000 },
+      { month: 'Sep', joiners: 18, leavers: 4, revenue: 780000 },
+      { month: 'Oct', joiners: 22, leavers: 6, revenue: 820000 },
+      { month: 'Nov', joiners: 16, leavers: 3, revenue: 810000 },
+      { month: 'Dec', joiners: 20, leavers: 5, revenue: 840000 },
+      { month: 'Jan', joiners: 26, leavers: 8, revenue: 850000 },
+    ],
+    recruiterLeaderboard: [
+      { name: 'Priya N', hired: 48, active: 42, retentionPct: 88 },
+      { name: 'Arun K', hired: 38, active: 31, retentionPct: 82 },
+      { name: 'Divya S', hired: 32, active: 24, retentionPct: 75 },
+    ],
+    topPerformers: [
+      { name: 'Anand Kumar', role: 'Senior Manager', revenue: 52400, profit: 34200 },
+      { name: 'Bhavya Rao', role: 'HR Lead', revenue: 41800, profit: 27200 },
+      { name: 'Charles Dev', role: 'Ops Manager', revenue: 38200, profit: 22800 },
+    ],
+    attritionRisk: [
+      { name: 'Kiran S', risk: 'Critical', sla: 58, lms: 42, dept: 'Medical Coding' },
+      { name: 'Pooja T', risk: 'High', sla: 64, lms: 51, dept: 'AR' },
+      { name: 'Rahul M', risk: 'Medium', sla: 72, lms: 60, dept: 'Billing' },
+    ],
+  },
+  {
+    id: 'vellore', city: 'Vellore', state: 'Tamil Nadu',
+    coordinates: [79.1325, 12.9165],
+    address: '3rd Floor, Ranipet Highway Business Park, Vellore – 632001',
+    established: '2017', headCount: 148, activeEmployees: 132,
+    revenue: 2140000, cost: 980000, profit: 1160000,
+    attritionRate: 11.4, hiringEfficiency: 74, trainingROI: 178,
+    openPositions: 9, benchStrength: 16, slaCompliance: 84, avgLmsScore: 71,
+    topDepts: [
+      { name: 'Medical Coder', count: 48 },
+      { name: 'AR Caller', count: 38 },
+      { name: 'Med. Billing Exec.', count: 28 },
+      { name: 'Quality Analyst', count: 16 },
+      { name: 'Team Leader', count: 10 },
+      { name: 'HR', count: 8 },
+    ],
+    monthlyTrend: [
+      { month: 'Aug', joiners: 6, leavers: 2, revenue: 320000 },
+      { month: 'Sep', joiners: 8, leavers: 3, revenue: 340000 },
+      { month: 'Oct', joiners: 10, leavers: 4, revenue: 370000 },
+      { month: 'Nov', joiners: 7, leavers: 2, revenue: 360000 },
+      { month: 'Dec', joiners: 9, leavers: 3, revenue: 375000 },
+      { month: 'Jan', joiners: 12, leavers: 5, revenue: 375000 },
+    ],
+    recruiterLeaderboard: [
+      { name: 'Meena R', hired: 22, active: 18, retentionPct: 82 },
+      { name: 'Suresh P', hired: 18, active: 13, retentionPct: 72 },
+      { name: 'Latha V', hired: 14, active: 9, retentionPct: 64 },
+    ],
+    topPerformers: [
+      { name: 'Senthil K', role: 'Ops Manager', revenue: 34200, profit: 21400 },
+      { name: 'Preethi M', role: 'HR Lead', revenue: 28600, profit: 17800 },
+      { name: 'Hari B', role: 'Team Leader', revenue: 25400, profit: 14900 },
+    ],
+    attritionRisk: [
+      { name: 'Murugan S', risk: 'High', sla: 62, lms: 48, dept: 'AR' },
+      { name: 'Kavitha L', risk: 'High', sla: 66, lms: 53, dept: 'Medical Coding' },
+      { name: 'Arjun R', risk: 'Medium', sla: 74, lms: 62, dept: 'HR' },
+    ],
+  },
+  {
+    id: 'hyderabad', city: 'Hyderabad', state: 'Telangana',
+    coordinates: [78.4867, 17.3850],
+    address: '22nd Floor, Skyview 10, Hitech City, Hyderabad – 500081',
+    established: '2015', headCount: 274, activeEmployees: 258,
+    revenue: 4210000, cost: 1680000, profit: 2530000,
+    attritionRate: 9.1, hiringEfficiency: 81, trainingROI: 196,
+    openPositions: 14, benchStrength: 16, slaCompliance: 89, avgLmsScore: 76,
+    topDepts: [
+      { name: 'Medical Coder', count: 88 },
+      { name: 'AR Caller', count: 70 },
+      { name: 'Med. Billing Exec.', count: 58 },
+      { name: 'Quality Analyst', count: 32 },
+      { name: 'Team Leader', count: 18 },
+      { name: 'HR', count: 8 },
+    ],
+    monthlyTrend: [
+      { month: 'Aug', joiners: 12, leavers: 3, revenue: 630000 },
+      { month: 'Sep', joiners: 15, leavers: 4, revenue: 680000 },
+      { month: 'Oct', joiners: 19, leavers: 5, revenue: 720000 },
+      { month: 'Nov', joiners: 13, leavers: 3, revenue: 710000 },
+      { month: 'Dec', joiners: 17, leavers: 4, revenue: 730000 },
+      { month: 'Jan', joiners: 22, leavers: 7, revenue: 740000 },
+    ],
+    recruiterLeaderboard: [
+      { name: 'Ravi T', hired: 42, active: 36, retentionPct: 86 },
+      { name: 'Swathi G', hired: 35, active: 28, retentionPct: 80 },
+      { name: 'Naveen K', hired: 28, active: 20, retentionPct: 71 },
+    ],
+    topPerformers: [
+      { name: 'Vikram N', role: 'Ops Manager', revenue: 48600, profit: 31200 },
+      { name: 'Shalini P', role: 'Team Leader', revenue: 39800, profit: 24600 },
+      { name: 'Karthik R', role: 'Sr. Manager', revenue: 36400, profit: 22100 },
+    ],
+    attritionRisk: [
+      { name: 'Aditya V', risk: 'High', sla: 63, lms: 49, dept: 'Medical Coding' },
+      { name: 'Swapna R', risk: 'Medium', sla: 70, lms: 58, dept: 'Billing' },
+      { name: 'Rohit M', risk: 'Low', sla: 79, lms: 68, dept: 'AR' },
+    ],
+  },
+  {
+    id: 'tirupati', city: 'Tirupati', state: 'Andhra Pradesh',
+    coordinates: [79.4192, 13.6288],
+    address: '5th Floor, Leela Towers, Renigunta Road, Tirupati – 517507',
+    established: '2019', headCount: 96, activeEmployees: 84,
+    revenue: 1380000, cost: 680000, profit: 700000,
+    attritionRate: 13.6, hiringEfficiency: 68, trainingROI: 152,
+    openPositions: 7, benchStrength: 12, slaCompliance: 80, avgLmsScore: 68,
+    topDepts: [
+      { name: 'Medical Coder', count: 32 },
+      { name: 'AR Caller', count: 24 },
+      { name: 'Med. Billing Exec.', count: 18 },
+      { name: 'Quality Analyst', count: 10 },
+      { name: 'Team Leader', count: 6 },
+      { name: 'HR', count: 6 },
+    ],
+    monthlyTrend: [
+      { month: 'Aug', joiners: 4, leavers: 2, revenue: 200000 },
+      { month: 'Sep', joiners: 5, leavers: 2, revenue: 220000 },
+      { month: 'Oct', joiners: 7, leavers: 3, revenue: 240000 },
+      { month: 'Nov', joiners: 4, leavers: 2, revenue: 230000 },
+      { month: 'Dec', joiners: 6, leavers: 2, revenue: 245000 },
+      { month: 'Jan', joiners: 8, leavers: 4, revenue: 245000 },
+    ],
+    recruiterLeaderboard: [
+      { name: 'Padma T', hired: 16, active: 12, retentionPct: 75 },
+      { name: 'Balaji C', hired: 14, active: 9, retentionPct: 64 },
+      { name: 'Rani S', hired: 10, active: 6, retentionPct: 60 },
+    ],
+    topPerformers: [
+      { name: 'Venkat R', role: 'Ops Manager', revenue: 26400, profit: 14800 },
+      { name: 'Swetha K', role: 'HR Lead', revenue: 21800, profit: 12200 },
+      { name: 'Prasad M', role: 'Team Leader', revenue: 19600, profit: 10900 },
+    ],
+    attritionRisk: [
+      { name: 'Suresh B', risk: 'Critical', sla: 55, lms: 40, dept: 'Medical Coding' },
+      { name: 'Lakshmi V', risk: 'High', sla: 61, lms: 47, dept: 'AR' },
+      { name: 'Govind P', risk: 'Medium', sla: 73, lms: 61, dept: 'HR' },
+    ],
+  },
+  {
+    id: 'bengaluru', city: 'Bengaluru', state: 'Karnataka',
+    coordinates: [77.5946, 12.9716],
+    address: '18th Floor, Prestige Tech Park, Outer Ring Road, Bengaluru – 560103',
+    established: '2013', headCount: 428, activeEmployees: 406,
+    revenue: 6840000, cost: 2620000, profit: 4220000,
+    attritionRate: 7.4, hiringEfficiency: 88, trainingROI: 234,
+    openPositions: 22, benchStrength: 22, slaCompliance: 94, avgLmsScore: 83,
+    topDepts: [
+      { name: 'Medical Coder', count: 132 },
+      { name: 'AR Caller', count: 108 },
+      { name: 'Med. Billing Exec.', count: 88 },
+      { name: 'Quality Analyst', count: 52 },
+      { name: 'Team Leader', count: 30 },
+      { name: 'HR', count: 18 },
+    ],
+    monthlyTrend: [
+      { month: 'Aug', joiners: 20, leavers: 4, revenue: 1020000 },
+      { month: 'Sep', joiners: 24, leavers: 5, revenue: 1100000 },
+      { month: 'Oct', joiners: 30, leavers: 7, revenue: 1180000 },
+      { month: 'Nov', joiners: 22, leavers: 4, revenue: 1150000 },
+      { month: 'Dec', joiners: 28, leavers: 6, revenue: 1200000 },
+      { month: 'Jan', joiners: 36, leavers: 10, revenue: 1190000 },
+    ],
+    recruiterLeaderboard: [
+      { name: 'Nisha P', hired: 64, active: 58, retentionPct: 91 },
+      { name: 'Arjun M', hired: 52, active: 45, retentionPct: 87 },
+      { name: 'Deepa K', hired: 44, active: 36, retentionPct: 82 },
+    ],
+    topPerformers: [
+      { name: 'Rajesh S', role: 'VP Operations', revenue: 78400, profit: 52600 },
+      { name: 'Nandita V', role: 'Sr. Director', revenue: 64200, profit: 41800 },
+      { name: 'Sunil A', role: 'Ops Manager', revenue: 56800, profit: 36400 },
+    ],
+    attritionRisk: [
+      { name: 'Rohini P', risk: 'High', sla: 65, lms: 52, dept: 'Medical Coding' },
+      { name: 'Manish T', risk: 'Medium', sla: 71, lms: 60, dept: 'Billing' },
+      { name: 'Swati G', risk: 'Low', sla: 81, lms: 72, dept: 'AR' },
+    ],
+  },
+  {
+    id: 'jaipur', city: 'Jaipur', state: 'Rajasthan',
+    coordinates: [75.7873, 26.9124],
+    address: '9th Floor, Aishwarya Tower, Malviya Nagar, Jaipur – 302017',
+    established: '2020', headCount: 112, activeEmployees: 98,
+    revenue: 1620000, cost: 780000, profit: 840000,
+    attritionRate: 12.1, hiringEfficiency: 71, trainingROI: 162,
+    openPositions: 8, benchStrength: 14, slaCompliance: 82, avgLmsScore: 70,
+    topDepts: [
+      { name: 'Medical Coder', count: 40 },
+      { name: 'AR Caller', count: 30 },
+      { name: 'Med. Billing Exec.', count: 22 },
+      { name: 'Quality Analyst', count: 10 },
+      { name: 'Team Leader', count: 6 },
+      { name: 'HR', count: 4 },
+    ],
+    monthlyTrend: [
+      { month: 'Aug', joiners: 5, leavers: 2, revenue: 240000 },
+      { month: 'Sep', joiners: 7, leavers: 3, revenue: 260000 },
+      { month: 'Oct', joiners: 9, leavers: 3, revenue: 280000 },
+      { month: 'Nov', joiners: 6, leavers: 2, revenue: 270000 },
+      { month: 'Dec', joiners: 8, leavers: 3, revenue: 285000 },
+      { month: 'Jan', joiners: 11, leavers: 4, revenue: 285000 },
+    ],
+    recruiterLeaderboard: [
+      { name: 'Kavya R', hired: 24, active: 19, retentionPct: 79 },
+      { name: 'Mohan L', hired: 20, active: 14, retentionPct: 70 },
+      { name: 'Suman B', hired: 16, active: 10, retentionPct: 63 },
+    ],
+    topPerformers: [
+      { name: 'Amit V', role: 'Sr. Manager', revenue: 31200, profit: 18600 },
+      { name: 'Sunita J', role: 'HR Lead', revenue: 25800, profit: 14900 },
+      { name: 'Prakash K', role: 'Ops Lead', revenue: 22400, profit: 12800 },
+    ],
+    attritionRisk: [
+      { name: 'Dinesh C', risk: 'High', sla: 63, lms: 50, dept: 'Billing' },
+      { name: 'Rekha M', risk: 'Medium', sla: 70, lms: 59, dept: 'AR' },
+      { name: 'Sanjay V', risk: 'Low', sla: 78, lms: 68, dept: 'HR' },
+    ],
+  },
+  {
+    id: 'ahmedabad', city: 'Ahmedabad', state: 'Gujarat',
+    coordinates: [72.5714, 23.0225],
+    address: '11th Floor, GIFT City Tower, Gandhinagar, Ahmedabad – 382355',
+    established: '2021', headCount: 88, activeEmployees: 76,
+    revenue: 1240000, cost: 620000, profit: 620000,
+    attritionRate: 14.8, hiringEfficiency: 65, trainingROI: 144,
+    openPositions: 10, benchStrength: 12, slaCompliance: 78, avgLmsScore: 66,
+    topDepts: [
+      { name: 'Medical Coder', count: 30 },
+      { name: 'AR Caller', count: 24 },
+      { name: 'Med. Billing Exec.', count: 16 },
+      { name: 'Quality Analyst', count: 8 },
+      { name: 'Team Leader', count: 6 },
+      { name: 'HR', count: 4 },
+    ],
+    monthlyTrend: [
+      { month: 'Aug', joiners: 4, leavers: 2, revenue: 180000 },
+      { month: 'Sep', joiners: 5, leavers: 3, revenue: 195000 },
+      { month: 'Oct', joiners: 7, leavers: 3, revenue: 215000 },
+      { month: 'Nov', joiners: 5, leavers: 2, revenue: 210000 },
+      { month: 'Dec', joiners: 6, leavers: 3, revenue: 220000 },
+      { month: 'Jan', joiners: 9, leavers: 4, revenue: 220000 },
+    ],
+    recruiterLeaderboard: [
+      { name: 'Hetal P', hired: 18, active: 13, retentionPct: 72 },
+      { name: 'Dhruv S', hired: 15, active: 10, retentionPct: 67 },
+      { name: 'Pooja M', hired: 12, active: 7, retentionPct: 58 },
+    ],
+    topPerformers: [
+      { name: 'Chirag P', role: 'Sr. Manager', revenue: 24800, profit: 13200 },
+      { name: 'Riddhi S', role: 'Billing Lead', revenue: 20400, profit: 10800 },
+      { name: 'Neel K', role: 'HR Lead', revenue: 18200, profit: 9400 },
+    ],
+    attritionRisk: [
+      { name: 'Vishal M', risk: 'Critical', sla: 54, lms: 38, dept: 'Medical Coding' },
+      { name: 'Prachi T', risk: 'High', sla: 62, lms: 46, dept: 'Billing' },
+      { name: 'Jaimin R', risk: 'Medium', sla: 71, lms: 57, dept: 'AR' },
+    ],
+  },
+];
+
+const ROLE_NAMES = ['Medical Coder', 'AR Caller', 'Med. Billing Exec.', 'Quality Analyst', 'Team Leader', 'HR'];
+
+export const ALL_INDIA_DATA: BranchData = {
+  id: 'all',
+  city: 'All India',
+  state: 'Pan India',
+  coordinates: [80.0, 22.0],
+  address: 'AGS Health — All 7 India Branches',
+  established: '2013',
+  headCount: BRANCH_DATA.reduce((s, b) => s + b.headCount, 0),
+  activeEmployees: BRANCH_DATA.reduce((s, b) => s + b.activeEmployees, 0),
+  revenue: BRANCH_DATA.reduce((s, b) => s + b.revenue, 0),
+  cost: BRANCH_DATA.reduce((s, b) => s + b.cost, 0),
+  profit: BRANCH_DATA.reduce((s, b) => s + b.profit, 0),
+  attritionRate: parseFloat((BRANCH_DATA.reduce((s, b) => s + b.attritionRate, 0) / BRANCH_DATA.length).toFixed(1)),
+  hiringEfficiency: Math.round(BRANCH_DATA.reduce((s, b) => s + b.hiringEfficiency, 0) / BRANCH_DATA.length),
+  trainingROI: Math.round(BRANCH_DATA.reduce((s, b) => s + b.trainingROI, 0) / BRANCH_DATA.length),
+  openPositions: BRANCH_DATA.reduce((s, b) => s + b.openPositions, 0),
+  benchStrength: BRANCH_DATA.reduce((s, b) => s + b.benchStrength, 0),
+  slaCompliance: Math.round(BRANCH_DATA.reduce((s, b) => s + b.slaCompliance, 0) / BRANCH_DATA.length),
+  avgLmsScore: Math.round(BRANCH_DATA.reduce((s, b) => s + b.avgLmsScore, 0) / BRANCH_DATA.length),
+  topDepts: ROLE_NAMES.map(name => ({
+    name,
+    count: BRANCH_DATA.reduce((s, b) => s + (b.topDepts.find(d => d.name === name)?.count || 0), 0),
+  })),
+  monthlyTrend: ['Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan'].map((month, idx) => ({
+    month,
+    joiners: BRANCH_DATA.reduce((s, b) => s + b.monthlyTrend[idx].joiners, 0),
+    leavers: BRANCH_DATA.reduce((s, b) => s + b.monthlyTrend[idx].leavers, 0),
+    revenue: BRANCH_DATA.reduce((s, b) => s + b.monthlyTrend[idx].revenue, 0),
+  })),
+  recruiterLeaderboard: [
+    { name: 'Nisha P (BLR)', hired: 64, active: 58, retentionPct: 91 },
+    { name: 'Priya N (CHN)', hired: 48, active: 42, retentionPct: 88 },
+    { name: 'Arjun M (BLR)', hired: 52, active: 45, retentionPct: 87 },
+  ],
+  topPerformers: [
+    { name: 'Rajesh S', role: 'VP Ops, BLR', revenue: 78400, profit: 52600 },
+    { name: 'Nandita V', role: 'Sr. Director, BLR', revenue: 64200, profit: 41800 },
+    { name: 'Anand Kumar', role: 'Sr. Manager, CHN', revenue: 52400, profit: 34200 },
+  ],
+  attritionRisk: [
+    { name: 'Vishal M', risk: 'Critical', sla: 54, lms: 38, dept: 'Medical Coding' },
+    { name: 'Suresh B', risk: 'Critical', sla: 55, lms: 40, dept: 'Medical Coding' },
+    { name: 'Kiran S', risk: 'Critical', sla: 58, lms: 42, dept: 'AR' },
+    { name: 'Lakshmi V', risk: 'High', sla: 61, lms: 47, dept: 'AR' },
+    { name: 'Aditya V', risk: 'High', sla: 63, lms: 49, dept: 'Medical Coding' },
+  ],
+};
