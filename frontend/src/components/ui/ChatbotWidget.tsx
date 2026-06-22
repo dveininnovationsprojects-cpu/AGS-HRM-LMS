@@ -74,6 +74,43 @@ export default function ChatbotWidget() {
     }
   }, [messages, isOpen]);
 
+  useEffect(() => {
+    const handleTriggerChatbot = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      setIsOpen(true);
+      if (customEvent.detail) {
+        const { message, response } = customEvent.detail;
+        const newMessages: Message[] = [];
+        if (message) {
+          newMessages.push({
+            role: 'user',
+            content: message,
+            timestamp: new Date()
+          });
+        }
+        if (response) {
+          newMessages.push({
+            role: 'assistant',
+            content: response,
+            timestamp: new Date()
+          });
+        }
+        if (newMessages.length > 0) {
+          setMessages(prev => {
+            const lastMsg = prev[prev.length - 1];
+            if (lastMsg && response && lastMsg.content === response) {
+              return prev;
+            }
+            return [...prev, ...newMessages];
+          });
+        }
+      }
+    };
+
+    window.addEventListener('trigger-chatbot', handleTriggerChatbot);
+    return () => window.removeEventListener('trigger-chatbot', handleTriggerChatbot);
+  }, []);
+
   const sendMessage = async (textToSend?: string) => {
     const messageText = textToSend || input;
     if (!messageText.trim() || loading) return;

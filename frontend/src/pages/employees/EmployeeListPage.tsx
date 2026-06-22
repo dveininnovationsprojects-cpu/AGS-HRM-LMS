@@ -6,6 +6,7 @@ import api from '../../services/api';
 import DataTable from '../../components/ui/DataTable';
 import CustomSelect from '../../components/ui/CustomSelect';
 import toast from 'react-hot-toast';
+import { COUNTRIES, STATES_BY_COUNTRY, BRANCH_DATA } from '../../data/branchData';
 
 interface Employee {
   id: number;
@@ -47,6 +48,7 @@ export default function EmployeeListPage() {
   const [revenueStatus, setRevenueStatus] = useState('');
   const [profitStatus, setProfitStatus] = useState('');
   const [country, setCountry] = useState('');
+  const [state, setState] = useState('');
   const [branch, setBranch] = useState('');
 
   const fetchEmployees = async (page = 1) => {
@@ -62,6 +64,7 @@ export default function EmployeeListPage() {
           revenue_status: revenueStatus,
           profit_status: profitStatus,
           country,
+          state,
           branch
         } 
       });
@@ -74,7 +77,7 @@ export default function EmployeeListPage() {
     }
   };
 
-  useEffect(() => { fetchEmployees(); }, [search, status, trainingPerformance, revenueStatus, profitStatus, country, branch]);
+  useEffect(() => { fetchEmployees(); }, [search, status, trainingPerformance, revenueStatus, profitStatus, country, state, branch]);
 
   const columns = [
     { header: 'Emp Code', accessor: 'emp_code' as keyof Employee },
@@ -99,13 +102,17 @@ export default function EmployeeListPage() {
     { header: 'Department', accessor: (row: Employee) => row.department?.name || '-' },
     { header: 'Designation', accessor: (row: Employee) => row.designation?.title || '-' },
     {
-      header: 'Location',
+      header: 'Country',
       accessor: (row: any) => (
-        <div className="text-xs">
-          <div className="font-semibold text-slate-200">{row.work_branch || '-'}</div>
-          <div className="text-slate-400">{row.work_country || '-'}</div>
-        </div>
+        <span className="font-semibold text-slate-200">{row.work_country || '-'}</span>
       )
+    },
+    {
+      header: 'Branch',
+      accessor: (row: any) => {
+        const found = BRANCH_DATA.find(b => b.id === row.work_branch);
+        return <span className="text-slate-400 text-xs">{found ? found.city : (row.work_branch || '-')}</span>;
+      }
     },
     {
       header: 'Status',
@@ -185,13 +192,6 @@ export default function EmployeeListPage() {
   const philCount = allStoredEmployees.filter((e: any) => e.work_country === 'Philippines').length;
   const mexCount = allStoredEmployees.filter((e: any) => e.work_country === 'Mexico').length;
 
-  const AGS_LOCATIONS: Record<string, string[]> = {
-    'United States': ['Washington, D.C. (HQ)', 'Scranton, PA'],
-    'India': ['Chennai', 'Vellore', 'Tirupati', 'Hyderabad', 'Bengaluru', 'Ahmedabad', 'Jaipur'],
-    'Philippines': ['Manila'],
-    'Mexico': ['Mexico City']
-  };
-
   const handleExport = async () => {
     const toastId = toast.loading('Preparing all matching records for export...');
     try {
@@ -205,6 +205,7 @@ export default function EmployeeListPage() {
           revenue_status: revenueStatus,
           profit_status: profitStatus,
           country,
+          state,
           branch
         } 
       });
@@ -218,11 +219,12 @@ export default function EmployeeListPage() {
 
       const headers = [
         'Emp Code', 'First Name', 'Last Name', 'Email', 'Department', 'Designation',
-        'Country', 'Branch', 'Status', 'Training Performance', 'Revenue ($)', 'Cost ($)', 'Profit ($)', 'Profit Status'
+        'Country', 'State', 'Branch', 'Status', 'Training Performance', 'Revenue ($)', 'Cost ($)', 'Profit ($)', 'Profit Status'
       ];
 
       const csvData = allFilteredEmployees.map((emp: any) => {
         const profit = (emp.revenue || 0) - (emp.cost || 0);
+        const branchObj = BRANCH_DATA.find(b => b.id === emp.work_branch);
         return [
           emp.emp_code || '',
           emp.first_name || '',
@@ -231,7 +233,8 @@ export default function EmployeeListPage() {
           emp.department?.name || '',
           emp.designation?.title || '',
           emp.work_country || '',
-          emp.work_branch || '',
+          emp.work_state || '',
+          branchObj ? branchObj.city : (emp.work_branch || ''),
           emp.employment_status || '',
           emp.training_performance || '',
           emp.revenue || 0,
@@ -307,9 +310,11 @@ export default function EmployeeListPage() {
               onClick={() => {
                 if (isSelected) {
                   setCountry('');
+                  setState('');
                   setBranch('');
                 } else {
                   setCountry(hub.name);
+                  setState('');
                   setBranch('');
                 }
               }}
@@ -373,6 +378,7 @@ export default function EmployeeListPage() {
           value={country}
           onChange={(val) => {
             setCountry(val);
+            setState('');
             setBranch('');
           }}
           options={[
@@ -386,12 +392,34 @@ export default function EmployeeListPage() {
           placeholder="Country"
         />
 
+        {country && STATES_BY_COUNTRY[country]?.length > 0 && (
+          <CustomSelect
+            value={state}
+            onChange={(val) => {
+              setState(val);
+              setBranch('');
+            }}
+            options={[
+              { value: '', label: 'All States' },
+              ...STATES_BY_COUNTRY[country].map(s => ({ value: s, label: s }))
+            ]}
+            className="shrink-0 w-auto min-w-[150px] text-primary"
+            placeholder="State"
+          />
+        )}
+
         <CustomSelect
           value={branch}
           onChange={setBranch}
           options={[
             { value: '', label: 'All Branches' },
-            ...(AGS_LOCATIONS[country] || []).map(b => ({ value: b, label: b }))
+            ...BRANCH_DATA
+              .filter(br => {
+                if (country && br.country !== country) return false;
+                if (state && br.state !== state) return false;
+                return true;
+              })
+              .map(br => ({ value: br.id, label: `${br.city} (${br.state})` }))
           ]}
           className="shrink-0 w-auto min-w-[150px] text-primary"
           placeholder="Branch"

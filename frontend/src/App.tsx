@@ -17,6 +17,7 @@ import PerformancePage from './pages/performance/PerformancePage';
 import AnalyticsDashboard from './pages/analytics/AnalyticsDashboard';
 import ReportsPage from './pages/reports/ReportsPage';
 import ProfitLossPage from './pages/employees/ProfitLossPage';
+import LeakagePage from './pages/employees/LeakagePage';
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
   const isAuthenticated = useSelector((s: RootState) => s.auth.isAuthenticated);
@@ -46,6 +47,7 @@ export default function App() {
         <Route path="performance" element={<PerformancePage />} />
         <Route path="analytics" element={<AnalyticsDashboard />} />
         <Route path="profit-loss" element={<ProfitLossPage />} />
+        <Route path="leakage-diagnostics" element={<LeakagePage />} />
         <Route path="reports" element={<ReportsPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/dashboard" replace />} />

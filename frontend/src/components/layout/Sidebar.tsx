@@ -14,12 +14,10 @@ const navItems = [
   { label: 'Dashboard', icon: LayoutDashboard, path: '/dashboard' },
   { label: 'Employees', icon: Users, path: '/employees' },
   { label: 'Recruitment', icon: Briefcase, path: '/recruitment' },
-  { label: 'LMS Courses', icon: BookOpen, path: '/lms/courses' },
   { label: 'Training', icon: GraduationCap, path: '/training' },
   { label: 'Performance', icon: TrendingUp, path: '/performance' },
-  { label: 'Analytics', icon: BarChart3, path: '/analytics' },
   { label: 'Profit & Loss Analyzer', icon: TrendingDown, path: '/profit-loss' },
-  { label: 'Reports', icon: FileText, path: '/reports' },
+  { label: 'Leakage Diagnostics', icon: BarChart3, path: '/leakage-diagnostics' },
 ];
 
 export default function Sidebar() {

@@ -54,31 +54,31 @@ const generateMockEmployees = () => {
   ];
 
   const recruiters = [
-    { name: 'Bhavya Rao', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=BhavyaRao' },
-    { name: 'Karthik Ramaswamy', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=KarthikRamaswamy' },
-    { name: 'Suresh Kumar', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=SureshKumar' },
-    { name: 'Divya Sridhar', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=DivyaSridhar' }
+    { name: 'Bhavya Rao', avatar: 'https://randomuser.me/api/portraits/women/10.jpg' },
+    { name: 'Karthik Ramaswamy', avatar: 'https://randomuser.me/api/portraits/men/11.jpg' },
+    { name: 'Suresh Kumar', avatar: 'https://randomuser.me/api/portraits/men/12.jpg' },
+    { name: 'Divya Sridhar', avatar: 'https://randomuser.me/api/portraits/women/13.jpg' }
   ];
 
   const trainers = [
-    { name: 'Meera Jasmine', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=MeeraJasmine' },
-    { name: 'Anand Kumar', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=AnandKumar' },
-    { name: 'Karthik Ramaswamy', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Karthik' },
-    { name: 'Suresh Kumar', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Suresh' }
+    { name: 'Meera Jasmine', avatar: 'https://randomuser.me/api/portraits/women/14.jpg' },
+    { name: 'Anand Kumar', avatar: 'https://randomuser.me/api/portraits/men/15.jpg' },
+    { name: 'Karthik Ramaswamy', avatar: 'https://randomuser.me/api/portraits/men/11.jpg' },
+    { name: 'Suresh Kumar', avatar: 'https://randomuser.me/api/portraits/men/12.jpg' }
   ];
 
   const interviewers = [
-    { name: 'Suresh Kumar (VP Operations)', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=SureshVP' },
-    { name: 'Anand Kumar (Senior Manager)', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=AnandKumar' },
-    { name: 'Elango M (Team Lead)', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Elango' },
-    { name: 'Charles Dev (Software Engineer)', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Charles' }
+    { name: 'Suresh Kumar (VP Operations)', avatar: 'https://randomuser.me/api/portraits/men/12.jpg' },
+    { name: 'Anand Kumar (Senior Manager)', avatar: 'https://randomuser.me/api/portraits/men/15.jpg' },
+    { name: 'Elango M (Team Lead)', avatar: 'https://randomuser.me/api/portraits/men/16.jpg' },
+    { name: 'Charles Dev (Software Engineer)', avatar: 'https://randomuser.me/api/portraits/men/17.jpg' }
   ];
 
   const teamLeads = [
-    { name: 'Anand Kumar', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=AnandKumar' },
-    { name: 'Elango M', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Elango' },
-    { name: 'Charles Dev', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Charles' },
-    { name: 'Bhavya Rao', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=BhavyaRao' }
+    { name: 'Anand Kumar', avatar: 'https://randomuser.me/api/portraits/men/15.jpg' },
+    { name: 'Elango M', avatar: 'https://randomuser.me/api/portraits/men/16.jpg' },
+    { name: 'Charles Dev', avatar: 'https://randomuser.me/api/portraits/men/17.jpg' },
+    { name: 'Bhavya Rao', avatar: 'https://randomuser.me/api/portraits/women/10.jpg' }
   ];
 
   const projects = [
@@ -163,26 +163,51 @@ const generateMockEmployees = () => {
     const date_of_birth = `${dobYear}-${dobMonth}-${dobDay}`;
 
     let work_country = 'India';
-    let work_branch = 'Chennai';
+    let work_branch = 'chennai';
+    let work_state = 'Tamil Nadu';
     let nationality = 'Indian';
 
     if (i % 10 === 0) {
       work_country = 'United States';
-      work_branch = (i % 20 === 0) ? 'Washington, D.C. (HQ)' : 'Scranton, PA';
       nationality = 'American';
+      if (i % 20 === 0) {
+        work_branch = 'washington';
+        work_state = 'District of Columbia';
+      } else {
+        work_branch = 'scranton';
+        work_state = 'Pennsylvania';
+      }
     } else if (i % 10 === 1) {
       work_country = 'Philippines';
-      work_branch = 'Manila';
       nationality = 'Filipino';
+      work_branch = 'manila';
+      work_state = 'Metro Manila';
     } else if (i % 10 === 2) {
       work_country = 'Mexico';
-      work_branch = 'Mexico City';
       nationality = 'Mexican';
+      if (i % 4 === 2) {
+        work_branch = 'zapopan_tizoc';
+        work_state = 'Jalisco';
+      } else {
+        work_branch = 'zapopan_meya';
+        work_state = 'Jalisco';
+      }
     } else {
-      const branches = ['Chennai', 'Vellore', 'Tirupati', 'Hyderabad', 'Bengaluru', 'Ahmedabad', 'Jaipur'];
       work_country = 'India';
-      work_branch = branches[(i - 1) % branches.length];
       nationality = 'Indian';
+      const indiaBranchIds = ['chennai', 'vellore', 'tirupati', 'hyderabad', 'bengaluru', 'ahmedabad', 'jaipur'];
+      const index = (i - 1) % 7;
+      work_branch = indiaBranchIds[index];
+      const states: Record<string, string> = {
+        chennai: 'Tamil Nadu',
+        vellore: 'Tamil Nadu',
+        tirupati: 'Andhra Pradesh',
+        hyderabad: 'Telangana',
+        bengaluru: 'Karnataka',
+        ahmedabad: 'Gujarat',
+        jaipur: 'Rajasthan'
+      };
+      work_state = states[work_branch] || 'Tamil Nadu';
     }
 
     let revenue = 0;
@@ -257,6 +282,15 @@ const generateMockEmployees = () => {
       training_performance = 'Poor';
     }
 
+    let training_score = 75 + (i % 15);
+    if (training_performance === 'Excellent') {
+      training_score = 90 + (i % 11);
+    } else if (training_performance === 'Poor') {
+      training_score = 50 + (i % 15);
+    }
+
+    let project_performance = 80 + (i % 18);
+
     // Revenue and Profit Status tags
     let revenue_status = 'Low';
     let profit_status = 'Loss Center';
@@ -300,7 +334,10 @@ const generateMockEmployees = () => {
       blood_group: bloodGroups[i % bloodGroups.length],
       nationality,
       work_country,
+      work_state,
       work_branch,
+      training_score,
+      project_performance,
       pan_number: `ABCDE${String(1000 + i)}F`,
       bank_account_number: `12345678${String(1000 + i)}`,
       bank_ifsc: 'SBIN0000789',
@@ -322,7 +359,9 @@ const generateMockEmployees = () => {
       training_performance,
       revenue_status,
       profit_status,
-      avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${fn}${ln.replace(/[^a-zA-Z]/g, '')}`
+      avatar: gender === 'Female'
+        ? `https://randomuser.me/api/portraits/women/${(i % 95) + 1}.jpg`
+        : `https://randomuser.me/api/portraits/men/${(i % 95) + 1}.jpg`
     });
   }
 
@@ -492,12 +531,12 @@ const initialCandidates = [
 const checkAndSeedMockDatabases = () => {
   const storedEmps = localStorage.getItem('ags_employees');
   let needsSeeding = false;
-  if (!storedEmps) {
+  if (!storedEmps || storedEmps.includes('dicebear.com')) {
     needsSeeding = true;
   } else {
     try {
       const parsed = JSON.parse(storedEmps);
-      if (!Array.isArray(parsed) || parsed.length < 100 || !parsed[0].hasOwnProperty('profit_status') || !parsed[0].hasOwnProperty('work_country')) {
+      if (!Array.isArray(parsed) || parsed.length < 100 || !parsed[0].hasOwnProperty('profit_status') || !parsed[0].hasOwnProperty('work_country') || !parsed[0].hasOwnProperty('work_state') || !parsed[0].hasOwnProperty('training_score')) {
         needsSeeding = true;
       }
     } catch {
@@ -612,6 +651,7 @@ api.get = async (url: string, config?: any): Promise<any> => {
     const revenue_status = params.revenue_status || '';
     const profit_status = params.profit_status || '';
     const country = params.country || '';
+    const state = params.state || '';
     const branch = params.branch || '';
 
     if (search) {
@@ -636,6 +676,9 @@ api.get = async (url: string, config?: any): Promise<any> => {
     }
     if (country) {
       employees = employees.filter((e: any) => e.work_country === country);
+    }
+    if (state) {
+      employees = employees.filter((e: any) => e.work_state === state);
     }
     if (branch) {
       employees = employees.filter((e: any) => e.work_branch === branch);
