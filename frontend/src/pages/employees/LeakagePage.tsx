@@ -117,9 +117,6 @@ export default function LeakagePage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-xl font-bold text-slate-100">Cost Leakage Diagnostics</h1>
-        </div>
         <span className="px-3 py-1 rounded-full bg-rose-500/10 text-rose-400 text-xs font-bold border border-rose-500/20">
           OPERATIONAL EFFICIENCY ANALYZER
         </span>
