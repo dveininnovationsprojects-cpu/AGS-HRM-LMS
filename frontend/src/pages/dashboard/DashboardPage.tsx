@@ -288,7 +288,6 @@ export default function DashboardPage() {
                 +5.2%
               </div>
             </div>
-
             <div className="flex items-baseline gap-2 notranslate" translate="no">
               <span className="text-xl font-bold text-slate-100 font-mono tracking-tight leading-none">
                 <CountUp target={b.headCount} />
