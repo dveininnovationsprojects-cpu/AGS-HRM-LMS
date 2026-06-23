@@ -25,7 +25,7 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['Fredoka', 'Quicksand', 'Outfit', 'Inter', 'system-ui', 'sans-serif'],
       },
       backgroundImage: {
         'gradient-primary': 'linear-gradient(135deg, #090b20 0%, #0c0e2b 100%)',

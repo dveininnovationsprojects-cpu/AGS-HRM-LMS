@@ -5,6 +5,22 @@
 @layer base {
   * {
     box-sizing: border-box;
+    font-family: 'Fredoka', 'Quicksand', 'Outfit', 'Inter', system-ui, -apple-system, sans-serif !important;
+  }
+
+  /* Tone down font thickness of all bold elements to reduce glare/brightness */
+  h1, h2, h3 {
+    font-weight: 600 !important;
+  }
+
+  h4, h5, h6, strong, b,
+  .font-bold, .font-semibold, .font-black {
+    font-weight: 500 !important;
+  }
+
+  /* Soften general heading colors to reduce brightness */
+  h1, h2, h3, h4, h5, h6 {
+    color: #e2e8f0;
   }
 
   body {
