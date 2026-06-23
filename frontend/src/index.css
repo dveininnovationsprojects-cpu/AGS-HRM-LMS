@@ -59,7 +59,7 @@
 
   /* Primary gradient background */
   .gradient-primary {
-    background: linear-gradient(135deg, #090b20 0%, #0c0e2b 100%);
+    background: linear-gradient(135deg, rgba(9, 11, 32, 0.25) 0%, rgba(12, 14, 43, 0.25) 100%);
   }
 
   /* Sidebar link active */

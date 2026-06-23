@@ -31,7 +31,7 @@ export default function Sidebar() {
       transition={{ duration: 0.25, ease: 'easeInOut' }}
       className={clsx(
         'relative z-30 flex flex-col h-full flex-shrink-0',
-        'gradient-primary shadow-xl',
+        'bg-transparent border-r border-white/5 shadow-xl',
         'lg:translate-x-0 transition-transform duration-300',
         sidebarMobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0',
         'fixed lg:relative'

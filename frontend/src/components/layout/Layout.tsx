@@ -6,6 +6,7 @@ import { setSidebarMobileOpen } from '../../store/slices/uiSlice';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import ChatbotWidget from '../ui/ChatbotWidget';
+import ParticleBackground from '../ui/ParticleBackground';
 
 export default function Layout() {
   const dispatch = useDispatch();
@@ -13,7 +14,9 @@ export default function Layout() {
   const location = useLocation();
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#060814] text-slate-200">
+    <div className="flex h-screen overflow-hidden bg-transparent text-slate-200 relative">
+      {/* Dynamic Animated Canvas System */}
+      <ParticleBackground />
       {/* Mobile overlay */}
       <AnimatePresence>
         {sidebarMobileOpen && (

@@ -98,7 +98,7 @@ export default function Header() {
   };
 
   return (
-    <header className="h-16 bg-[#060814]/80 backdrop-blur-md border-b border-white/5 px-6 flex items-center gap-4 shadow-sm sticky top-0 z-10">
+    <header className="h-16 bg-transparent border-b border-white/5 px-6 flex items-center gap-4 shadow-sm sticky top-0 z-10">
       <button
         onClick={() => dispatch(setSidebarMobileOpen(true))}
         className="lg:hidden p-2 rounded-lg text-slate-400 hover:bg-white/5 transition-colors"
