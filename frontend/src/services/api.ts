@@ -102,7 +102,7 @@ const generateMockEmployees = () => {
 
   const employees: any[] = [];
 
-  for (let i = 1; i <= 110; i++) {
+  for (let i = 1; i <= 1000; i++) {
     const fn = firstNames[(i - 1) % firstNames.length];
     const nameIndex = Math.floor((i - 1) / firstNames.length);
     const suffix = nameIndex > 0 ? ` ${String.fromCharCode(64 + nameIndex)}` : '';
@@ -115,19 +115,19 @@ const generateMockEmployees = () => {
     let dept = depts[0];
     let desig = designations[5];
     
-    if (i <= 4) {
-      dept = depts[i - 1];
+    if (i <= 40) {
+      dept = depts[(i - 1) % depts.length];
       desig = designations[0];
-    } else if (i <= 10) {
-      dept = depts[(i - 5) % depts.length];
+    } else if (i <= 100) {
+      dept = depts[(i - 1) % depts.length];
       desig = designations[4];
-    } else if (i <= 60) {
+    } else if (i <= 600) {
       dept = depts[0];
       desig = designations[5];
-    } else if (i <= 85) {
+    } else if (i <= 850) {
       dept = depts[2];
       desig = (i % 3 === 0) ? designations[6] : designations[2];
-    } else if (i <= 100) {
+    } else if (i <= 950) {
       dept = depts[1];
       desig = (i % 2 === 0) ? designations[1] : designations[8];
     } else {
@@ -138,15 +138,15 @@ const generateMockEmployees = () => {
     let status = 'Active';
     let date_of_leaving: string | null = null;
     let leaving_reason: string | null = null;
-    if (i >= 106) {
+    if (i >= 960) {
       status = 'Terminated';
       date_of_leaving = `2026-05-${String(15 + (i % 10)).padStart(2, '0')}`;
       leaving_reason = i % 2 === 0 ? 'Performance Failure & Repeated SLA Delays' : 'Compliance & Security Policy Violation';
-    } else if (i >= 101) {
+    } else if (i >= 920) {
       status = 'Resigned';
       date_of_leaving = `2026-05-${String(10 + (i % 5)).padStart(2, '0')}`;
       leaving_reason = leavingReasons[i % leavingReasons.length];
-    } else if (i >= 96) {
+    } else if (i >= 880) {
       status = 'On-Leave';
     }
 
@@ -167,47 +167,60 @@ const generateMockEmployees = () => {
     let work_state = 'Tamil Nadu';
     let nationality = 'Indian';
 
-    if (i % 10 === 0) {
+    // Determinstic Unequal Distribution (India 350, US 250, Philippines 205, Mexico 195):
+    if (i <= 350) {
+      work_country = 'India';
+      nationality = 'Indian';
+      // Branch distribution within India: Chennai 90, Bengaluru 70, Hyderabad 55, Vellore 45, Tirupati 35, Ahmedabad 30, Jaipur 25
+      if (i <= 90) {
+        work_branch = 'chennai';
+        work_state = 'Tamil Nadu';
+      } else if (i <= 160) {
+        work_branch = 'bengaluru';
+        work_state = 'Karnataka';
+      } else if (i <= 215) {
+        work_branch = 'hyderabad';
+        work_state = 'Telangana';
+      } else if (i <= 260) {
+        work_branch = 'vellore';
+        work_state = 'Tamil Nadu';
+      } else if (i <= 295) {
+        work_branch = 'tirupati';
+        work_state = 'Andhra Pradesh';
+      } else if (i <= 325) {
+        work_branch = 'ahmedabad';
+        work_state = 'Gujarat';
+      } else {
+        work_branch = 'jaipur';
+        work_state = 'Rajasthan';
+      }
+    } else if (i <= 600) {
       work_country = 'United States';
       nationality = 'American';
-      if (i % 20 === 0) {
-        work_branch = 'washington';
-        work_state = 'District of Columbia';
-      } else {
+      // Scranton: 140, Washington: 110
+      if (i <= 490) {
         work_branch = 'scranton';
         work_state = 'Pennsylvania';
+      } else {
+        work_branch = 'washington';
+        work_state = 'District of Columbia';
       }
-    } else if (i % 10 === 1) {
+    } else if (i <= 805) {
       work_country = 'Philippines';
       nationality = 'Filipino';
       work_branch = 'manila';
       work_state = 'Metro Manila';
-    } else if (i % 10 === 2) {
+    } else {
       work_country = 'Mexico';
       nationality = 'Mexican';
-      if (i % 4 === 2) {
-        work_branch = 'zapopan_tizoc';
-        work_state = 'Jalisco';
-      } else {
+      // Zapopan Meya: 105, Zapopan Tizoc: 90
+      if (i <= 910) {
         work_branch = 'zapopan_meya';
         work_state = 'Jalisco';
+      } else {
+        work_branch = 'zapopan_tizoc';
+        work_state = 'Jalisco';
       }
-    } else {
-      work_country = 'India';
-      nationality = 'Indian';
-      const indiaBranchIds = ['chennai', 'vellore', 'tirupati', 'hyderabad', 'bengaluru', 'ahmedabad', 'jaipur'];
-      const index = (i - 1) % 7;
-      work_branch = indiaBranchIds[index];
-      const states: Record<string, string> = {
-        chennai: 'Tamil Nadu',
-        vellore: 'Tamil Nadu',
-        tirupati: 'Andhra Pradesh',
-        hyderabad: 'Telangana',
-        bengaluru: 'Karnataka',
-        ahmedabad: 'Gujarat',
-        jaipur: 'Rajasthan'
-      };
-      work_state = states[work_branch] || 'Tamil Nadu';
     }
 
     let revenue = 0;
@@ -506,15 +519,195 @@ const initialCourses = [
   { id: 5, title: 'Workplace Safety & Threat Management', category: 'Safety', duration_hours: 2, level: 'Beginner', status: 'Published', description: 'Safety regulations, hazard identification, and emergency response guidelines.' },
 ];
 
-const initialBatches = [
-  { id: 1, title: 'AGS Quality Boot Camp', trainer_name: 'Anand Kumar', start_date: '2026-06-01', end_date: '2026-06-10', venue: 'Conference Room 3A', max_participants: 25, status: 'Completed' },
-  { id: 2, title: 'Information Security compliance H1', trainer_name: 'System Security Team', start_date: '2026-06-15', end_date: '2026-06-22', venue: 'Online Webinar', max_participants: 100, status: 'Ongoing' },
-  { id: 3, title: 'Effective Communication Workshop', trainer_name: 'Bhavya Rao', start_date: '2026-07-05', end_date: '2026-07-07', venue: 'Training Room A', max_participants: 15, status: 'Scheduled' },
+const initialTrainers = [
+  { id: 1, name: 'Meera Jasmine', email: 'meera.jasmine@agshealth.com', phone: '9876543001', specialization: 'Operational Guidelines & Quality Assurance', bio: 'Meera has 8+ years of QA leadership experience, driving critical training initiatives across healthcare ops.', type: 'Internal', rating: 4.8, cost_per_batch: 2000, avatar: 'https://randomuser.me/api/portraits/women/14.jpg' },
+  { id: 2, name: 'Anand Kumar', email: 'anand.kumar@agshealth.com', phone: '9876543002', specialization: 'Billing Compliance & Client Quality Standards', bio: 'Senior manager and certified instructor on compliance protocols, HIPAA audits, and quality SLAs.', type: 'Internal', rating: 4.6, cost_per_batch: 1500, avatar: 'https://randomuser.me/api/portraits/men/15.jpg' },
+  { id: 3, name: 'Karthik Ramaswamy', email: 'karthik.ramaswamy@agshealth.com', phone: '9876543003', specialization: 'Enterprise IT Systems & Security Infrastructure', bio: 'IT Lead focused on cloud platforms, corporate security frameworks, and security credentialing.', type: 'Internal', rating: 4.4, cost_per_batch: 1800, avatar: 'https://randomuser.me/api/portraits/men/11.jpg' },
+  { id: 4, name: 'Bhavya Rao', email: 'bhavya.rao@external.com', phone: '9876543004', specialization: 'Corporate Soft Skills & Leadership Dynamics', bio: 'External leadership coach specializing in communication workshops, client negotiation, and manager core competency.', type: 'External', rating: 4.5, cost_per_batch: 3000, avatar: 'https://randomuser.me/api/portraits/women/10.jpg' },
+  { id: 5, name: 'System Security Team', email: 'sec-ops@agshealth.com', phone: '9876543005', specialization: 'Information Security & Threat Compliance', bio: 'Global threat response team executing phishing drills and enterprise standard credential updates.', type: 'Internal', rating: 4.2, cost_per_batch: 500, avatar: 'https://randomuser.me/api/portraits/men/12.jpg' },
 ];
 
+const getInitialBatches = (employees: any[]) => {
+  const getEmpDetails = (id: number) => {
+    const e = employees.find((x: any) => x.id === id);
+    return e ? {
+      employee_id: e.id,
+      name: `${e.first_name} ${e.last_name}`,
+      emp_code: e.emp_code,
+      dept_name: e.department?.name || 'Operations',
+    } : { employee_id: id, name: `Employee ${id}`, emp_code: `AGS-${String(id).padStart(3, '0')}`, dept_name: 'Operations' };
+  };
+
+  return [
+    {
+      id: 1,
+      batch_name: 'AGS Quality Boot Camp',
+      program_name: 'Introduction to AGS Quality Guidelines',
+      trainer_id: 2,
+      trainer_name: 'Anand Kumar',
+      trainer_avatar: 'https://randomuser.me/api/portraits/men/15.jpg',
+      start_date: '2026-06-01',
+      end_date: '2026-06-10',
+      venue: 'Conference Room 3A',
+      mode: 'In-Person',
+      capacity: 25,
+      status: 'Completed',
+      trainer_cost: 1500,
+      material_cost: 300,
+      curriculum: [
+        'Healthcare BPO Foundations & Quality Fundamentals',
+        'Detailed Walkthrough of AGS Quality SLA Requirements',
+        'Mock Ticket Audits & Common Pitfalls Review',
+        'Interactive Client Case Study Analysis',
+        'Final Assessment and Trainer One-on-One Feedback'
+      ],
+      trainees: [5, 8, 12, 19, 25, 34, 45, 52, 60, 67, 73, 80].map((id, index) => {
+        const emp = getEmpDetails(id);
+        const scores = [85, 92, 78, 62, 95, 81, 74, 58, 88, 90, 83, 76];
+        const feedback = [
+          'Excellent grasp of quality metrics. Participated actively.',
+          'Superb mock audit performance. Certified as QA Ready.',
+          'Satisfactory understanding, but needs to focus on response SLAs.',
+          'Struggled with audit simulation. Refresher recommended.',
+          'Flawless audit execution. Potential buddy mentor.',
+          'Solid case handling. Passed comfortably.',
+          'Average performance. Monitor response time closely.',
+          'Failed mock ticket validation twice. Needs refresher.',
+          'Great communication and client presentation score.',
+          'Strong analytical skills. Promising results.',
+          'Completed all coursework with solid scores.',
+          'Needs practice on billing codes. Certified with caveats.'
+        ];
+        const score = scores[index % scores.length];
+        return {
+          ...emp,
+          score,
+          status: 'Completed',
+          activities_done: feedback[index % feedback.length],
+          employee_cost: 1200,
+          revenue_generated: score >= 90 ? 7000 : score >= 75 ? 5000 : 3500
+        };
+      })
+    },
+    {
+      id: 2,
+      batch_name: 'Information Security compliance H1',
+      program_name: 'Enterprise Information Security Compliance',
+      trainer_id: 5,
+      trainer_name: 'System Security Team',
+      trainer_avatar: 'https://randomuser.me/api/portraits/men/12.jpg',
+      start_date: '2026-06-15',
+      end_date: '2026-06-22',
+      venue: 'Online Webinar',
+      mode: 'Online',
+      capacity: 100,
+      status: 'Ongoing',
+      trainer_cost: 500,
+      material_cost: 100,
+      curriculum: [
+        'HIPAA Compliance & PII Protection Guidelines',
+        'Phishing Threats, Social Engineering & Reporting Controls',
+        'Multi-Factor Authentication & Access Control Settings',
+        'Live Phishing Mock Test & Certification Assessment'
+      ],
+      trainees: [1, 2, 3, 4, 6, 7, 9, 10, 11, 13, 14, 15].map((id) => {
+        const emp = getEmpDetails(id);
+        return {
+          ...emp,
+          score: null,
+          status: 'Ongoing',
+          activities_done: 'In-progress. Completed Modules 1 & 2. Mock phishing test pending.',
+          employee_cost: 600,
+          revenue_generated: 0
+        };
+      })
+    },
+    {
+      id: 3,
+      batch_name: 'Effective Communication Workshop',
+      program_name: 'Effective Client Communication & Soft Skills',
+      trainer_id: 4,
+      trainer_name: 'Bhavya Rao',
+      trainer_avatar: 'https://randomuser.me/api/portraits/women/10.jpg',
+      start_date: '2026-07-05',
+      end_date: '2026-07-07',
+      venue: 'Training Room A',
+      mode: 'In-Person',
+      capacity: 15,
+      status: 'Scheduled',
+      trainer_cost: 3000,
+      material_cost: 500,
+      curriculum: [
+        'Understanding Client Personas & Assertive Communication',
+        'Conflict Resolution, Escalation Handling & Written Etiquette',
+        'Roleplay Scenarios & Corporate Communication Audits'
+      ],
+      trainees: [17, 21, 29, 33, 41, 49, 58, 66, 74].map((id) => {
+        const emp = getEmpDetails(id);
+        return {
+          ...emp,
+          score: null,
+          status: 'Enrolled',
+          activities_done: 'Awaiting program commencement.',
+          employee_cost: 400,
+          revenue_generated: 0
+        };
+      })
+    },
+    {
+      id: 4,
+      batch_name: 'Operations Guidelines Bootcamp - Cohort 2',
+      program_name: 'Introduction to AGS Quality Guidelines',
+      trainer_id: 1,
+      trainer_name: 'Meera Jasmine',
+      trainer_avatar: 'https://randomuser.me/api/portraits/women/14.jpg',
+      start_date: '2026-05-10',
+      end_date: '2026-05-20',
+      venue: 'Conference Room 3B',
+      mode: 'In-Person',
+      capacity: 20,
+      status: 'Completed',
+      trainer_cost: 2000,
+      material_cost: 400,
+      curriculum: [
+        'Healthcare Coding Standard Overview & Quality Matrix',
+        'Audit Logs & Operational Frameworks',
+        'Client Escalation Pathways & SLA Restores',
+        'Live Environment Processing Simulation',
+        'Capstone Examination and Final Reviews'
+      ],
+      trainees: [30, 31, 32, 35, 36, 40, 42, 43, 44, 46].map((id, index) => {
+        const emp = getEmpDetails(id);
+        const scores = [94, 91, 88, 96, 85, 78, 90, 89, 93, 87];
+        const feedback = [
+          'Excellent understanding of complex healthcare billing audits.',
+          'Very systematic approach. Exceeded audit accuracy goals.',
+          'Demonstrated high competency in HIPAA compliance audits.',
+          'Outstanding performer. Scored highest in simulation sandbox.',
+          'Solid comprehension, but should improve resolution speed.',
+          'Good scores. A bit hesitant in handling complex case scenarios.',
+          'Well-prepared for clinical coding logs. Promising analyst.',
+          'Strong performance. Ready for client-facing support.',
+          'Excellent quality score. Mastered operational restoration codes.',
+          'Passed capstone audit easily. Commendable diligence.'
+        ];
+        const score = scores[index % scores.length];
+        return {
+          ...emp,
+          score,
+          status: 'Completed',
+          activities_done: feedback[index % feedback.length],
+          employee_cost: 1200,
+          revenue_generated: score >= 90 ? 9500 : 8000
+        };
+      })
+    }
+  ];
+};
+
 const initialPayroll = [
-  { id: 1, month: 5, year: 2026, employee_count: 110, processed_date: '2026-05-31', total_net: 5500000, status: 'Processed' },
-  { id: 2, month: 6, year: 2026, employee_count: 110, processed_date: '2026-06-15', total_net: 5520000, status: 'Draft' },
+  { id: 1, month: 5, year: 2026, employee_count: 1000, processed_date: '2026-05-31', total_net: 50000000, status: 'Processed' },
+  { id: 2, month: 6, year: 2026, employee_count: 1000, processed_date: '2026-06-15', total_net: 50200000, status: 'Draft' },
 ];
 
 const initialRequisitions = [
@@ -530,17 +723,41 @@ const initialCandidates = [
 // Seeding logic check and initialization
 const checkAndSeedMockDatabases = () => {
   const storedEmps = localStorage.getItem('ags_employees');
+  const storedBatches = localStorage.getItem('ags_batches');
+  const storedTrainers = localStorage.getItem('ags_trainers');
   let needsSeeding = false;
+  
   if (!storedEmps || storedEmps.includes('dicebear.com')) {
     needsSeeding = true;
   } else {
     try {
       const parsed = JSON.parse(storedEmps);
-      if (!Array.isArray(parsed) || parsed.length < 100 || !parsed[0].hasOwnProperty('profit_status') || !parsed[0].hasOwnProperty('work_country') || !parsed[0].hasOwnProperty('work_state') || !parsed[0].hasOwnProperty('training_score')) {
+      if (!Array.isArray(parsed) || parsed.length < 1000 || !parsed[0].hasOwnProperty('profit_status') || !parsed[0].hasOwnProperty('work_country') || !parsed[0].hasOwnProperty('work_state') || !parsed[0].hasOwnProperty('training_score')) {
         needsSeeding = true;
+      } else {
+        // Force re-seeding if we detect the old distribution (e.g. India had 750 employees, now it should have 350)
+        const indiaCount = parsed.filter((e: any) => e.work_country === 'India').length;
+        if (indiaCount > 350) {
+          needsSeeding = true;
+        }
       }
     } catch {
       needsSeeding = true;
+    }
+  }
+
+  // Check if training databases need seeding (i.e. not yet in localstorage, or old schema without trainer_cost)
+  let needsTrainingSeed = false;
+  if (!storedBatches || !storedTrainers) {
+    needsTrainingSeed = true;
+  } else {
+    try {
+      const parsedBatches = JSON.parse(storedBatches);
+      if (!Array.isArray(parsedBatches) || parsedBatches.length === 0 || !parsedBatches[0].hasOwnProperty('trainer_cost') || !parsedBatches[0].hasOwnProperty('trainees')) {
+        needsTrainingSeed = true;
+      }
+    } catch {
+      needsTrainingSeed = true;
     }
   }
 
@@ -558,16 +775,27 @@ const checkAndSeedMockDatabases = () => {
     getStorageItem('ags_enrollments', initialEnrollments);
   }
 
+  const currentEmployees = getStorageItem('ags_employees', initialEmployees);
+  const dynamicInitialBatches = getInitialBatches(currentEmployees);
+
+  if (needsTrainingSeed || needsSeeding) {
+    localStorage.setItem('ags_trainers', JSON.stringify(initialTrainers));
+    localStorage.setItem('ags_batches', JSON.stringify(dynamicInitialBatches));
+  } else {
+    getStorageItem('ags_trainers', initialTrainers);
+    getStorageItem('ags_batches', dynamicInitialBatches);
+  }
+
   getStorageItem('ags_depts', initialDepts);
   getStorageItem('ags_designations', initialDesignations);
   getStorageItem('ags_courses', initialCourses);
-  getStorageItem('ags_batches', initialBatches);
   getStorageItem('ags_payroll', initialPayroll);
   getStorageItem('ags_requisitions', initialRequisitions);
   getStorageItem('ags_candidates', initialCandidates);
 };
 
 checkAndSeedMockDatabases();
+
 
 // Axios Base
 const api = axios.create({
@@ -950,22 +1178,125 @@ api.get = async (url: string, config?: any): Promise<any> => {
   }
 
   if (cleanUrl === '/training/batches') {
-    const batches = getStorageItem('ags_batches', initialBatches);
+    const batches = getStorageItem('ags_batches', []);
     return mockResponse({ batches });
   }
 
-  if (cleanUrl === '/training/skill-matrix') {
-    const employees = getStorageItem('ags_employees', initialEmployees);
-    const skillMatrix = employees.map((emp: any) => ({
-      id: emp.id,
-      first_name: emp.first_name,
-      last_name: emp.last_name,
-      emp_code: emp.emp_code,
-      courses_enrolled: emp.id % 2 === 0 ? 2 : 1,
-      courses_completed: emp.id % 2 === 0 ? 1 : 0,
-      avg_progress: emp.id % 2 === 0 ? 75 : 45,
-    }));
-    return mockResponse({ skillMatrix });
+  if (cleanUrl === '/training/trainers') {
+    const trainers = getStorageItem('ags_trainers', initialTrainers);
+    const batches = getStorageItem('ags_batches', []);
+    
+    const enrichedTrainers = trainers.map((t: any) => {
+      const trainerBatches = batches.filter((b: any) => b.trainer_id === t.id);
+      const totalTrainees = trainerBatches.reduce((sum: number, b: any) => sum + (b.trainees?.length || 0), 0);
+      const netProfitContribution = trainerBatches.reduce((sum: number, b: any) => {
+        const batchRevenue = b.trainees?.reduce((rSum: number, tr: any) => rSum + (tr.revenue_generated || 0), 0) || 0;
+        const traineeCost = b.trainees?.reduce((cSum: number, tr: any) => cSum + (tr.employee_cost || 0), 0) || 0;
+        const totalBatchCost = (b.trainer_cost || 0) + (b.material_cost || 0) + traineeCost;
+        return sum + (batchRevenue - totalBatchCost);
+      }, 0);
+
+      return {
+        ...t,
+        batches_count: trainerBatches.length,
+        total_trainees: totalTrainees,
+        net_profit: netProfitContribution
+      };
+    });
+
+    return mockResponse({ trainers: enrichedTrainers });
+  }
+
+  if (cleanUrl === '/training/stats') {
+    const batches = getStorageItem('ags_batches', []);
+    const trainers = getStorageItem('ags_trainers', initialTrainers);
+
+    let totalBatches = batches.length;
+    let totalTrainees = 0;
+    let totalTrainerCost = 0;
+    let totalMaterialCost = 0;
+    let totalEmployeeCost = 0;
+    let totalRevenueBoost = 0;
+    let completedTraineesCount = 0;
+    let totalTraineeScore = 0;
+
+    batches.forEach((b: any) => {
+      totalTrainees += b.trainees?.length || 0;
+      totalTrainerCost += b.trainer_cost || 0;
+      totalMaterialCost += b.material_cost || 0;
+
+      b.trainees?.forEach((tr: any) => {
+        totalEmployeeCost += tr.employee_cost || 0;
+        totalRevenueBoost += tr.revenue_generated || 0;
+        if (tr.score !== null && tr.score !== undefined) {
+          totalTraineeScore += tr.score;
+          completedTraineesCount += 1;
+        }
+      });
+    });
+
+    const totalCost = totalTrainerCost + totalMaterialCost + totalEmployeeCost;
+    const netProfit = totalRevenueBoost - totalCost;
+    const roi = totalCost > 0 ? parseFloat(((netProfit / totalCost) * 100).toFixed(1)) : 0;
+    const avgScore = completedTraineesCount > 0 ? Math.round(totalTraineeScore / completedTraineesCount) : 80;
+
+    const trainerPerformance = trainers.map((t: any) => {
+      const tBatches = batches.filter((b: any) => b.trainer_id === t.id);
+      let trainerRevenue = 0;
+      let trainerBatchCost = 0;
+      let trTraineesCount = 0;
+      let trTotalScore = 0;
+
+      tBatches.forEach((b: any) => {
+        trainerBatchCost += (b.trainer_cost || 0) + (b.material_cost || 0);
+        b.trainees?.forEach((tr: any) => {
+          trainerRevenue += tr.revenue_generated || 0;
+          trainerBatchCost += tr.employee_cost || 0;
+          if (tr.score !== null && tr.score !== undefined) {
+            trTotalScore += tr.score;
+            trTraineesCount += 1;
+          }
+        });
+      });
+
+      const tProfit = trainerRevenue - trainerBatchCost;
+      const tRoi = trainerBatchCost > 0 ? parseFloat(((tProfit / trainerBatchCost) * 100).toFixed(1)) : 0;
+      const tAvgScore = trTraineesCount > 0 ? Math.round(trTotalScore / trTraineesCount) : 0;
+
+      return {
+        trainer_name: t.name,
+        cost: trainerBatchCost,
+        revenue: trainerRevenue,
+        profit: tProfit,
+        roi: tRoi,
+        avg_score: tAvgScore,
+        rating: t.rating
+      };
+    });
+
+    const outcomes = [
+      { name: 'Ops Guidelines', before: 54, after: 88 },
+      { name: 'Security Compliance', before: 62, after: 94 },
+      { name: 'Client Soft Skills', before: 48, after: 78 },
+      { name: 'Leadership Core', before: 65, after: 90 },
+    ];
+
+    return mockResponse({
+      stats: {
+        totalBatches,
+        totalTrainees,
+        avgScore,
+        totalTrainerCost,
+        totalMaterialCost,
+        totalEmployeeCost,
+        totalCost,
+        totalRevenueBoost,
+        netProfit,
+        roi
+      },
+      trainerPerformance,
+      outcomes
+    });
   }
 
   if (cleanUrl === '/performance') {
@@ -1376,20 +1707,116 @@ api.post = async (url: string, data?: any): Promise<any> => {
   }
 
   if (url === '/training/batches') {
-    const batches = getStorageItem('ags_batches', initialBatches);
+    const batches = getStorageItem('ags_batches', []);
+    const trainers = getStorageItem('ags_trainers', initialTrainers);
+    const employees = getStorageItem('ags_employees', initialEmployees);
+
+    const trainerId = parseInt(data.trainer_id) || 1;
+    const trainer = trainers.find((t: any) => t.id === trainerId) || { name: 'System Trainer', avatar: '' };
+
+    const traineeIds = Array.isArray(data.trainee_ids) ? data.trainee_ids.map(Number) : [];
+    const trainees = traineeIds.map((tid: number) => {
+      const emp = employees.find((e: any) => e.id === tid);
+      return emp ? {
+        employee_id: emp.id,
+        name: `${emp.first_name} ${emp.last_name}`,
+        emp_code: emp.emp_code,
+        dept_name: emp.department?.name || 'Operations',
+        score: null,
+        status: 'Enrolled',
+        activities_done: 'Awaiting program start.',
+        employee_cost: 400,
+        revenue_generated: 0
+      } : {
+        employee_id: tid,
+        name: `Employee ${tid}`,
+        emp_code: `AGS-${String(tid).padStart(3, '0')}`,
+        dept_name: 'Operations',
+        score: null,
+        status: 'Enrolled',
+        activities_done: 'Awaiting program start.',
+        employee_cost: 400,
+        revenue_generated: 0
+      };
+    });
+
     const newBatch = {
       id: batches.length + 1,
-      title: data.title,
-      trainer_name: data.trainer_name || 'System Trainer',
+      batch_name: data.batch_name,
+      program_name: data.program_name || 'General Training Program',
+      trainer_id: trainerId,
+      trainer_name: trainer.name,
+      trainer_avatar: trainer.avatar,
       start_date: data.start_date || new Date().toISOString().split('T')[0],
       end_date: data.end_date || new Date().toISOString().split('T')[0],
       venue: data.venue || 'Online',
-      max_participants: parseInt(data.max_participants) || 20,
+      mode: data.mode || 'Online',
+      capacity: parseInt(data.capacity) || 20,
       status: 'Scheduled',
+      trainer_cost: parseFloat(data.trainer_cost) || trainer.cost_per_batch || 1500,
+      material_cost: parseFloat(data.material_cost) || 200,
+      curriculum: Array.isArray(data.curriculum) ? data.curriculum : typeof data.curriculum === 'string' ? data.curriculum.split('\n').filter(Boolean) : ['Course introduction and overview.'],
+      trainees
     };
+
     batches.push(newBatch);
     setStorageItem('ags_batches', batches);
-    return mockResponse({ batch: newBatch });
+    return mockResponse({ batch: newBatch }, 201);
+  }
+
+  if (url === '/training/trainers') {
+    const trainers = getStorageItem('ags_trainers', initialTrainers);
+    const newTrainer = {
+      id: trainers.length + 1,
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      specialization: data.specialization,
+      bio: data.bio || '',
+      type: data.type || 'Internal',
+      rating: 5.0,
+      cost_per_batch: parseFloat(data.cost_per_batch) || 1500,
+      avatar: data.avatar || `https://randomuser.me/api/portraits/${data.gender === 'Female' ? 'women' : 'men'}/${Math.floor(Math.random() * 90) + 1}.jpg`
+    };
+    trainers.push(newTrainer);
+    setStorageItem('ags_trainers', trainers);
+    return mockResponse({ trainer: newTrainer }, 201);
+  }
+
+  if (url.match(/^\/training\/batches\/\d+\/evaluate$/)) {
+    const id = parseInt(url.split('/')[3]);
+    const batches = getStorageItem('ags_batches', []);
+    const employees = getStorageItem('ags_employees', initialEmployees);
+
+    const bIndex = batches.findIndex((b: any) => b.id === id);
+    if (bIndex === -1) return mockError('Batch not found', 404);
+
+    const { employee_id, score, status, activities_done } = data;
+    const tIndex = batches[bIndex].trainees.findIndex((t: any) => t.employee_id === parseInt(employee_id));
+    if (tIndex === -1) return mockError('Trainee not enrolled in this batch', 404);
+
+    batches[bIndex].trainees[tIndex].score = score ? parseInt(score) : null;
+    batches[bIndex].trainees[tIndex].status = status;
+    batches[bIndex].trainees[tIndex].activities_done = activities_done;
+
+    if (status === 'Completed') {
+      const parsedScore = parseInt(score) || 80;
+      batches[bIndex].trainees[tIndex].revenue_generated = parsedScore >= 90 ? 8500 : parsedScore >= 75 ? 6000 : 4000;
+      batches[bIndex].trainees[tIndex].employee_cost = 1200;
+      
+      const eIndex = employees.findIndex((e: any) => e.id === parseInt(employee_id));
+      if (eIndex !== -1) {
+        employees[eIndex].training_score = parsedScore;
+        employees[eIndex].training_performance = parsedScore >= 90 ? 'Excellent' : parsedScore >= 75 ? 'Medium' : 'Poor';
+        setStorageItem('ags_employees', employees);
+      }
+    } else if (status === 'Dropped') {
+      batches[bIndex].trainees[tIndex].revenue_generated = 0;
+      batches[bIndex].trainees[tIndex].employee_cost = 400;
+    }
+
+    setStorageItem('ags_batches', batches);
+    return mockResponse({ batch: batches[bIndex] }, 200);
   }
 
   if (url === '/performance') {
@@ -1593,6 +2020,20 @@ I can assist you with profitability analyzer reports, recruiter retention tracki
 // Override PUT requests
 api.put = async (url: string, data?: any): Promise<any> => {
   await new Promise(resolve => setTimeout(resolve, 200));
+
+  if (url.match(/^\/training\/batches\/\d+$/)) {
+    const id = parseInt(url.split('/')[3]);
+    const batches = getStorageItem('ags_batches', []);
+    const index = batches.findIndex((b: any) => b.id === id);
+    if (index === -1) return mockError('Batch not found', 404);
+
+    batches[index] = {
+      ...batches[index],
+      ...data
+    };
+    setStorageItem('ags_batches', batches);
+    return mockResponse({ batch: batches[index] });
+  }
 
   if (url.match(/^\/employees\/\d+$/)) {
     const id = parseInt(url.split('/')[2]);

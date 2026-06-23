@@ -19,6 +19,9 @@ const TrainingBatch = sequelize.define('TrainingBatch', {
     type: DataTypes.ENUM('Scheduled', 'In-Progress', 'Completed', 'Cancelled'),
     defaultValue: 'Scheduled',
   },
+  trainer_cost: { type: DataTypes.DECIMAL(10, 2), defaultValue: 0.0 },
+  material_cost: { type: DataTypes.DECIMAL(10, 2), defaultValue: 0.0 },
+  curriculum: { type: DataTypes.JSON },
 }, {
   tableName: 'training_batches',
   timestamps: true,

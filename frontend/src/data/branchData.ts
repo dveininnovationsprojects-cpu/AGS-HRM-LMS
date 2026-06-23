@@ -514,7 +514,174 @@ export const STATES_BY_COUNTRY: Record<string, string[]> = {
   'Mexico': ['Jalisco'],
 };
 
+const getLocalEmployees = (): any[] => {
+  if (typeof window === 'undefined' || !window.localStorage) return [];
+  const data = localStorage.getItem('ags_employees');
+  if (!data) return [];
+  try {
+    return JSON.parse(data);
+  } catch {
+    return [];
+  }
+};
+
+export function updateBranchDataFromStorage() {
+  const employees = getLocalEmployees();
+  if (employees.length === 0) return;
+
+  BRANCH_DATA.forEach((branch) => {
+    const branchEmployees = employees.filter((e) => e.work_branch === branch.id);
+    const active = branchEmployees.filter((e) => e.status === 'Active' || e.employment_status === 'Active');
+    const resigned = branchEmployees.filter((e) => e.status === 'Resigned' || e.employment_status === 'Resigned');
+    const terminated = branchEmployees.filter((e) => e.status === 'Terminated' || e.employment_status === 'Terminated');
+    const exited = resigned.length + terminated.length;
+
+    const headCount = branchEmployees.length || 1; // avoid divide by zero
+    const activeCount = active.length;
+
+    const revenue = branchEmployees.reduce((sum, e) => sum + (e.revenue || 0), 0);
+    const cost = branchEmployees.reduce((sum, e) => sum + (e.cost || 0), 0);
+    const profit = revenue - cost;
+
+    const avgLmsScore = Math.round(
+      branchEmployees.reduce((sum, e) => sum + (e.training_score || 0), 0) / headCount
+    ) || 75;
+
+    const avgSla = Math.round(
+      branchEmployees.reduce((sum, e) => sum + (e.project_performance || 0), 0) / headCount
+    ) || 85;
+
+    // Bench strength: employees on project 'Bench / Support'
+    const benchStrength = branchEmployees.filter((e) => e.project === 'Bench / Support' && (e.status === 'Active' || e.status === 'On-Leave' || e.employment_status === 'Active' || e.employment_status === 'On-Leave')).length;
+
+    // Attrition rate
+    const attritionRate = parseFloat(((exited / headCount) * 100).toFixed(1)) || 5.0;
+
+    // Training ROI
+    const trainingROI = 150 + Math.round(avgLmsScore * 0.8);
+
+    // Open positions
+    const openPositions = Math.max(2, Math.round(headCount * 0.08));
+
+    // Top departments/designations
+    const deptCounts: Record<string, number> = {};
+    branchEmployees.forEach((e) => {
+      const name = e.designation?.title || 'Associate';
+      deptCounts[name] = (deptCounts[name] || 0) + 1;
+    });
+    const topDepts = Object.entries(deptCounts)
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 6);
+
+    // Recruiter leaderboard
+    const recruiterMap: Record<string, { name: string; hired: number; active: number }> = {};
+    branchEmployees.forEach((e) => {
+      if (e.recruiter) {
+        if (!recruiterMap[e.recruiter]) {
+          recruiterMap[e.recruiter] = { name: e.recruiter, hired: 0, active: 0 };
+        }
+        recruiterMap[e.recruiter].hired++;
+        if (e.status === 'Active' || e.employment_status === 'Active') {
+          recruiterMap[e.recruiter].active++;
+        }
+      }
+    });
+    const recruiterLeaderboard = Object.values(recruiterMap)
+      .map((r) => ({
+        name: r.name,
+        hired: r.hired,
+        active: r.active,
+        retentionPct: r.hired > 0 ? Math.round((r.active / r.hired) * 100) : 0,
+      }))
+      .sort((a, b) => b.hired - a.hired)
+      .slice(0, 3);
+
+    // Top performers (sorted by profit descending)
+    const topPerformers = branchEmployees
+      .map((e) => ({
+        name: `${e.first_name} ${e.last_name}`,
+        role: e.designation?.title || 'Associate',
+        revenue: e.revenue || 0,
+        profit: (e.revenue || 0) - (e.cost || 0),
+      }))
+      .sort((a, b) => b.profit - a.profit)
+      .slice(0, 3);
+
+    // Attrition risk: employees with mistakes or low performance
+    const attritionRisk = branchEmployees
+      .filter((e) => e.status === 'Active' || e.employment_status === 'Active')
+      .map((e) => {
+        let risk: 'Critical' | 'High' | 'Medium' | 'Low' = 'Low';
+        if (e.project_performance < 83 || (e.mistakes && e.mistakes.length > 1)) {
+          risk = 'Critical';
+        } else if (e.project_performance < 87 || (e.mistakes && e.mistakes.length > 0)) {
+          risk = 'High';
+        } else if (e.project_performance < 92) {
+          risk = 'Medium';
+        }
+        return {
+          name: `${e.first_name} ${e.last_name}`,
+          risk,
+          sla: e.project_performance || 85,
+          lms: e.training_score || 75,
+          dept: e.department?.name || 'Operations',
+        };
+      })
+      .sort((a, b) => {
+        const score = { Critical: 4, High: 3, Medium: 2, Low: 1 };
+        return score[b.risk] - score[a.risk];
+      })
+      .slice(0, 5);
+
+    // Monthly trends scaled to branch headcount
+    const monthlyTrend = [
+      { month: 'Aug', joiners: Math.round(headCount * 0.04), leavers: Math.round(headCount * 0.01), revenue: Math.round(revenue * 0.15) },
+      { month: 'Sep', joiners: Math.round(headCount * 0.05), leavers: Math.round(headCount * 0.01), revenue: Math.round(revenue * 0.16) },
+      { month: 'Oct', joiners: Math.round(headCount * 0.06), leavers: Math.round(headCount * 0.02), revenue: Math.round(revenue * 0.17) },
+      { month: 'Nov', joiners: Math.round(headCount * 0.04), leavers: Math.round(headCount * 0.01), revenue: Math.round(revenue * 0.16) },
+      { month: 'Dec', joiners: Math.round(headCount * 0.05), leavers: Math.round(headCount * 0.01), revenue: Math.round(revenue * 0.18) },
+      { month: 'Jan', joiners: Math.round(headCount * 0.07), leavers: Math.round(headCount * 0.02), revenue: Math.round(revenue * 0.18) },
+    ];
+
+    // Mutate the branch object properties
+    branch.headCount = headCount;
+    branch.activeEmployees = activeCount;
+    branch.revenue = revenue;
+    branch.cost = cost;
+    branch.profit = profit;
+    branch.attritionRate = attritionRate;
+    branch.avgLmsScore = avgLmsScore;
+    branch.slaCompliance = avgSla;
+    branch.benchStrength = benchStrength;
+    branch.trainingROI = trainingROI;
+    branch.openPositions = openPositions;
+    branch.topDepts = topDepts;
+    branch.recruiterLeaderboard = recruiterLeaderboard;
+    branch.topPerformers = topPerformers;
+    branch.attritionRisk = attritionRisk;
+    branch.monthlyTrend = monthlyTrend;
+  });
+
+  // Recalculate compatibility exports in place
+  const newIndia = getAggregatedDataInternal({ country: 'India' });
+  const newGlobal = getAggregatedDataInternal({ country: 'all' });
+  Object.assign(ALL_INDIA_DATA, newIndia);
+  Object.assign(GLOBAL_DATA, newGlobal);
+}
+
 export function getAggregatedData(
+  filter: { country?: string; state?: string; branchId?: string }
+): BranchData {
+  try {
+    updateBranchDataFromStorage();
+  } catch (e) {
+    console.error("Failed to update branch data from storage", e);
+  }
+  return getAggregatedDataInternal(filter);
+}
+
+function getAggregatedDataInternal(
   filter: { country?: string; state?: string; branchId?: string }
 ): BranchData {
   const { country, state, branchId } = filter;
@@ -580,11 +747,13 @@ export function getAggregatedData(
   const avgLms = Math.round(filtered.reduce((s, b) => s + b.avgLmsScore, 0) / filtered.length);
 
   // Consolidated Role Distribution (Departments)
-  const ROLE_NAMES = ['Medical Coder', 'AR Caller', 'Med. Billing Exec.', 'Quality Analyst', 'Team Leader', 'HR'];
+  const ROLE_NAMES = ['Senior Manager', 'HR Executive', 'Software Engineer', 'Financial Analyst', 'Team Lead', 'Associate', 'System Admin', 'Trainer', 'Recruiter'];
   const topDepts = ROLE_NAMES.map((name) => ({
     name,
     count: filtered.reduce((s, b) => s + (b.topDepts.find((d) => d.name === name)?.count || 0), 0),
-  }));
+  }))
+  .sort((a, b) => b.count - a.count)
+  .slice(0, 6);
 
   // Consolidated Monthly Trends (consolidated by month order)
   const months = ['Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan'];
@@ -668,5 +837,20 @@ export function getAggregatedData(
 }
 
 // Compatibility Exports
-export const ALL_INDIA_DATA: BranchData = getAggregatedData({ country: 'India' });
-export const GLOBAL_DATA: BranchData = getAggregatedData({ country: 'all' });
+export const ALL_INDIA_DATA: BranchData = {
+  id: 'india', city: 'All India', state: 'India', country: 'India', coordinates: [0,0], address: '', established: '',
+  headCount: 0, activeEmployees: 0, revenue: 0, cost: 0, profit: 0, attritionRate: 0, hiringEfficiency: 0, trainingROI: 0, openPositions: 0, benchStrength: 0, slaCompliance: 0, avgLmsScore: 0,
+  topDepts: [], monthlyTrend: [], recruiterLeaderboard: [], topPerformers: [], attritionRisk: []
+};
+export const GLOBAL_DATA: BranchData = {
+  id: 'global', city: 'All Countries', state: 'Global', country: 'Global', coordinates: [0,0], address: '', established: '',
+  headCount: 0, activeEmployees: 0, revenue: 0, cost: 0, profit: 0, attritionRate: 0, hiringEfficiency: 0, trainingROI: 0, openPositions: 0, benchStrength: 0, slaCompliance: 0, avgLmsScore: 0,
+  topDepts: [], monthlyTrend: [], recruiterLeaderboard: [], topPerformers: [], attritionRisk: []
+};
+
+// Initial sync
+try {
+  updateBranchDataFromStorage();
+} catch (e) {
+  console.error("Failed to sync branch data on load", e);
+}
