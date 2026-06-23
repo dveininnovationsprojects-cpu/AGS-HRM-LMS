@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Users, TrendingUp, TrendingDown, DollarSign, Search, 
-  User, ShieldCheck, Award 
+  User, ShieldCheck, Award, ChevronLeft, ChevronRight 
 } from 'lucide-react';
 
 // ==========================================
@@ -37,6 +37,10 @@ const getLocalEmployees = (): any[] => {
 export default function RecruitmentPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [hiredData, setHiredData] = useState<HiredCandidate[]>([]);
+  
+  // Pagination States
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10; // Number of employees per page
 
   // Fetch and format data on mount
   useEffect(() => {
@@ -58,6 +62,11 @@ export default function RecruitmentPage() {
 
     setHiredData(formattedData);
   }, []);
+
+  // Reset to page 1 when searching
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery]);
 
   // Dynamic Calculations based on fetched DB data
   const metrics = useMemo(() => {
@@ -87,8 +96,16 @@ export default function RecruitmentPage() {
     emp.mentor.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  // Pagination Logic Calculations
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const paginatedData = filteredData.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
   return (
-    <div className="space-y-6">
+    // Added pb-24 here to ensure the page scrolls past the floating widget
+    <div className="space-y-6 pb-24">
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
@@ -146,12 +163,13 @@ export default function RecruitmentPage() {
         </motion.div>
       </div>
 
-      {/* Main ROI Table */}
-      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="bg-[#0e112a] border border-white/5 rounded-2xl shadow-xl overflow-hidden">
-        <div className="p-5 border-b border-white/5 flex items-center justify-between bg-[#0c0e25]">
+      {/* Main ROI Table with Redesigned Pagination */}
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="bg-[#0e112a] border border-white/5 rounded-2xl shadow-xl flex flex-col">
+        <div className="p-5 border-b border-white/5 flex items-center justify-between bg-[#0c0e25] rounded-t-2xl">
           <h2 className="font-bold text-slate-200">Employee Financial Tracking Ledger</h2>
         </div>
-        <div className="overflow-x-auto max-h-[600px] custom-scrollbar">
+        
+        <div className="overflow-x-auto min-h-[400px]">
           <table className="w-full text-left border-collapse relative">
             <thead className="sticky top-0 z-10 bg-[#0c0e25]/95 backdrop-blur-md">
               <tr className="border-b border-white/5 text-xs text-slate-400 uppercase tracking-wider">
@@ -165,7 +183,7 @@ export default function RecruitmentPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">
-              {filteredData.map((emp) => {
+              {paginatedData.map((emp) => {
                 const profit = emp.revenue - emp.cost;
                 const isProfit = profit > 0;
 
@@ -220,13 +238,45 @@ export default function RecruitmentPage() {
               {filteredData.length === 0 && (
                 <tr>
                   <td colSpan={7} className="p-8 text-center text-slate-500 text-sm">
-                    No data found in your system. Add employees to see metrics.
+                    No data found matching your criteria.
                   </td>
                 </tr>
               )}
             </tbody>
           </table>
         </div>
+
+        {/* Enhanced Pagination Controls */}
+        {filteredData.length > 0 && (
+          <div className="p-4 border-t border-white/5 bg-[#0c0e25]/80 flex flex-col md:flex-row items-center justify-between gap-4 rounded-b-2xl">
+            <div className="text-sm text-slate-400">
+              Showing <span className="font-semibold text-slate-200">{(currentPage - 1) * itemsPerPage + 1}</span> to <span className="font-semibold text-slate-200">{Math.min(currentPage * itemsPerPage, filteredData.length)}</span> of <span className="font-semibold text-slate-200">{filteredData.length}</span> entries
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <button 
+                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/10 text-sm font-medium text-slate-300 bg-[#060814] hover:bg-white/10 disabled:opacity-30 disabled:hover:bg-[#060814] disabled:cursor-not-allowed transition-all"
+              >
+                <ChevronLeft className="w-4 h-4" /> Prev
+              </button>
+              
+              <div className="text-sm font-semibold text-white px-4 py-1.5 bg-indigo-500/20 border border-indigo-500/30 rounded-lg">
+                {currentPage} / {totalPages}
+              </div>
+
+              <button 
+                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages || totalPages === 0}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/10 text-sm font-medium text-slate-300 bg-[#060814] hover:bg-white/10 disabled:opacity-30 disabled:hover:bg-[#060814] disabled:cursor-not-allowed transition-all"
+              >
+                Next <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        )}
+
       </motion.div>
     </div>
   );
