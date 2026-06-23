@@ -20,7 +20,7 @@ export default function EmployeeDetailPage() {
     return `AI Summary Report
 
 **1. Is the employee worth it?**
-${isWorth ? `✅ **Yes, absolutely.** ${emp.first_name} is currently a high-performing active contributor. With a positive net contribution of **$${profitVal.toLocaleString()} (~${lakhs} Lakhs)**, they provide strong economic value to the company.` : `⚠️ **Marginal / Needs Review.** The net yield is currently **$${profitVal.toLocaleString()}**. They require productivity enhancement or alignment to high-margin projects to offset operational overhead.`}
+${isWorth ? `**Yes, absolutely.** ${emp.first_name} is currently a high-performing active contributor. With a positive net contribution of **$${profitVal.toLocaleString()} (~${lakhs} Lakhs)**, they provide strong economic value to the company.` : `⚠️ **Marginal / Needs Review.** The net yield is currently **$${profitVal.toLocaleString()}**. They require productivity enhancement or alignment to high-margin projects to offset operational overhead.`}
 
 **2. Lifecycle Achievements & Best Actions:**
 * **Recruitment:** Selected by HR Recruiter **${emp.recruiter || 'Priya N'}** and approved by panel lead **${emp.interviewer || 'Anand Kumar'}**.

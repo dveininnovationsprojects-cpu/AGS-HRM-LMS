@@ -2,8 +2,6 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from './store';
 import Layout from './components/layout/Layout';
-
-// Pages
 import LoginPage from './pages/auth/LoginPage';
 import DashboardPage from './pages/dashboard/DashboardPage';
 import EmployeeListPage from './pages/employees/EmployeeListPage';
