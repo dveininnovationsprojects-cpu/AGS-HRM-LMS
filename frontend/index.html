@@ -2,16 +2,86 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/ags-icon.svg" />
+    <link rel="icon" type="image/svg+xml" href="https://cdn-bpead.nitrocdn.com/BBpeMUqwtpRtLgerjeQhQjKhWBtMWEQP/assets/images/optimized/rev-e5326ea/www.agshealth.com/wp-content/uploads/2022/09/ags-siticon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="AGS Health Workforce Intelligence Platform - Enterprise HRM & LMS" />
     <title>AGS Health | Workforce Intelligence Platform</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    
+    <script type="text/javascript">
+      // Pre-initialize googtrans cookie before Google Translate script loads
+      (function() {
+        var lang = localStorage.getItem('currentLanguage') || 'en';
+        if (lang === 'en') {
+          var domains = [window.location.hostname, '.' + window.location.hostname, 'localhost', '.localhost', ''];
+          for (var i = 0; i < domains.length; i++) {
+            document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=' + domains[i];
+            document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
+          }
+        } else {
+          var cookieVal = '/en/' + lang;
+          document.cookie = 'googtrans=' + cookieVal + '; path=/';
+          document.cookie = 'googtrans=' + cookieVal + '; path=/; domain=' + window.location.hostname;
+          if (window.location.hostname.includes('.')) {
+            var parts = window.location.hostname.split('.');
+            if (parts.length > 2) {
+              var rootDomain = '.' + parts.slice(-2).join('.');
+              document.cookie = 'googtrans=' + cookieVal + '; path=/; domain=' + rootDomain;
+            }
+          }
+        }
+      })();
+    </script>
+    
+    <style>
+      body {
+        top: 0px !important;
+        position: static !important;
+        min-height: 100vh;
+      }
+      #google_translate_element,
+      .skiptranslate,
+      iframe.goog-te-banner-frame,
+      .goog-te-banner-frame,
+      #goog-gt-tt,
+      .goog-te-balloon-frame,
+      .goog-tooltip,
+      .goog-tooltip:hover,
+      .goog-te-spinner-pos,
+      .goog-te-spinner,
+      .goog-te-spinner-animation {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        height: 0 !important;
+        width: 0 !important;
+        pointer-events: none !important;
+      }
+      .goog-text-highlight {
+        background-color: transparent !important;
+        box-shadow: none !important;
+        border: none !important;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
+
+    <div id="google_translate_element" style="display:none;"></div>
+    <script type="text/javascript">
+      function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+          pageLanguage: 'en',
+          // Random languages prevent panna nammaloda languages-a mattum restrict panrom
+          includedLanguages: 'es,fr,de,ar,ja,zh-CN,pt,te,kn,ml,bn,ru,it,ko,ur,gu,ta,hi',
+          autoDisplay: false
+        }, 'google_translate_element');
+      }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

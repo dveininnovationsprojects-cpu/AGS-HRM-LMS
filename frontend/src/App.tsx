@@ -2,10 +2,11 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from './store';
 import Layout from './components/layout/Layout';
-
-// Pages
 import LoginPage from './pages/auth/LoginPage';
 import DashboardPage from './pages/dashboard/DashboardPage';
+import EmployeeListPage from './pages/employees/EmployeeListPage';
+import EmployeeDetailPage from './pages/employees/EmployeeDetailPage';
+import EmployeeFormPage from './pages/employees/EmployeeFormPage';
 import RecruitmentPage from './pages/recruitment/RecruitmentPage';
 import CoursesPage from './pages/lms/CoursesPage';
 import EnrollmentsPage from './pages/lms/EnrollmentsPage';
@@ -13,8 +14,8 @@ import TrainingPage from './pages/training/TrainingPage';
 import PerformancePage from './pages/performance/PerformancePage';
 import AnalyticsDashboard from './pages/analytics/AnalyticsDashboard';
 import ReportsPage from './pages/reports/ReportsPage';
-// Main Comprehensive Workforce Module
-import WorkforceMaster from './pages/employees/WorkforceMaster';
+import ProfitLossPage from './pages/employees/ProfitLossPage';
+import LeakagePage from './pages/employees/LeakagePage';
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
   const isAuthenticated = useSelector((s: RootState) => s.auth.isAuthenticated);
@@ -33,20 +34,18 @@ export default function App() {
       <Route path="/" element={<PrivateRoute><Layout /></PrivateRoute>}>
         <Route index element={<Navigate to="/dashboard" replace />} />
         <Route path="dashboard" element={<DashboardPage />} />
-        
-        {/* All Workforce Management mapped directly to Master Suite */}
-        <Route path="employees" element={<WorkforceMaster />} />
-        <Route path="employees/new" element={<WorkforceMaster />} />
-        <Route path="employees/:id" element={<WorkforceMaster />} />
-        <Route path="employees/:id/edit" element={<WorkforceMaster />} />
-        <Route path="profit-loss" element={<WorkforceMaster />} />
-        
+        <Route path="employees" element={<EmployeeListPage />} />
+        <Route path="employees/new" element={<EmployeeFormPage />} />
+        <Route path="employees/:id" element={<EmployeeDetailPage />} />
+        <Route path="employees/:id/edit" element={<EmployeeFormPage />} />
         <Route path="recruitment" element={<RecruitmentPage />} />
         <Route path="lms/courses" element={<CoursesPage />} />
         <Route path="lms/enrollments" element={<EnrollmentsPage />} />
         <Route path="training" element={<TrainingPage />} />
         <Route path="performance" element={<PerformancePage />} />
         <Route path="analytics" element={<AnalyticsDashboard />} />
+        <Route path="profit-loss" element={<ProfitLossPage />} />
+        <Route path="leakage-diagnostics" element={<LeakagePage />} />
         <Route path="reports" element={<ReportsPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/dashboard" replace />} />

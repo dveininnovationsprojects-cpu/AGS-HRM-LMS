@@ -1,12 +1,12 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Users, TrendingUp, TrendingDown, DollarSign, Search, 
-  User, ShieldCheck, Briefcase, Award 
+  User, ShieldCheck, Award 
 } from 'lucide-react';
 
 // ==========================================
-// 1. MOCK DATA: HIRED CANDIDATES ROI
+// 1. DATA TYPES
 // ==========================================
 interface HiredCandidate {
   id: string;
@@ -19,29 +19,54 @@ interface HiredCandidate {
   hire_date: string;
 }
 
-const HIRED_DATA: HiredCandidate[] = [
-  { id: 'EMP-001', name: 'Arjun Kumar', role: 'Frontend Developer', recruiter: 'Swetha K', mentor: 'Ganapathi V', revenue: 8500, cost: 3200, hire_date: '2025-08-10' },
-  { id: 'EMP-002', name: 'Deepika Rajan', role: 'Backend Engineer', recruiter: 'Jayachitra P', mentor: 'Eswar NS', revenue: 2500, cost: 4000, hire_date: '2025-09-15' },
-  { id: 'EMP-003', name: 'Karthik S', role: 'IoT Systems Architect', recruiter: 'Dinagaran I', mentor: 'Navin', revenue: 9200, cost: 4500, hire_date: '2025-10-05' },
-  { id: 'EMP-004', name: 'Priya V', role: 'UI/UX Designer', recruiter: 'Swetha K', mentor: 'Ganapathi V', revenue: 1500, cost: 2800, hire_date: '2025-11-20' },
-  { id: 'EMP-005', name: 'Rahul M', role: 'Data Scientist', recruiter: 'Jayachitra P', mentor: 'Eswar NS', revenue: 7800, cost: 3500, hire_date: '2026-01-12' },
-  { id: 'EMP-006', name: 'Sneha P', role: 'Embedded Engineer', recruiter: 'Dinagaran I', mentor: 'Navin', revenue: 5000, cost: 2000, hire_date: '2026-02-18' },
-];
+// Function to fetch real employee data from LocalStorage
+const getLocalEmployees = (): any[] => {
+  if (typeof window === 'undefined' || !window.localStorage) return [];
+  const data = localStorage.getItem('ags_employees');
+  if (!data) return [];
+  try {
+    return JSON.parse(data);
+  } catch {
+    return [];
+  }
+};
 
 // ==========================================
 // 2. MAIN ROI DASHBOARD COMPONENT
 // ==========================================
 export default function RecruitmentPage() {
   const [searchQuery, setSearchQuery] = useState('');
-  
-  // Dynamic Calculations
+  const [hiredData, setHiredData] = useState<HiredCandidate[]>([]);
+
+  // Fetch and format data on mount
+  useEffect(() => {
+    const rawEmployees = getLocalEmployees();
+    
+    // Map raw global employee data to the Quality of Hire format
+    const formattedData: HiredCandidate[] = rawEmployees.map((e: any) => ({
+      id: e.id || e.emp_code || Math.random().toString(),
+      name: `${e.first_name || ''} ${e.last_name || ''}`.trim() || 'Unknown',
+      // Handle both object and string formats for designation
+      role: typeof e.designation === 'object' ? e.designation?.title : e.designation || 'Associate',
+      recruiter: e.recruiter || 'Not Assigned',
+      // Combining trainer or team lead as the Mentor
+      mentor: e.trainer || e.team_lead || 'Not Assigned',
+      revenue: Number(e.revenue) || 0,
+      cost: Number(e.cost) || 0,
+      hire_date: e.date_of_joining || 'Unknown'
+    }));
+
+    setHiredData(formattedData);
+  }, []);
+
+  // Dynamic Calculations based on fetched DB data
   const metrics = useMemo(() => {
     let totalProfit = 0;
     let totalLoss = 0;
     let profitCount = 0;
     let lossCount = 0;
 
-    HIRED_DATA.forEach(emp => {
+    hiredData.forEach(emp => {
       const margin = emp.revenue - emp.cost;
       if (margin > 0) {
         totalProfit += margin;
@@ -53,9 +78,10 @@ export default function RecruitmentPage() {
     });
 
     return { totalProfit, totalLoss, profitCount, lossCount, netMargin: totalProfit - totalLoss };
-  }, []);
+  }, [hiredData]);
 
-  const filteredData = HIRED_DATA.filter(emp => 
+  // Search filtering
+  const filteredData = hiredData.filter(emp => 
     emp.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
     emp.recruiter.toLowerCase().includes(searchQuery.toLowerCase()) ||
     emp.mentor.toLowerCase().includes(searchQuery.toLowerCase())
@@ -87,7 +113,7 @@ export default function RecruitmentPage() {
           <div className="flex items-center gap-3 mb-2 text-slate-400 text-sm font-bold uppercase tracking-wider">
             <Users className="w-4 h-4" /> Total Hires
           </div>
-          <div className="text-3xl font-black text-white">{HIRED_DATA.length}</div>
+          <div className="text-3xl font-black text-white">{hiredData.length}</div>
         </motion.div>
         
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-emerald-500/10 border border-emerald-500/20 p-5 rounded-2xl shadow-xl">
@@ -125,10 +151,10 @@ export default function RecruitmentPage() {
         <div className="p-5 border-b border-white/5 flex items-center justify-between bg-[#0c0e25]">
           <h2 className="font-bold text-slate-200">Employee Financial Tracking Ledger</h2>
         </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="bg-[#0c0e25]/50 border-b border-white/5 text-xs text-slate-400 uppercase tracking-wider">
+        <div className="overflow-x-auto max-h-[600px] custom-scrollbar">
+          <table className="w-full text-left border-collapse relative">
+            <thead className="sticky top-0 z-10 bg-[#0c0e25]/95 backdrop-blur-md">
+              <tr className="border-b border-white/5 text-xs text-slate-400 uppercase tracking-wider">
                 <th className="p-4 font-semibold">Employee</th>
                 <th className="p-4 font-semibold">Recruiter (HR)</th>
                 <th className="p-4 font-semibold">Assigned Mentor</th>
@@ -147,23 +173,25 @@ export default function RecruitmentPage() {
                   <tr key={emp.id} className="hover:bg-white/[0.02] transition-colors">
                     <td className="p-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-xs border border-indigo-500/30">
-                          {emp.name.charAt(0)}
+                        <div className="w-8 h-8 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-xs border border-indigo-500/30 shrink-0">
+                          {emp.name.charAt(0).toUpperCase()}
                         </div>
                         <div>
-                          <div className="font-semibold text-slate-200">{emp.name}</div>
-                          <div className="text-xs text-slate-500">{emp.role}</div>
+                          <div className="font-semibold text-slate-200 truncate max-w-[200px]" title={emp.name}>{emp.name}</div>
+                          <div className="text-xs text-slate-500 truncate max-w-[200px]">{emp.role}</div>
                         </div>
                       </div>
                     </td>
                     <td className="p-4">
                       <div className="flex items-center gap-2 text-sm text-slate-300">
-                        <User className="w-3.5 h-3.5 text-slate-500" /> {emp.recruiter}
+                        <User className="w-3.5 h-3.5 text-slate-500 shrink-0" /> 
+                        <span className="truncate max-w-[150px]">{emp.recruiter}</span>
                       </div>
                     </td>
                     <td className="p-4">
                       <div className="flex items-center gap-2 text-sm text-slate-300">
-                        <ShieldCheck className="w-3.5 h-3.5 text-slate-500" /> {emp.mentor}
+                        <ShieldCheck className="w-3.5 h-3.5 text-slate-500 shrink-0" /> 
+                        <span className="truncate max-w-[150px]">{emp.mentor}</span>
                       </div>
                     </td>
                     <td className="p-4 text-right text-sm font-semibold text-slate-300">
@@ -192,7 +220,7 @@ export default function RecruitmentPage() {
               {filteredData.length === 0 && (
                 <tr>
                   <td colSpan={7} className="p-8 text-center text-slate-500 text-sm">
-                    No records found matching your search.
+                    No data found in your system. Add employees to see metrics.
                   </td>
                 </tr>
               )}

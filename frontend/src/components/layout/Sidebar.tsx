@@ -14,12 +14,10 @@ const navItems = [
   { label: 'Dashboard', icon: LayoutDashboard, path: '/dashboard' },
   { label: 'Employees', icon: Users, path: '/employees' },
   { label: 'Recruitment', icon: Briefcase, path: '/recruitment' },
-  { label: 'LMS Courses', icon: BookOpen, path: '/lms/courses' },
   { label: 'Training', icon: GraduationCap, path: '/training' },
   { label: 'Performance', icon: TrendingUp, path: '/performance' },
-  { label: 'Analytics', icon: BarChart3, path: '/analytics' },
   { label: 'Profit & Loss Analyzer', icon: TrendingDown, path: '/profit-loss' },
-  { label: 'Reports', icon: FileText, path: '/reports' },
+  { label: 'Leakage Diagnostics', icon: BarChart3, path: '/leakage-diagnostics' },
 ];
 
 export default function Sidebar() {
@@ -42,23 +40,19 @@ export default function Sidebar() {
       {/* Logo */}
       <div className="flex items-center gap-3 px-4 py-5 border-b border-white/5 h-16">
         {sidebarCollapsed ? (
-          <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 border border-primary/20 mx-auto overflow-hidden">
-            <div 
-              className="w-5 h-5"
-              style={{
-                backgroundImage: `url('https://cdn-bpead.nitrocdn.com/BBpeMUqwtpRtLgerjeQhQjKhWBtMWEQP/assets/images/optimized/rev-e5326ea/www.agshealth.com/wp-content/uploads/2022/09/AGS-Health-Logo-White.svg')`,
-                backgroundPosition: 'right center',
-                backgroundSize: '700% 100%',
-                backgroundRepeat: 'no-repeat'
-              }}
+          <div className="w-9 h-9 flex items-center justify-center flex-shrink-0 mx-auto">
+            <img
+              src="https://cdn-bpead.nitrocdn.com/BBpeMUqwtpRtLgerjeQhQjKhWBtMWEQP/assets/images/optimized/rev-e5326ea/www.agshealth.com/wp-content/uploads/2022/09/ags-siticon.png"
+              alt="AGS Health"
+              className="w-7 h-7 object-contain"
             />
           </div>
         ) : (
           <div className="flex flex-col gap-1 pl-1">
-            <img 
-              src="https://cdn-bpead.nitrocdn.com/BBpeMUqwtpRtLgerjeQhQjKhWBtMWEQP/assets/images/optimized/rev-e5326ea/www.agshealth.com/wp-content/uploads/2022/09/AGS-Health-Logo-White.svg" 
-              alt="AGS Health" 
-              className="h-6 w-auto object-contain" 
+            <img
+              src="https://cdn-bpead.nitrocdn.com/BBpeMUqwtpRtLgerjeQhQjKhWBtMWEQP/assets/images/optimized/rev-e5326ea/www.agshealth.com/wp-content/uploads/2022/09/AGS-Health-Logo-White.svg"
+              alt="AGS Health"
+              className="h-6 w-auto object-contain"
             />
           </div>
         )}

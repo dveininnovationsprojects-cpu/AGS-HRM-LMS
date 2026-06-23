@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useDragControls } from 'framer-motion';
 import { X, Send, User, Loader, Zap, HelpCircle } from 'lucide-react';
 import api from '../../services/api';
 
@@ -12,6 +12,7 @@ interface Message {
 const CHATBOT_LOGO = 'https://branition.com/assets/img/users/logos/15060-qJ7ZZ6J.webp?v2';
 
 export default function ChatbotWidget() {
+  const dragControls = useDragControls();
   const [isOpen, setIsOpen] = useState(false);
   const [showPrompts, setShowPrompts] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
@@ -24,12 +25,91 @@ export default function ChatbotWidget() {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  
+  // Typing state for advisor greeting bubble
+  const [typedText, setTypedText] = useState('');
+
+  useEffect(() => {
+    if (isOpen) {
+      setTypedText('');
+      return;
+    }
+    
+    let isMounted = true;
+    let index = 0;
+    let currentText = '';
+    let timer: any;
+    const fullText = "Hii, I am your AI Advisor";
+    
+    const tick = () => {
+      if (!isMounted) return;
+      
+      currentText = fullText.slice(0, index + 1);
+      index++;
+      setTypedText(currentText);
+      
+      if (index < fullText.length) {
+        timer = setTimeout(tick, 100); // Typing speed
+      } else {
+        // Finished typing! Wait 2 seconds, then clear the message so it disappears
+        timer = setTimeout(() => {
+          if (isMounted) {
+            setTypedText('');
+          }
+        }, 2000);
+      }
+    };
+    
+    timer = setTimeout(tick, 1500); // Initial delay before typing starts
+    
+    return () => {
+      isMounted = false;
+      clearTimeout(timer);
+    };
+  }, [isOpen]);
 
   useEffect(() => {
     if (isOpen) {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages, isOpen]);
+
+  useEffect(() => {
+    const handleTriggerChatbot = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      setIsOpen(true);
+      if (customEvent.detail) {
+        const { message, response } = customEvent.detail;
+        const newMessages: Message[] = [];
+        if (message) {
+          newMessages.push({
+            role: 'user',
+            content: message,
+            timestamp: new Date()
+          });
+        }
+        if (response) {
+          newMessages.push({
+            role: 'assistant',
+            content: response,
+            timestamp: new Date()
+          });
+        }
+        if (newMessages.length > 0) {
+          setMessages(prev => {
+            const lastMsg = prev[prev.length - 1];
+            if (lastMsg && response && lastMsg.content === response) {
+              return prev;
+            }
+            return [...prev, ...newMessages];
+          });
+        }
+      }
+    };
+
+    window.addEventListener('trigger-chatbot', handleTriggerChatbot);
+    return () => window.removeEventListener('trigger-chatbot', handleTriggerChatbot);
+  }, []);
 
   const sendMessage = async (textToSend?: string) => {
     const messageText = textToSend || input;
@@ -130,7 +210,13 @@ export default function ChatbotWidget() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
+    <motion.div 
+      drag
+      dragListener={false}
+      dragControls={dragControls}
+      dragMomentum={false}
+      className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3 touch-none"
+    >
       {/* Popup Chatbox Panel with Neon Accent Glows */}
       <AnimatePresence>
         {isOpen && (
@@ -139,7 +225,7 @@ export default function ChatbotWidget() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.22, ease: 'easeOut' }}
-            className="w-[370px] max-w-[calc(100vw-2rem)] h-[490px] max-h-[calc(100vh-8rem)] bg-[#090b1e]/98 backdrop-blur-md rounded-2xl border border-emerald-500/25 shadow-[0_0_25px_rgba(16,185,129,0.15)] flex flex-col overflow-hidden relative"
+            className="absolute bottom-20 right-0 w-[370px] max-w-[calc(100vw-2rem)] h-[490px] max-h-[calc(100vh-8rem)] bg-[#090b1e]/98 backdrop-blur-md rounded-2xl border border-emerald-500/25 shadow-[0_0_25px_rgba(16,185,129,0.15)] flex flex-col overflow-hidden"
           >
             {/* Top glowing neon light accent */}
             <div className="h-[2px] bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-500 w-full flex-shrink-0" />
@@ -149,24 +235,26 @@ export default function ChatbotWidget() {
             <div className="absolute top-1/4 left-1/4 w-28 h-28 bg-emerald-500/5 rounded-full blur-[60px] pointer-events-none -z-10" />
             <div className="absolute bottom-1/4 right-1/4 w-28 h-28 bg-teal-500/5 rounded-full blur-[60px] pointer-events-none -z-10" />
 
-            {/* Header */}
-            <div className="bg-[#060814] px-4 py-3 flex items-center justify-between border-b border-emerald-500/20">
+            {/* Header (Drag Handle) */}
+            <div 
+              onPointerDown={(e) => dragControls.start(e)}
+              className="bg-[#060814] px-4 py-3 flex items-center justify-between border-b border-emerald-500/20 cursor-grab active:cursor-grabbing select-none"
+            >
               <div className="flex items-center gap-2.5">
                 <img
                   src={CHATBOT_LOGO}
                   alt="Workforce AI Advisor Logo"
-                  className="w-8 h-8 rounded-full border border-emerald-500/30 object-cover"
+                  className="w-8 h-8 rounded-full border border-emerald-500/30 object-cover pointer-events-none"
                 />
                 <div>
-                  <h4 className="text-xs font-bold text-emerald-400 tracking-wide">Workforce AI Advisor</h4>
-                  <div className="flex items-center gap-1.5 mt-0.5">
+                  <h4 className="text-xs font-bold text-emerald-400 tracking-wide pointer-events-none">Workforce AI Advisor</h4>
+                  <div className="flex items-center gap-1.5 mt-0.5 pointer-events-none">
                     <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
                     <span className="text-[9px] text-slate-400 font-semibold">ONLINE & SECURE</span>
                   </div>
                 </div>
               </div>
-              
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-1.5" onPointerDown={(e) => e.stopPropagation()}>
                 {/* Suggestions Trigger Button (?) */}
                 <button
                   onClick={() => setShowPrompts(!showPrompts)}
@@ -243,7 +331,7 @@ export default function ChatbotWidget() {
                   <p className="text-[9px] font-bold text-emerald-400 tracking-wider uppercase mb-2 flex items-center gap-1.5">
                     <Zap className="w-3.5 h-3.5 text-emerald-400 animate-pulse" /> Suggested Analytical Queries
                   </p>
-                  <div className="flex flex-col gap-1 max-h-40 overflow-y-auto scrollbar-thin">
+                  <div className="flex flex-col gap-2 max-h-48 overflow-y-auto pr-1.5 scrollbar-thin">
                     {quickPrompts.map((q, i) => (
                       <button
                         key={i}
@@ -251,7 +339,7 @@ export default function ChatbotWidget() {
                           sendMessage(q.prompt);
                           setShowPrompts(false); // Hide panel after query selection
                         }}
-                        className="text-[9.5px] text-left px-2.5 py-1.5 bg-[#090b1e] hover:bg-emerald-500/10 hover:text-emerald-400 text-slate-300 rounded-lg border border-emerald-500/10 hover:border-emerald-500/30 transition-all font-medium truncate"
+                        className="w-full text-center px-4 py-2.5 bg-[#090b1e]/90 hover:bg-gradient-to-r hover:from-emerald-500/20 hover:to-teal-500/20 hover:text-emerald-300 text-slate-300 rounded-xl border border-emerald-500/15 hover:border-emerald-500/40 shadow-sm hover:shadow-[0_0_12px_rgba(16,185,129,0.25)] transition-all duration-300 font-semibold text-xs tracking-wide cursor-pointer"
                         title={q.prompt}
                       >
                         {q.label}
@@ -284,8 +372,28 @@ export default function ChatbotWidget() {
         )}
       </AnimatePresence>
 
-      {/* Floating Action Button (Only Launcher) */}
+      {/* Typing Bubble above the Floating Action Button */}
+      <AnimatePresence>
+        {!isOpen && typedText && (
+          <motion.div
+            initial={{ opacity: 0, y: 15, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 10, scale: 0.95 }}
+            transition={{ duration: 0.25, ease: 'easeOut' }}
+            className="px-3.5 py-2 mb-1 bg-[#090b1e]/95 backdrop-blur-md rounded-xl border border-emerald-500/35 shadow-[0_0_15px_rgba(16,185,129,0.25)] text-emerald-400 text-xs font-semibold tracking-wide whitespace-nowrap relative select-none cursor-pointer hover:border-emerald-500/60 hover:shadow-[0_0_20px_rgba(16,185,129,0.4)] transition-all duration-300"
+            onClick={() => setIsOpen(true)}
+          >
+            <span>{typedText}</span>
+            <span className="inline-block w-1 h-3.5 bg-emerald-400 ml-0.5 animate-pulse align-middle" />
+            
+            {/* Tooltip triangle point */}
+            <div className="absolute -bottom-1.5 right-[22px] w-2.5 h-2.5 bg-[#090b1e] border-r border-b border-emerald-500/35 rotate-45" />
+          </motion.div>
+        )}
+      </AnimatePresence>
+      {/* Floating Action Button (Only Launcher / Drag Handle) */}
       <motion.button
+        onPointerDown={(e) => dragControls.start(e)}
         onClick={() => setIsOpen(!isOpen)}
         whileHover={{ scale: 1.08 }}
         whileTap={{ scale: 0.95 }}
@@ -298,14 +406,14 @@ export default function ChatbotWidget() {
             ease: "easeInOut"
           }
         }}
-        className="w-14 h-14 rounded-full bg-[#060814] flex items-center justify-center shadow-[0_0_18px_rgba(16,185,129,0.35)] hover:shadow-[0_0_28px_rgba(16,185,129,0.7)] border-2 border-emerald-500/50 relative overflow-hidden"
+        className="w-14 h-14 rounded-full bg-[#060814] flex items-center justify-center shadow-[0_0_18px_rgba(16,185,129,0.35)] hover:shadow-[0_0_28px_rgba(16,185,129,0.7)] border-2 border-emerald-500/50 relative overflow-hidden cursor-grab active:cursor-grabbing"
       >
         <img
           src={CHATBOT_LOGO}
           alt="AI Advisor Logo"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover pointer-events-none"
         />
       </motion.button>
-    </div>
+    </motion.div>
   );
 }

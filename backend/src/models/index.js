@@ -63,6 +63,23 @@ Candidate.belongsTo(JobRequisition, { foreignKey: 'requisition_id', as: 'requisi
 Employee.hasMany(PerformanceReview, { foreignKey: 'employee_id', as: 'reviews' });
 PerformanceReview.belongsTo(Employee, { foreignKey: 'employee_id', as: 'employee' });
 
+// Training Associations
+const Trainer = require('./Trainer');
+const TrainingProgram = require('./TrainingProgram');
+const BatchEnrollment = require('./BatchEnrollment');
+
+TrainingBatch.belongsTo(Trainer, { foreignKey: 'trainer_id', as: 'trainer' });
+Trainer.hasMany(TrainingBatch, { foreignKey: 'trainer_id', as: 'batches' });
+
+TrainingBatch.belongsTo(TrainingProgram, { foreignKey: 'program_id', as: 'program' });
+TrainingProgram.hasMany(TrainingBatch, { foreignKey: 'program_id', as: 'batches' });
+
+TrainingBatch.hasMany(BatchEnrollment, { foreignKey: 'batch_id', as: 'enrollments' });
+BatchEnrollment.belongsTo(TrainingBatch, { foreignKey: 'batch_id', as: 'batch' });
+
+Employee.hasMany(BatchEnrollment, { foreignKey: 'employee_id', as: 'batchEnrollments' });
+BatchEnrollment.belongsTo(Employee, { foreignKey: 'employee_id', as: 'employee' });
+
 module.exports = {
   sequelize,
   User,
@@ -78,4 +95,7 @@ module.exports = {
   PerformanceReview,
   JobRequisition,
   Candidate,
+  Trainer,
+  TrainingProgram,
+  BatchEnrollment,
 };
