@@ -22,7 +22,7 @@ const seed = async () => {
     Department.findOrCreate({ where: { name: 'Operations', org_id: 1 }, defaults: { code: 'OPS', org_id: 1, is_active: 1 } }),
   ]);
 
-  console.log('✅ Departments seeded');
+  console.log('Departments seeded');
 
   // Seed designations
   await Promise.all([
@@ -33,7 +33,7 @@ const seed = async () => {
     Designation.findOrCreate({ where: { name: 'Finance Analyst', dept_id: depts[3][0].id }, defaults: { org_id: 1, dept_id: depts[3][0].id, level: 3, is_active: 1 } }),
   ]);
 
-  console.log('✅ Designations seeded');
+  console.log(' Designations seeded');
 
   // Seed admin user
   const adminExists = await User.findOne({ where: { email: 'admin@agshealth.com', org_id: 1 } });
@@ -47,9 +47,9 @@ const seed = async () => {
       is_active: 1,
       is_email_verified: 1,
     });
-    console.log('✅ Admin user created: admin@agshealth.com / Admin@123');
+    console.log(' Admin user created: admin@agshealth.com / Admin@123');
   } else {
-    console.log('ℹ️  Admin user already exists');
+    console.log(' Admin user already exists');
   }
 
   // Create roles & permissions tables (raw SQL for speed)
@@ -120,14 +120,14 @@ const seed = async () => {
     await sequelize.query(`INSERT IGNORE INTO user_roles (user_id, role_id) VALUES (:uid, :rid)`, {
       replacements: { uid: admin.id, rid: roleRows[0].id },
     });
-    console.log('✅ Super-admin role assigned');
+    console.log(' Super-admin role assigned');
   }
 
-  console.log('\n🎉 Seed completed! Login with admin@agshealth.com / Admin@123\n');
+  console.log('\n Seed completed! Login with admin@agshealth.com / Admin@123\n');
   process.exit(0);
 };
 
 seed().catch((err) => {
-  console.error('❌ Seed failed:', err.message);
+  console.error('Seed failed:', err.message);
   process.exit(1);
 });
