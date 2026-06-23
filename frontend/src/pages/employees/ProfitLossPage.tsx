@@ -4,10 +4,12 @@ import { motion } from 'framer-motion';
 import api from '../../services/api';
 import DataTable from '../../components/ui/DataTable';
 import toast from 'react-hot-toast';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, Legend } from 'recharts';
 
 export default function ProfitLossPage() {
   const navigate = useNavigate();
   const [employees, setEmployees] = useState<any[]>([]);
+  const [monthlyData, setMonthlyData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [activeTab, setActiveTab] = useState<'profitable' | 'loss'>('profitable');
@@ -23,6 +25,7 @@ export default function ProfitLossPage() {
     api.get('/analytics/executive')
       .then(res => {
         setEmployees(res.data.data.employeeProfitability || []);
+        setMonthlyData(res.data.data.monthlyJoiners || []);
       })
       .catch(() => toast.error('Failed to load employee profitability data'))
       .finally(() => setLoading(false));
@@ -217,6 +220,31 @@ export default function ProfitLossPage() {
           <div className="text-xs text-slate-400 mt-0.5">Total Optimized Net Margin</div>
         </motion.div>
       </div>
+
+      {/* 6-Month Profit & Loss Trend */}
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="bg-[#0e112a] rounded-2xl shadow-card p-5">
+        <h3 className="font-semibold text-slate-200 text-sm mb-4">
+          6-Month Profit & Loss Trend
+        </h3>
+        <div className="h-72 w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={monthlyData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+              <XAxis dataKey="month" stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
+              <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} tickFormatter={(value) => `$${value >= 1000 ? value/1000 + 'k' : value}`} />
+              <RechartsTooltip 
+                cursor={{ fill: 'rgba(255,255,255,0.02)' }}
+                contentStyle={{ backgroundColor: '#0c0e25', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', fontSize: '12px' }}
+                formatter={(value: number) => [`$${value.toLocaleString()}`, '']}
+              />
+              <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
+              <Bar dataKey="revenue" name="Revenue" fill="#3b82f6" radius={[4, 4, 0, 0]} maxBarSize={40} />
+              <Bar dataKey="cost" name="Cost" fill="#f43f5e" radius={[4, 4, 0, 0]} maxBarSize={40} />
+              <Bar dataKey="profit" name="Net Profit" fill="#10b981" radius={[4, 4, 0, 0]} maxBarSize={40} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </motion.div>
 
       {/* Executive P&L Insights Hub */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
