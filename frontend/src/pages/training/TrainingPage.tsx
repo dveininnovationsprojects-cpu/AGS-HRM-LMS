@@ -136,7 +136,7 @@ export default function TrainingPage() {
                     <span className="text-xs font-semibold uppercase tracking-wider">Active Batches</span>
                     <Calendar className="w-5 h-5 text-indigo-400" />
                   </div>
-                  <div className="mt-4">
+                  <div className="mt-4 notranslate" translate="no">
                     <span className="text-3xl font-extrabold text-white">{stats.totalBatches}</span>
                     <span className="text-xs block text-slate-500 mt-1">Trainer led programs</span>
                   </div>
@@ -147,7 +147,7 @@ export default function TrainingPage() {
                     <span className="text-xs font-semibold uppercase tracking-wider">Trainees Enrolled</span>
                     <Users className="w-5 h-5 text-emerald-400" />
                   </div>
-                  <div className="mt-4">
+                  <div className="mt-4 notranslate" translate="no">
                     <span className="text-3xl font-extrabold text-white">{stats.totalTrainees}</span>
                     <span className="text-xs block text-emerald-400 mt-1">Average {stats.avgScore}% pass grade</span>
                   </div>
@@ -158,7 +158,7 @@ export default function TrainingPage() {
                     <span className="text-xs font-semibold uppercase tracking-wider">Training Budget (Cost)</span>
                     <DollarSign className="w-5 h-5 text-rose-400" />
                   </div>
-                  <div className="mt-4">
+                  <div className="mt-4 notranslate" translate="no">
                     <span className="text-3xl font-extrabold text-rose-400">${stats.totalCost?.toLocaleString()}</span>
                     <span className="text-xs block text-slate-500 mt-1">
                       Trainer: ${stats.totalTrainerCost} | Emp: ${stats.totalEmployeeCost}
@@ -171,7 +171,7 @@ export default function TrainingPage() {
                     <span className="text-xs font-semibold uppercase tracking-wider">Net Training Profit (ROI)</span>
                     <TrendingUp className="w-5 h-5 text-primary" />
                   </div>
-                  <div className="mt-4">
+                  <div className="mt-4 notranslate" translate="no">
                     <span className="text-3xl font-extrabold text-primary">${stats.netProfit?.toLocaleString()}</span>
                     <span className="text-xs block text-emerald-400 font-bold mt-1">
                       ROI: +{stats.roi}%
@@ -191,7 +191,7 @@ export default function TrainingPage() {
                       <p className="text-xs text-slate-400">Comparing program delivery cost with trainee billing returns</p>
                     </div>
                   </div>
-                  <div className="h-[280px] w-full">
+                  <div className="h-[280px] w-full notranslate" translate="no">
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart data={trainerPerf} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
                         <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
@@ -216,7 +216,7 @@ export default function TrainingPage() {
                       <p className="text-xs text-slate-400">SLA Accuracy score improvement: pre-training vs post-training cohort average</p>
                     </div>
                   </div>
-                  <div className="h-[280px] w-full">
+                  <div className="h-[280px] w-full notranslate" translate="no">
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart data={outcomes} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
                         <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
@@ -251,7 +251,7 @@ export default function TrainingPage() {
                       <p className="text-sm text-slate-500 py-6 text-center">No evaluations certified with honours yet.</p>
                     ) : (
                       topLearners.map((tl, i) => (
-                        <div key={i} className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
+                        <div key={i} className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors notranslate" translate="no">
                           <div className="flex items-center gap-3">
                             <div className="w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-400 font-bold text-xs">
                               {tl.score}%
@@ -287,7 +287,7 @@ export default function TrainingPage() {
                       <p className="text-sm text-slate-500 py-6 text-center">All evaluated trainees meet Pass requirements.</p>
                     ) : (
                       refresherNeeded.map((rn, i) => (
-                        <div key={i} className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
+                        <div key={i} className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors notranslate" translate="no">
                           <div className="flex items-center gap-3">
                             <div className="w-8 h-8 rounded-full bg-amber-500/10 flex items-center justify-center text-amber-400 font-bold text-xs">
                               {rn.score}%
@@ -417,7 +417,7 @@ export default function TrainingPage() {
                         <DollarSign className="w-4.5 h-4.5 text-primary" /> Training Batch Financial Audit
                       </h3>
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div className="p-3 bg-white/5 rounded-xl border border-white/5">
+                        <div className="p-3 bg-white/5 rounded-xl border border-white/5 notranslate" translate="no">
                           <div className="text-xs text-slate-500">Total Program Cost</div>
                           <div className="text-lg font-bold text-white mt-1">
                             ${((selectedBatch.trainer_cost || 0) + (selectedBatch.material_cost || 0) + (selectedBatch.trainees?.reduce((sum: number, t: any) => sum + (t.employee_cost || 0), 0) || 0)).toLocaleString()}
@@ -427,7 +427,7 @@ export default function TrainingPage() {
                           </div>
                         </div>
 
-                        <div className="p-3 bg-white/5 rounded-xl border border-white/5">
+                        <div className="p-3 bg-white/5 rounded-xl border border-white/5 notranslate" translate="no">
                           <div className="text-xs text-slate-500">Trainee Revenue Value</div>
                           <div className="text-lg font-bold text-white mt-1">
                             ${(selectedBatch.trainees?.reduce((sum: number, t: any) => sum + (t.revenue_generated || 0), 0) || 0).toLocaleString()}
@@ -437,7 +437,7 @@ export default function TrainingPage() {
                           </div>
                         </div>
 
-                        <div className="p-3 bg-primary/5 rounded-xl border border-primary/10">
+                        <div className="p-3 bg-primary/5 rounded-xl border border-primary/10 notranslate" translate="no">
                           <div className="text-xs text-primary">Net profit margin</div>
                           <div className="text-lg font-bold text-primary mt-1">
                             ${((selectedBatch.trainees?.reduce((sum: number, t: any) => sum + (t.revenue_generated || 0), 0) || 0) - ((selectedBatch.trainer_cost || 0) + (selectedBatch.material_cost || 0) + (selectedBatch.trainees?.reduce((sum: number, t: any) => sum + (t.employee_cost || 0), 0) || 0))).toLocaleString()}
@@ -489,7 +489,8 @@ export default function TrainingPage() {
                             {selectedBatch.trainees?.map((tr: any) => (
                               <tr
                                 key={tr.employee_id}
-                                className="border-b border-white/5 hover:bg-white/5 transition-colors"
+                                className="border-b border-white/5 hover:bg-white/5 transition-colors notranslate"
+                                translate="no"
                               >
                                 <td className="p-3 font-bold text-slate-200">{tr.name}</td>
                                 <td className="p-3 text-slate-400">{tr.emp_code}</td>
@@ -573,7 +574,7 @@ export default function TrainingPage() {
 
                   <p className="text-xs text-slate-400 line-clamp-2 min-h-[32px]">{t.bio}</p>
 
-                  <div className="grid grid-cols-3 gap-2 border-t border-white/5 pt-4 text-center">
+                  <div className="grid grid-cols-3 gap-2 border-t border-white/5 pt-4 text-center notranslate" translate="no">
                     <div>
                       <div className="text-[10px] text-slate-500 uppercase">Batches</div>
                       <div className="text-sm font-bold text-white mt-1">{t.batches_count || 0}</div>

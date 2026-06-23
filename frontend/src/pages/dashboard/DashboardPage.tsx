@@ -283,20 +283,20 @@ export default function DashboardPage() {
                 </div>
                 <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Workforce Strength</span>
               </div>
-              <div className="flex items-center gap-0.5 text-[10px] font-bold text-emerald-400">
+              <div className="flex items-center gap-0.5 text-[10px] font-bold text-emerald-400 notranslate" translate="no">
                 <ArrowUpRight className="w-3 h-3" />
                 +5.2%
               </div>
             </div>
 
-            <div className="flex items-baseline gap-2">
+            <div className="flex items-baseline gap-2 notranslate" translate="no">
               <span className="text-xl font-bold text-slate-100 font-mono tracking-tight leading-none">
                 <CountUp target={b.headCount} />
               </span>
               <span className="text-[10px] text-slate-400">Total</span>
             </div>
 
-            <div className="flex items-center gap-4 mt-2 text-[10.5px] text-slate-400 border-t border-white/5 pt-2">
+            <div className="flex items-center gap-4 mt-2 text-[10.5px] text-slate-400 border-t border-white/5 pt-2 notranslate" translate="no">
               <div className="flex items-center gap-1">
                 <div className="w-1.5 h-1.5 rounded-full bg-teal-400" />
                 <span>Active: <strong>{b.activeEmployees}</strong></span>
@@ -310,7 +310,7 @@ export default function DashboardPage() {
               <div className="h-full bg-teal-400 rounded-full" style={{ width: `${(b.activeEmployees / b.headCount) * 100}%` }} />
             </div>
             {/* Sparkline */}
-            <div className="w-14 h-6 opacity-80">
+            <div className="w-14 h-6 opacity-80 notranslate" translate="no">
               <svg width="100%" height="100%" viewBox="0 0 70 24">
                 <defs>
                   <linearGradient id="sparkline-grad-0" x1="0" y1="0" x2="0" y2="1">
@@ -350,20 +350,20 @@ export default function DashboardPage() {
                 </div>
                 <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Financial Summary</span>
               </div>
-              <div className="flex items-center gap-0.5 text-[10px] font-bold text-emerald-400">
+              <div className="flex items-center gap-0.5 text-[10px] font-bold text-emerald-400 notranslate" translate="no">
                 <ArrowUpRight className="w-3 h-3" />
                 +18.5%
               </div>
             </div>
 
-            <div className="flex items-baseline gap-2">
+            <div className="flex items-baseline gap-2 notranslate" translate="no">
               <span className="text-xl font-bold text-slate-100 font-mono tracking-tight leading-none">
                 <CountUp target={b.profit} prefix="$" />
               </span>
               <span className="text-[10px] text-slate-400">Net Profit</span>
             </div>
 
-            <div className="grid grid-cols-2 gap-2 mt-2 border-t border-white/5 pt-2 text-[10px] text-slate-400">
+            <div className="grid grid-cols-2 gap-2 mt-2 border-t border-white/5 pt-2 text-[10px] text-slate-400 notranslate" translate="no">
               <div>
                 <span className="text-slate-500">Rev:</span> <strong className="text-slate-300">${(b.revenue / 1e6).toFixed(2)}M</strong>
               </div>
@@ -379,7 +379,7 @@ export default function DashboardPage() {
               <div className="h-full bg-rose-500" style={{ width: `${Math.round((b.cost / b.revenue) * 100)}%` }} />
             </div>
             {/* Sparkline */}
-            <div className="w-14 h-6 opacity-80">
+            <div className="w-14 h-6 opacity-80 notranslate" translate="no">
               <svg width="100%" height="100%" viewBox="0 0 70 24">
                 <defs>
                   <linearGradient id="sparkline-grad-1" x1="0" y1="0" x2="0" y2="1">
@@ -419,13 +419,13 @@ export default function DashboardPage() {
                 </div>
                 <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Attrition Rate</span>
               </div>
-              <div className="flex items-center gap-0.5 text-[10px] font-bold text-emerald-400">
+              <div className="flex items-center gap-0.5 text-[10px] font-bold text-emerald-400 notranslate" translate="no">
                 <ArrowDownRight className="w-3 h-3" />
                 -1.2%
               </div>
             </div>
 
-            <div className="flex items-baseline gap-2">
+            <div className="flex items-baseline gap-2 notranslate" translate="no">
               <span className="text-xl font-bold text-slate-100 font-mono tracking-tight leading-none">
                 <CountUp target={b.attritionRate} suffix="%" decimals={1} />
               </span>
@@ -436,7 +436,7 @@ export default function DashboardPage() {
           <div className="flex items-end justify-between mt-3">
             <span className="text-[9px] text-slate-500">Low Risk Alert</span>
             {/* Sparkline */}
-            <div className="w-14 h-6 opacity-80">
+            <div className="w-14 h-6 opacity-80 notranslate" translate="no">
               <svg width="100%" height="100%" viewBox="0 0 70 24">
                 <defs>
                   <linearGradient id="sparkline-grad-2" x1="0" y1="0" x2="0" y2="1">
@@ -482,14 +482,14 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            <div className="flex items-baseline gap-2">
+            <div className="flex items-baseline gap-2 notranslate" translate="no">
               <span className="text-xl font-bold text-slate-100 font-mono tracking-tight leading-none">
                 <CountUp target={b.hiringEfficiency} suffix="%" />
               </span>
               <span className="text-[10px] text-slate-400">Hiring Efficiency</span>
             </div>
 
-            <div className="flex items-center gap-4 mt-2 text-[10.5px] text-slate-400 border-t border-white/5 pt-2">
+            <div className="flex items-center gap-4 mt-2 text-[10.5px] text-slate-400 border-t border-white/5 pt-2 notranslate" translate="no">
               <div className="flex items-center gap-1">
                 <div className="w-1.5 h-1.5 rounded-full bg-sky-400" />
                 <span>Training ROI: <strong>{b.trainingROI}%</strong></span>
@@ -503,7 +503,7 @@ export default function DashboardPage() {
               <div className="h-full bg-purple-500" style={{ width: `${b.hiringEfficiency}%` }} />
             </div>
             {/* Sparkline */}
-            <div className="w-14 h-6 opacity-80">
+            <div className="w-14 h-6 opacity-80 notranslate" translate="no">
               <svg width="100%" height="100%" viewBox="0 0 70 24">
                 <defs>
                   <linearGradient id="sparkline-grad-3" x1="0" y1="0" x2="0" y2="1">
@@ -533,7 +533,7 @@ export default function DashboardPage() {
               </h3>
               <span className="ml-auto text-[10px] text-slate-500">Click marker to filter</span>
             </div>
-            <div style={{ height: 374 }}>
+            <div style={{ height: 374 }} className="notranslate" translate="no">
               <BranchMap
                 selectedBranch={b}
                 onBranchSelect={handleMapBranchSelect}
@@ -549,16 +549,16 @@ export default function DashboardPage() {
             <div className="px-5 py-4 bg-gradient-to-r from-emerald-500/10 to-transparent border-b border-white/5 flex-shrink-0">
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-emerald-400" />
-                <motion.h3 key={`city-${b.id}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.15 }} className="text-base font-bold text-slate-100">{b.city}</motion.h3>
+                <motion.h3 key={`city-${b.id}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.15 }} className="text-base font-bold text-slate-100 notranslate" translate="no">{b.city}</motion.h3>
                 {b.id !== 'all' && (
-                  <motion.span key={`est-${b.id}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.15 }} className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/20 ml-auto">
+                  <motion.span key={`est-${b.id}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.15 }} className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/20 ml-auto notranslate" translate="no">
                     Est. {b.established}
                   </motion.span>
                 )}
               </div>
-              <motion.p key={`addr-${b.id}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.15 }} className="text-[10px] text-slate-500 mt-0.5 truncate">{b.address}</motion.p>
+              <motion.p key={`addr-${b.id}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.15 }} className="text-[10px] text-slate-500 mt-0.5 truncate notranslate" translate="no">{b.address}</motion.p>
               {/* Mini KPIs */}
-              <motion.div key={`kpi-${b.id}`} initial={{ opacity: 0, y: 3 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }} className="grid grid-cols-3 gap-2 mt-3">
+              <motion.div key={`kpi-${b.id}`} initial={{ opacity: 0, y: 3 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }} className="grid grid-cols-3 gap-2 mt-3 notranslate" translate="no">
                 {[
                   { label: 'Attrition', val: `${b.attritionRate}%`, cls: 'text-orange-400' },
                   { label: 'SLA', val: `${b.slaCompliance}%`, cls: b.slaCompliance >= 90 ? 'text-emerald-400' : b.slaCompliance >= 80 ? 'text-amber-400' : 'text-rose-400' },
@@ -575,7 +575,7 @@ export default function DashboardPage() {
             {/* Dept pie */}
             <div className="px-4 py-3 border-b border-white/5 flex-shrink-0">
               <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider mb-2">Role Distribution</p>
-              <motion.div key={`dept-${b.id}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.2 }} className="flex gap-3 items-center">
+              <motion.div key={`dept-${b.id}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.2 }} className="flex gap-3 items-center notranslate" translate="no">
                 <ResponsiveContainer width={80} height={80}>
                   <PieChart>
                     <Pie data={b.topDepts} cx="50%" cy="50%" innerRadius={22} outerRadius={36} paddingAngle={2} dataKey="count">
@@ -590,7 +590,7 @@ export default function DashboardPage() {
                         <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: DEPT_COLORS[i] }} />
                         <span className="text-slate-400">{d.name}</span>
                       </div>
-                      <span className="text-slate-200 font-medium">{d.count}</span>
+                      <span className="text-slate-200 font-medium notranslate" translate="no">{d.count}</span>
                     </div>
                   ))}
                 </div>
@@ -602,11 +602,11 @@ export default function DashboardPage() {
               <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Resource Health</p>
               <motion.div key={`health-${b.id}`} initial={{ opacity: 0, y: 3 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }} className="space-y-2">
                 <div className="grid grid-cols-2 gap-2">
-                  <div className="bg-white/[0.03] border border-white/5 rounded-xl p-3 text-center">
+                  <div className="bg-white/[0.03] border border-white/5 rounded-xl p-3 text-center notranslate" translate="no">
                     <p className="text-lg font-bold text-amber-400">{b.benchStrength}</p>
                     <p className="text-[9px] text-slate-500">Bench Strength</p>
                   </div>
-                  <div className="bg-white/[0.03] border border-white/5 rounded-xl p-3 text-center">
+                  <div className="bg-white/[0.03] border border-white/5 rounded-xl p-3 text-center notranslate" translate="no">
                     <p className="text-lg font-bold text-purple-400">{b.openPositions}</p>
                     <p className="text-[9px] text-slate-500">Open Positions</p>
                   </div>
@@ -615,7 +615,7 @@ export default function DashboardPage() {
                 <div>
                   <div className="flex justify-between text-[10px] mb-1">
                     <span className="text-slate-500">Revenue Contribution</span>
-                    <span className="text-emerald-400 font-semibold">
+                    <span className="text-emerald-400 font-semibold notranslate" translate="no">
                       ${(b.revenue / 1e6).toFixed(2)}M / ${(GLOBAL_DATA.revenue / 1e6).toFixed(2)}M
                     </span>
                   </div>
@@ -625,7 +625,7 @@ export default function DashboardPage() {
                       style={{ width: `${Math.max(1, Math.min(100, Math.round((b.revenue / GLOBAL_DATA.revenue) * 100)))}%` }}
                     />
                   </div>
-                  <p className="text-[9px] text-slate-500 mt-0.5 text-right">
+                  <p className="text-[9px] text-slate-500 mt-0.5 text-right notranslate" translate="no">
                     {Math.round((b.revenue / GLOBAL_DATA.revenue) * 100)}% of Global Revenue
                   </p>
                 </div>
@@ -642,27 +642,29 @@ export default function DashboardPage() {
           <div className="bg-[#0e112a] rounded-2xl p-5 border border-white/5 h-full flex flex-col">
             <h3 className="font-semibold text-slate-200 mb-1 text-sm">Headcount Trend — {b.city}</h3>
             <p className="text-xs text-slate-400 mb-4">Monthly joiners vs leavers</p>
-            <ResponsiveContainer width="100%" height={220}>
-              <AreaChart data={b.monthlyTrend}>
-                <defs>
-                  <linearGradient id="joinersGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.15} />
-                    <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
-                  </linearGradient>
-                  <linearGradient id="leaversGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#ef4444" stopOpacity={0.15} />
-                    <stop offset="95%" stopColor="#ef4444" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                <XAxis dataKey="month" tick={{ fontSize: 11, fill: '#94a3b8' }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fontSize: 11, fill: '#94a3b8' }} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={ttStyle} itemStyle={{ color: '#e2e8f0' }} labelStyle={{ color: '#94a3b8' }} />
-                <Area type="monotone" dataKey="joiners" stroke="#10b981" strokeWidth={2.5} fill="url(#joinersGrad)" name="Joiners" dot={{ fill: '#10b981', strokeWidth: 0, r: 4 }} />
-                <Area type="monotone" dataKey="leavers" stroke="#ef4444" strokeWidth={2.5} fill="url(#leaversGrad)" name="Leavers" dot={{ fill: '#ef4444', strokeWidth: 0, r: 4 }} />
-                <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 12 }} />
-              </AreaChart>
-            </ResponsiveContainer>
+            <div className="notranslate" translate="no">
+              <ResponsiveContainer width="100%" height={220}>
+                <AreaChart data={b.monthlyTrend}>
+                  <defs>
+                    <linearGradient id="joinersGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#10b981" stopOpacity={0.15} />
+                      <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
+                    </linearGradient>
+                    <linearGradient id="leaversGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#ef4444" stopOpacity={0.15} />
+                      <stop offset="95%" stopColor="#ef4444" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
+                  <XAxis dataKey="month" tick={{ fontSize: 11, fill: '#94a3b8' }} axisLine={false} tickLine={false} />
+                  <YAxis tick={{ fontSize: 11, fill: '#94a3b8' }} axisLine={false} tickLine={false} />
+                  <Tooltip contentStyle={ttStyle} itemStyle={{ color: '#e2e8f0' }} labelStyle={{ color: '#94a3b8' }} />
+                  <Area type="monotone" dataKey="joiners" stroke="#10b981" strokeWidth={2.5} fill="url(#joinersGrad)" name="Joiners" dot={{ fill: '#10b981', strokeWidth: 0, r: 4 }} />
+                  <Area type="monotone" dataKey="leavers" stroke="#ef4444" strokeWidth={2.5} fill="url(#leaversGrad)" name="Leavers" dot={{ fill: '#ef4444', strokeWidth: 0, r: 4 }} />
+                  <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 12 }} />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </FadeIn>
 
@@ -673,7 +675,7 @@ export default function DashboardPage() {
               <h3 className="font-semibold text-slate-200 mb-1 text-sm">Revenue Performance</h3>
               <p className="text-xs text-slate-400 mb-4">Monthly revenue trend — {b.city}</p>
             </div>
-            <div className="flex-1 min-h-[200px] mt-2">
+            <div className="flex-1 min-h-[200px] mt-2 notranslate" translate="no">
               <ResponsiveContainer width="100%" height={220}>
                 <BarChart data={b.monthlyTrend} barSize={24}>
                   <defs>
@@ -729,21 +731,21 @@ export default function DashboardPage() {
                     return (
                       <tr key={emp.name} className="border-b border-white/[0.04] hover:bg-white/[0.02] transition-colors">
                         <td className="px-5 py-3">
-                          <span className={`w-6 h-6 rounded-lg flex items-center justify-center text-[11px] font-bold ${
+                          <span className={`w-6 h-6 rounded-lg flex items-center justify-center text-[11px] font-bold notranslate ${
                             i === 0 ? 'bg-yellow-500/20 text-yellow-300' :
                             i === 1 ? 'bg-slate-400/15 text-slate-300' :
                                       'bg-orange-500/15 text-orange-300'
-                          }`}>{i + 1}</span>
+                          }`} translate="no">{i + 1}</span>
                         </td>
                         <td className="px-3 py-3">
-                          <p className="font-semibold text-slate-200">{emp.name}</p>
+                          <p className="font-semibold text-slate-200 notranslate" translate="no">{emp.name}</p>
                           <p className="text-[10px] text-slate-500">{emp.role}</p>
                         </td>
                         <td className="px-3 py-3 text-right">
-                          <span className="font-semibold text-emerald-400">${emp.revenue.toLocaleString()}</span>
+                          <span className="font-semibold text-emerald-400 notranslate" translate="no">${emp.revenue.toLocaleString()}</span>
                         </td>
                         <td className="px-5 py-3 text-right">
-                          <div className="flex flex-col items-end gap-1">
+                          <div className="flex flex-col items-end gap-1 notranslate" translate="no">
                             <span className="font-bold text-indigo-300">${emp.profit.toLocaleString()}</span>
                             <div className="w-16 h-1 bg-white/10 rounded-full overflow-hidden">
                               <div className="h-full bg-gradient-to-r from-indigo-500 to-purple-400 rounded-full" style={{ width: `${profitPct}%` }} />
@@ -777,7 +779,7 @@ export default function DashboardPage() {
             <div className="px-4 py-2 border-b border-white/5 flex-shrink-0 overflow-hidden">
               <p className="text-[9px] text-orange-400/70 font-bold uppercase tracking-wider mb-1.5">⚡ Live Risk Feed</p>
               <div className="overflow-hidden">
-                <div className="marquee-content gap-2">
+                <div className="marquee-content gap-2 notranslate" translate="no">
                   {[...b.attritionRisk, ...b.attritionRisk, ...b.attritionRisk, ...b.attritionRisk].map((emp, i) => (
                     <span key={i} className={`text-[9px] px-2 py-1 rounded-full border font-semibold whitespace-nowrap ${riskConfig[emp.risk]}`}>
                       {emp.name} · {emp.dept}
@@ -797,15 +799,15 @@ export default function DashboardPage() {
                   transition={{ duration: 0.18, delay: i * 0.05, ease: 'easeOut' }}
                   className="flex items-center gap-3 p-2.5 rounded-xl bg-white/[0.025] border border-white/5 hover:bg-white/[0.04] transition-colors"
                 >
-                  <div className="w-7 h-7 rounded-full bg-gradient-to-br from-slate-700 to-slate-800 flex items-center justify-center flex-shrink-0 text-[10px] font-bold text-slate-300">
+                  <div className="w-7 h-7 rounded-full bg-gradient-to-br from-slate-700 to-slate-800 flex items-center justify-center flex-shrink-0 text-[10px] font-bold text-slate-300 notranslate" translate="no">
                     {emp.name.charAt(0)}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between">
-                      <p className="text-xs font-semibold text-slate-200 truncate">{emp.name}</p>
+                      <p className="text-xs font-semibold text-slate-200 truncate notranslate" translate="no">{emp.name}</p>
                       <span className={`text-[8.5px] px-1.5 py-0.5 rounded font-bold border ${riskConfig[emp.risk]}`}>{emp.risk}</span>
                     </div>
-                    <div className="flex gap-3 mt-1">
+                    <div className="flex gap-3 mt-1 notranslate" translate="no">
                       <div className="flex items-center gap-1">
                         <span className="text-[9px] text-slate-500">SLA</span>
                         <div className="w-10 h-1 bg-white/10 rounded-full overflow-hidden">
@@ -843,7 +845,7 @@ export default function DashboardPage() {
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 divide-y lg:divide-y-0 lg:divide-x divide-white/5">
             {/* Bar chart */}
-            <div className="p-5">
+            <div className="p-5 notranslate" translate="no">
               <p className="text-[10px] text-slate-500 uppercase font-semibold tracking-wider mb-3">Hired vs Active Headcount</p>
               <ResponsiveContainer width="100%" height={180}>
                 <BarChart data={recruiterChartData} barSize={24} barGap={4}>
@@ -863,15 +865,15 @@ export default function DashboardPage() {
               <div className="flex flex-col gap-5">
                 {b.recruiterLeaderboard.map((r, i) => (
                   <div key={r.name} className="flex items-center gap-4">
-                    <div className={`w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-bold flex-shrink-0 ${
+                    <div className={`w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-bold flex-shrink-0 notranslate ${
                       i === 0 ? 'bg-yellow-500/20 text-yellow-300' :
                       i === 1 ? 'bg-slate-400/15 text-slate-300' :
                                 'bg-orange-500/15 text-orange-300'
-                    }`}>{i + 1}</div>
+                    }`} translate="no">{i + 1}</div>
                     <div className="flex-1">
                       <div className="flex items-center justify-between mb-1">
-                        <p className="text-xs font-semibold text-slate-200">{r.name}</p>
-                        <span className="text-[10px] font-bold" style={{ color: RETENTION_COLORS[i] }}>{r.retentionPct}%</span>
+                        <p className="text-xs font-semibold text-slate-200 notranslate" translate="no">{r.name}</p>
+                        <span className="text-[10px] font-bold notranslate" style={{ color: RETENTION_COLORS[i] }} translate="no">{r.retentionPct}%</span>
                       </div>
                       <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
                         <div
@@ -879,7 +881,7 @@ export default function DashboardPage() {
                           style={{ width: `${r.retentionPct}%`, backgroundColor: RETENTION_COLORS[i] }}
                         />
                       </div>
-                      <span className="text-[9px] text-slate-500 mt-0.5 block">{r.active}/{r.hired} retained</span>
+                      <span className="text-[9px] text-slate-500 mt-0.5 block notranslate" translate="no">{r.active}/{r.hired} retained</span>
                     </div>
                   </div>
                 ))}
